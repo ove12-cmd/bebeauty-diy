@@ -1,0 +1,351 @@
+/* ============================================================
+   Paigaldusjuhend (/juhend) — step wizard
+   ============================================================ */
+.bb-guide {
+  min-height: 100vh;
+  background: #faf9f6;
+  padding: 28px 20px 96px;
+}
+
+.bb-guide__inner {
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.bb-guide__back {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bb-ink-2);
+  text-decoration: none;
+  margin-bottom: 28px;
+  transition: color 0.15s;
+}
+.bb-guide__back:hover { color: var(--bb-ink); }
+
+.bb-guide__eyebrow,
+.bb-guide__cat {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bb-gold);
+  margin: 0 0 12px;
+}
+
+@keyframes guideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Intro ── */
+.bb-guide__intro {
+  text-align: center;
+  padding: 48px 0 24px;
+  animation: guideIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.bb-guide__intro-title {
+  font-size: clamp(34px, 6vw, 52px);
+  font-weight: var(--bb-fw-display);
+  letter-spacing: var(--bb-tracking-display);
+  line-height: 1.05;
+  color: var(--bb-ink);
+  margin: 0 0 12px;
+}
+
+.bb-guide__intro-sub {
+  font-family: var(--bb-hand);
+  font-size: 22px;
+  color: var(--bb-ink-2);
+  margin: 0 0 24px;
+}
+
+.bb-guide__intro-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bb-ink-2);
+  margin-bottom: 36px;
+}
+.bb-guide__meta-dot { color: #ccc; }
+
+.bb-guide__start {
+  font-size: 17px !important;
+  padding: 16px 36px !important;
+}
+
+/* ── Progress ── */
+.bb-guide__progress {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.bb-guide__progress-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--bb-ink-2);
+  white-space: nowrap;
+}
+
+.bb-guide__dots {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+}
+
+.bb-guide__dot {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  border-radius: 10px;
+  border: 1.5px solid #e5e1d8;
+  background: #fff;
+  color: var(--bb-ink-2);
+  font-family: var(--bb-font);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+}
+.bb-guide__dot:hover { transform: translateY(-1px); }
+.bb-guide__dot--active {
+  background: var(--bb-gold);
+  border-color: var(--bb-gold);
+  color: #fff;
+}
+.bb-guide__dot--done {
+  background: #fffbf0;
+  border-color: var(--bb-gold);
+  color: var(--bb-gold);
+}
+
+/* ── Step card ── */
+.bb-guide__step {
+  position: relative;
+  background: #fff;
+  border-radius: 24px;
+  padding: 40px 36px;
+  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  animation: guideIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.bb-guide__num {
+  position: absolute;
+  top: 8px;
+  right: 20px;
+  font-size: 120px;
+  font-weight: var(--bb-fw-display);
+  letter-spacing: -0.05em;
+  line-height: 1;
+  color: rgba(192, 150, 47, 0.1);
+  pointer-events: none;
+}
+
+.bb-guide__title {
+  font-size: clamp(24px, 3.5vw, 32px);
+  font-weight: var(--bb-fw-display);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--bb-ink);
+  margin: 0 0 24px;
+  max-width: 80%;
+}
+
+.bb-guide__actions {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bb-guide__action {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--bb-ink);
+  letter-spacing: -0.01em;
+}
+
+.bb-guide__check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--bb-gold);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.bb-guide__tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #fffbf0;
+  border: 1px solid #f0e6c8;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 24px;
+}
+.bb-guide__tip-icon { font-size: 18px; line-height: 1.4; flex-shrink: 0; }
+.bb-guide__tip p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--bb-ink-2);
+}
+.bb-guide__tip strong { color: var(--bb-ink); }
+
+.bb-guide__needs-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bb-ink-2);
+  margin-bottom: 10px;
+}
+
+.bb-guide__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.bb-guide__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f3f1eb;
+  border: 1px solid #e8e6e0;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bb-ink);
+}
+
+/* ── Nav ── */
+.bb-guide__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.bb-guide__nav-btn {
+  background: none;
+  border: 1.5px solid #e0dcd2;
+  border-radius: 999px;
+  padding: 13px 24px;
+  font-family: var(--bb-font);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--bb-ink);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.bb-guide__nav-btn:hover { border-color: #c4bfb2; background: #fff; }
+
+.bb-guide__nav-next {
+  font-size: 15px !important;
+  padding: 14px 28px !important;
+}
+
+/* ── Done / aftercare ── */
+.bb-guide__done {
+  text-align: center;
+  padding: 32px 0 8px;
+  animation: guideIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.bb-guide__done-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--bb-gold);
+  color: #fff;
+  margin-bottom: 20px;
+  transform: scale(1.4);
+}
+.bb-guide__done-badge svg { width: 26px; height: 26px; }
+
+.bb-guide__done-title {
+  font-size: clamp(32px, 6vw, 48px);
+  font-weight: var(--bb-fw-display);
+  letter-spacing: var(--bb-tracking-display);
+  color: var(--bb-ink);
+  margin: 8px 0 32px;
+}
+
+.bb-guide__aftercare {
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px 32px 28px;
+  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.06);
+  text-align: left;
+  margin-bottom: 32px;
+}
+.bb-guide__aftercare .bb-guide__cat { text-align: left; }
+
+.bb-guide__aftercare-title {
+  font-size: 22px;
+  font-weight: var(--bb-fw-display);
+  letter-spacing: -0.02em;
+  color: var(--bb-ink);
+  margin: 0 0 20px;
+}
+
+.bb-guide__aftercare-note {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bb-gold);
+  margin: 20px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid #f0ede6;
+}
+
+.bb-guide__done-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.bb-guide__restart {
+  background: none;
+  border: none;
+  font-family: var(--bb-font);
+  font-size: 13px;
+  color: var(--bb-ink-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+  .bb-guide { padding: 20px 16px 80px; }
+  .bb-guide__step { padding: 32px 22px; }
+  .bb-guide__num { font-size: 88px; top: 12px; right: 14px; }
+  .bb-guide__title { max-width: 100%; }
+  .bb-guide__dot { height: 30px; font-size: 11px; }
+  .bb-guide__nav-btn { padding: 12px 18px; }
+  .bb-guide__aftercare { padding: 26px 20px; }
+}
