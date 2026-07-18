@@ -24,6 +24,7 @@
 .bb-checkout__back:hover { color: var(--bb-ink); }
 
 .bb-checkout__title {
+  font-family: var(--bb-font);
   font-size: clamp(30px, 4vw, 44px);
   font-weight: var(--bb-fw-display);
   letter-spacing: var(--bb-tracking-display);
@@ -39,6 +40,7 @@
 }
 
 .bb-checkout__section-title {
+  font-family: var(--bb-font);
   font-size: 15px;
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -70,6 +72,7 @@
 }
 
 .bb-checkout__field label {
+  font-family: var(--bb-font);
   font-size: 13px;
   font-weight: 600;
   color: var(--bb-ink);
@@ -114,14 +117,15 @@
   background: #fffbf0;
 }
 .bb-checkout__delivery-opt input { accent-color: var(--bb-gold); width: 16px; height: 16px; }
-.bb-checkout__delivery-label { font-size: 14px; font-weight: 600; color: var(--bb-ink); }
-.bb-checkout__delivery-note { font-size: 12px; color: var(--bb-ink-2); white-space: nowrap; }
+.bb-checkout__delivery-label { font-family: var(--bb-font); font-size: 14px; font-weight: 600; color: var(--bb-ink); }
+.bb-checkout__delivery-note { font-family: var(--bb-hand); font-size: 13px; color: var(--bb-ink-2); white-space: nowrap; }
 
 /* Parcel-locker picker */
 .bb-checkout__lockers { margin-bottom: 18px; }
 
 .bb-checkout__locker-label {
   display: block;
+  font-family: var(--bb-font);
   font-size: 13px;
   font-weight: 600;
   color: var(--bb-ink);
@@ -144,7 +148,8 @@
 .bb-checkout__locker-search::placeholder { color: #aaa; }
 
 .bb-checkout__locker-hint {
-  font-size: 13px;
+  font-family: var(--bb-hand);
+  font-size: 14px;
   color: var(--bb-ink-2);
   margin: 10px 2px 0;
 }
@@ -176,8 +181,8 @@
 .bb-checkout__locker-item:last-child { border-bottom: none; }
 .bb-checkout__locker-item:hover { background: #fffbf0; }
 
-.bb-checkout__locker-name { font-size: 14px; font-weight: 600; color: var(--bb-ink); }
-.bb-checkout__locker-meta { font-size: 12px; color: var(--bb-ink-2); }
+.bb-checkout__locker-name { font-family: var(--bb-font); font-size: 14px; font-weight: 600; color: var(--bb-ink); }
+.bb-checkout__locker-meta { font-family: var(--bb-hand); font-size: 13px; color: var(--bb-ink-2); }
 
 .bb-checkout__locker-selected {
   display: flex;
@@ -218,7 +223,8 @@
 }
 
 .bb-checkout__fine {
-  font-size: 12px;
+  font-family: var(--bb-hand);
+  font-size: 13px;
   color: var(--bb-ink-2);
   text-align: center;
   margin: 12px 0 0;
@@ -246,6 +252,7 @@
   display: flex;
   justify-content: space-between;
   gap: 12px;
+  font-family: var(--bb-font);
   font-size: 14px;
   color: var(--bb-ink);
 }
@@ -261,6 +268,7 @@
 .bb-checkout__total-row {
   display: flex;
   justify-content: space-between;
+  font-family: var(--bb-font);
   font-size: 14px;
   color: var(--bb-ink-2);
 }
@@ -286,7 +294,8 @@
 }
 .bb-checkout__empty p,
 .bb-checkout__confirm-sub {
-  font-size: 15px;
+  font-family: var(--bb-hand);
+  font-size: 17px;
   color: var(--bb-ink-2);
   max-width: 440px;
   line-height: 1.6;
@@ -308,6 +317,7 @@
 }
 
 .bb-checkout__confirm-title {
+  font-family: var(--bb-font);
   font-size: clamp(28px, 5vw, 40px);
   font-weight: var(--bb-fw-display);
   letter-spacing: var(--bb-tracking-display);
@@ -326,8 +336,9 @@
 
 /* ── Embedded card payment (Stripe Elements) ── */
 .bb-checkout__pay-hint {
+  font-family: var(--bb-hand);
   margin: -0.25rem 0 1rem;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: #6b6b6b;
 }
 .bb-checkout__pay .bb-checkout__submit {

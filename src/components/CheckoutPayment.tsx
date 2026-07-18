@@ -69,12 +69,20 @@ export default function CheckoutPayment({
       options={{
         clientSecret,
         locale: "et",
+        // Stripe renders the Payment Element in its own iframe, so it can't
+        // see our self-hosted next/font file — it must load the font itself.
+        fonts: [
+          {
+            cssSrc:
+              "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@6..96,200..800&display=swap",
+          },
+        ],
         appearance: {
           theme: "flat",
           variables: {
             colorPrimary: "#c9a24b",
             colorText: "#1a1a1a",
-            fontFamily: "inherit",
+            fontFamily: '"Bricolage Grotesque", system-ui, sans-serif',
             borderRadius: "10px",
           },
         },
