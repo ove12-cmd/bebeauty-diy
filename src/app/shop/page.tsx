@@ -11,9 +11,9 @@ import { productSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
 import { useCart } from "@/hooks/useCart";
 
 const VARIANTS = [
-  { id: "s17", label: "1.7mm", desc: "Väiksem, peenem kristall", price: 35, original: 45 },
-  { id: "s20", label: "2.0mm", desc: "Kõige populaarsem valik", price: 35, original: 45 },
-  { id: "s23", label: "2.3mm", desc: "Suurem, silmapaistvam efekt", price: 35, original: 45 },
+  { id: "s17", label: "1.7mm", desc: "Väiksem, peenem kristall", price: 41, original: 45 },
+  { id: "s20", label: "2.0mm", desc: "Kõige populaarsem valik", price: 41, original: 45 },
+  { id: "s23", label: "2.3mm", desc: "Suurem, silmapaistvam efekt", price: 41, original: 45 },
 ];
 
 // Product gallery — main image first, then alternate shots (click to swap)
@@ -32,8 +32,8 @@ const RESULTS: { type: "image" | "video"; src: string }[] = [
   { type: "image", src: "/results/result-3.jpg" },
 ];
 
-const FALLBACK_CODE = "BEBEAUTY25";
-const DISCOUNT = 0.25;
+const FALLBACK_CODE = "BEBEAUTY15";
+const DISCOUNT = 0.15;
 
 const BOX_ITEMS = [
   { name: "UV LED lamp", desc: "Professionaalne UV-lamp kiirlampimiseks" },
@@ -218,6 +218,8 @@ export default function ShopPage() {
     if (entered === FALLBACK_CODE || (stored && entered === stored)) {
       setCodeApplied(true);
       setCodeError(false);
+      // Persist so the checkout applies the same discount and you net €35
+      localStorage.setItem("bbDiscountPct", String(DISCOUNT * 100));
     } else {
       setCodeError(true);
       setCodeApplied(false);
@@ -315,7 +317,7 @@ export default function ShopPage() {
             <div className="bb-urgency__timer">
               <span className="bb-urgency__timer-label">
                 {codeTimer && codeTimer !== "Aegunud" ? (
-                  <>Sooduskood kehtib veel — saad <strong>−25%</strong> allahindlust</>
+                  <>Sooduskood kehtib veel — saad <strong>−15%</strong> allahindlust</>
                 ) : (
                   <>
                     <button
@@ -324,7 +326,7 @@ export default function ShopPage() {
                     >
                       Genereeri sooduskood
                     </button>
-                    {" "}— saad <strong>−25%</strong> allahindlust
+                    {" "}— saad <strong>−15%</strong> allahindlust
                   </>
                 )}
               </span>
@@ -346,7 +348,7 @@ export default function ShopPage() {
               />
               <button className="bb-discount__btn" onClick={applyCode}>Rakenda</button>
             </div>
-            {codeApplied && <p className="bb-discount__ok">✓ Kood rakendatud — 25% soodustus!</p>}
+            {codeApplied && <p className="bb-discount__ok">✓ Kood rakendatud — 15% soodustus!</p>}
             {codeError && <p className="bb-discount__err">Vigane kood. Proovi uuesti.</p>}
           </div>
 
@@ -360,7 +362,7 @@ export default function ShopPage() {
               <div className="bb-shop__prices">
                 <span className="bb-shop__price">{finalPrice}€</span>
                 <span className="bb-shop__price-original">{variant.original * qty}€</span>
-                {codeApplied && <span className="bb-discount__badge">-25%</span>}
+                {codeApplied && <span className="bb-discount__badge">-15%</span>}
               </div>
             </div>
             <Button className="bb-shop__cta" onClick={addToCart}><IconCart />Lisa korvi</Button>

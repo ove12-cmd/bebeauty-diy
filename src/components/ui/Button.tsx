@@ -14,6 +14,8 @@ type ButtonProps = {
   /** Context modifier classes (e.g. bb-cta__btn, bb-footer__card-btn). */
   className?: string;
   ariaLabel?: string;
+  /** Only applies when there is no href. */
+  disabled?: boolean;
 };
 
 export default function Button({
@@ -25,6 +27,7 @@ export default function Button({
   arrow = false,
   className = "",
   ariaLabel,
+  disabled = false,
 }: ButtonProps) {
   const cls = ["bb-btn", `bb-btn--${variant}`, className].filter(Boolean).join(" ");
   const inner = (
@@ -42,7 +45,7 @@ export default function Button({
     );
   }
   return (
-    <button className={cls} type={type} onClick={onClick} aria-label={ariaLabel}>
+    <button className={cls} type={type} onClick={onClick} aria-label={ariaLabel} disabled={disabled}>
       {inner}
     </button>
   );

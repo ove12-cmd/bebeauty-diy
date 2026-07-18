@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Button from "@/components/ui/Button";
+import CheckoutPayment from "@/components/CheckoutPayment";
 import { useCart } from "@/hooks/useCart";
 import { searchLockers, type Locker } from "@/lib/lockers";
 import { useEffect, useMemo, useState } from "react";
@@ -17,7 +18,7 @@ function eur(n: number) {
 }
 
 export default function CheckoutPage() {
-  const { items, subtotal, count, clear } = useCart();
+  const { items, subtotal, count } = useCart();
   const [discountPct, setDiscountPct] = useState(0);
   const [form, setForm] = useState({
     name: "",
@@ -28,8 +29,10 @@ export default function CheckoutPage() {
     city: "",
     zip: "",
   });
-  const [placed, setPlaced] = useState(false);
-  const [orderNr, setOrderNr] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [payError, setPayError] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [reference, setReference] = useState("");
 
   // Locker picker state
   const [lockers, setLockers] = useState<Locker[]>([]);
@@ -42,6 +45,10 @@ export default function CheckoutPage() {
   useEffect(() => {
     const pct = Number(localStorage.getItem("bbDiscountPct") || 0);
     if (pct > 0) setDiscountPct(pct);
+    const p = new URLSearchParams(window.location.search).get("payment");
+    if (p === "failed" || p === "cancelled") {
+      setPayError(true);
+    }
   }, []);
 
   // Fetch Omniva lockers the first time the parcel-machine option is active.
@@ -64,32 +71,40 @@ export default function CheckoutPage() {
   const discount = Math.round(subtotal * (discountPct / 100));
   const total = Math.max(0, subtotal - discount) + delivery.price;
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (form.delivery === "omniva" && !selectedLocker && !manualLocker.trim()) {
       setLockerError(true);
       return;
     }
-    // TODO: create the order + take payment here (Stripe / Montonio / pangalink).
-    setOrderNr("BB-" + Date.now().toString().slice(-6));
-    setPlaced(true);
-    clear();
-  }
-
-  if (placed) {
-    return (
-      <main className="bb-checkout">
-        <div className="bb-checkout__inner bb-checkout__confirm">
-          <span className="bb-checkout__confirm-icon">✓</span>
-          <h1 className="bb-checkout__confirm-title">Aitäh tellimuse eest!</h1>
-          <p className="bb-checkout__confirm-sub">
-            Sinu tellimus <strong>{orderNr}</strong> on vastu võetud. Saadame kinnituse e-postiga
-            ning paneme paki peagi teele.
-          </p>
-          <Button href="/" arrow>Tagasi avalehele</Button>
-        </div>
-      </main>
-    );
+    setSubmitting(true);
+    setPayError(false);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: items.map((i) => ({ id: i.id, label: i.label, qty: i.qty })),
+          discountPct,
+          delivery: form.delivery,
+          contact: { name: form.name, email: form.email, phone: form.phone },
+          locker: form.delivery === "omniva" ? selectedLocker?.name ?? manualLocker.trim() : null,
+          address:
+            form.delivery === "courier"
+              ? { street: form.street, city: form.city, zip: form.zip }
+              : null,
+        }),
+      });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      if (!data.clientSecret) throw new Error();
+      setClientSecret(data.clientSecret);
+      setReference(data.reference);
+      setSubmitting(false);
+    } catch {
+      setPayError(true);
+      setSubmitting(false);
+    }
   }
 
   if (count === 0) {
@@ -111,6 +126,14 @@ export default function CheckoutPage() {
         <h1 className="bb-checkout__title">Vormista tellimus</h1>
 
         <div className="bb-checkout__grid">
+          {clientSecret ? (
+            <div className="bb-checkout__form">
+              <button type="button" className="bb-checkout__back" onClick={() => setClientSecret(null)}>← Muuda andmeid</button>
+              <h2 className="bb-checkout__section-title">Maksmine</h2>
+              <p className="bb-checkout__pay-hint">Sisesta oma kaardiandmed. Makse on turvaline ja krüpteeritud.</p>
+              <CheckoutPayment clientSecret={clientSecret} amountLabel={eur(total)} reference={reference} />
+            </div>
+          ) : (
           <form className="bb-checkout__form" onSubmit={handleSubmit}>
             <h2 className="bb-checkout__section-title">Kontaktandmed</h2>
             <div className="bb-checkout__field">
@@ -215,9 +238,15 @@ export default function CheckoutPage() {
               </>
             )}
 
-            <Button type="submit" arrow className="bb-checkout__submit">Esita tellimus</Button>
-            <p className="bb-checkout__fine">Esitades tellimuse nõustud meie tingimustega. Makse toimub järgmises sammus.</p>
+            {payError && (
+              <p className="bb-checkout__locker-err">Makse jäi pooleli. Palun proovi uuesti.</p>
+            )}
+            <Button type="submit" arrow className="bb-checkout__submit" disabled={submitting}>
+              {submitting ? "Palun oota…" : "Jätka maksmiseni"}
+            </Button>
+            <p className="bb-checkout__fine">Esitades tellimuse nõustud meie tingimustega. Järgmises sammus sisestad kaardiandmed.</p>
           </form>
+          )}
 
           <aside className="bb-checkout__summary">
             <h2 className="bb-checkout__section-title">Sinu tellimus</h2>

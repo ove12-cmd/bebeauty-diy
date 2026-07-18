@@ -323,3 +323,14 @@
 @media (max-width: 480px) {
   .bb-checkout__row { grid-template-columns: 1fr; gap: 0; }
 }
+
+/* ── Embedded card payment (Stripe Elements) ── */
+.bb-checkout__pay-hint {
+  margin: -0.25rem 0 1rem;
+  font-size: 0.9rem;
+  color: #6b6b6b;
+}
+.bb-checkout__pay .bb-checkout__submit {
+  margin-top: 1.25rem;
+  width: 100%;
+}
