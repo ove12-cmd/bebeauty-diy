@@ -7,13 +7,13 @@ export const LOCALE = "et";
 
 // Variant id → unit price (€). Mirrors VARIANTS in src/app/shop/page.tsx.
 export const VARIANT_PRICES: Record<string, number> = {
-  s17: 41,
-  s20: 41,
-  s23: 41,
+  s17: 35,
+  s20: 35,
+  s23: 35,
 };
 
 // Highest discount a code may grant. Caps whatever the client claims.
-export const MAX_DISCOUNT_PCT = 15;
+export const MAX_DISCOUNT_PCT = 10;
 
 export const DELIVERY: Record<string, { label: string; price: number }> = {
   omniva: { label: "Omniva pakiautomaat", price: 0 },
@@ -63,7 +63,7 @@ export function priceOrder(input: {
   const subtotal = money(lines.reduce((sum, l) => sum + l.unitPrice * l.qty, 0));
 
   const discountPct = Math.min(MAX_DISCOUNT_PCT, Math.max(0, Math.floor(Number(input.discountPct) || 0)));
-  const discount = money(Math.round(subtotal * (discountPct / 100)));
+  const discount = money(subtotal * (discountPct / 100));
 
   const delivery = DELIVERY[input.delivery];
   if (!delivery) throw new Error(`Unknown delivery method: ${input.delivery}`);

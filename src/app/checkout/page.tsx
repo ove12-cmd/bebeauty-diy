@@ -69,7 +69,7 @@ export default function CheckoutPage() {
   const results = useMemo(() => searchLockers(lockers, query), [lockers, query]);
 
   const delivery = DELIVERY.find((d) => d.id === form.delivery)!;
-  const discount = Math.round(subtotal * (discountPct / 100));
+  const discount = Math.round(subtotal * (discountPct / 100) * 100) / 100;
   const total = Math.max(0, subtotal - discount) + delivery.price;
 
   async function handleSubmit(e: React.FormEvent) {

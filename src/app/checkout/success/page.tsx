@@ -46,7 +46,7 @@ function SuccessInner() {
       .catch(() => setOrder(null));
   }, [pi]);
 
-  const discount = order ? Math.round(order.subtotal * (order.discountPct / 100)) : 0;
+  const discount = order ? Math.round(order.subtotal * (order.discountPct / 100) * 100) / 100 : 0;
 
   return (
     <main className="bb-checkout">

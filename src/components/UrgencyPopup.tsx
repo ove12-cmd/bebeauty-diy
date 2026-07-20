@@ -76,7 +76,7 @@ export default function UrgencyPopup({ autoOpen = true }: { autoOpen?: boolean }
     const newCode = generateCode();
     const expiry = Date.now() + 15 * 60 * 1000;
     localStorage.setItem("bbDiscountCode", newCode);
-    localStorage.setItem("bbDiscountPct", "15");
+    localStorage.setItem("bbDiscountPct", "10");
     localStorage.setItem("bbCodeExpiry", String(expiry));
     window.dispatchEvent(new CustomEvent("bb:codeGenerated"));
     setCode(newCode);
@@ -110,7 +110,7 @@ export default function UrgencyPopup({ autoOpen = true }: { autoOpen?: boolean }
 
         <div className="bb-popup__body">
           <p className="bb-popup__eyebrow">Eripakkumine</p>
-          <h2 className="bb-popup__title">Saa esimeselt tellimuselt <em className="bb-popup__title-em">15% soodustust</em></h2>
+          <h2 className="bb-popup__title">Saa esimeselt tellimuselt <em className="bb-popup__title-em">10% soodustust</em></h2>
           <p className="bb-popup__sub">Genereeri oma isiklik sooduskood ja kasuta seda ostu vormistamisel.</p>
 
           {!code || expired ? (
