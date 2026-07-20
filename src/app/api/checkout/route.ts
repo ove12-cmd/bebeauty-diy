@@ -65,7 +65,10 @@ export async function POST(req: NextRequest) {
         customerEmail: contact.email,
         customerPhone: contact.phone,
         delivery: deliveryText,
+        deliveryMethod: priced.deliveryLabel,
         discountPct: String(priced.discountPct),
+        subtotal: String(priced.subtotal),
+        deliveryPrice: String(priced.deliveryPrice),
         itemsJson,
       },
     });
@@ -73,6 +76,7 @@ export async function POST(req: NextRequest) {
     if (!intent.client_secret) throw new Error("PaymentIntent missing client_secret");
     return NextResponse.json({
       clientSecret: intent.client_secret,
+      paymentIntentId: intent.id,
       reference,
       amount: priced.grandTotal,
     });

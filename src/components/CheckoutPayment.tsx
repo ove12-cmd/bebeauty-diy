@@ -8,12 +8,22 @@ import { useCart } from "@/hooks/useCart";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "");
 
-function PayForm({ amountLabel, reference }: { amountLabel: string; reference: string }) {
+function PayForm({
+  amountLabel,
+  reference,
+  paymentIntentId,
+}: {
+  amountLabel: string;
+  reference: string;
+  paymentIntentId: string;
+}) {
   const stripe = useStripe();
   const elements = useElements();
   const { clear } = useCart();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const successUrl = `/checkout/success?ref=${reference}&pi=${paymentIntentId}`;
 
   async function handlePay(e: React.FormEvent) {
     e.preventDefault();
@@ -25,7 +35,7 @@ function PayForm({ amountLabel, reference }: { amountLabel: string; reference: s
       elements,
       redirect: "if_required",
       confirmParams: {
-        return_url: `${window.location.origin}/checkout/success?ref=${reference}`,
+        return_url: `${window.location.origin}${successUrl}`,
       },
     });
 
@@ -37,7 +47,7 @@ function PayForm({ amountLabel, reference }: { amountLabel: string; reference: s
 
     if (paymentIntent?.status === "succeeded") {
       clear();
-      window.location.href = `/checkout/success?ref=${reference}`;
+      window.location.href = successUrl;
       return;
     }
     // Otherwise Stripe handled a redirect (e.g. 3-D Secure) via return_url.
@@ -58,10 +68,12 @@ export default function CheckoutPayment({
   clientSecret,
   amountLabel,
   reference,
+  paymentIntentId,
 }: {
   clientSecret: string;
   amountLabel: string;
   reference: string;
+  paymentIntentId: string;
 }) {
   return (
     <Elements
@@ -88,7 +100,7 @@ export default function CheckoutPayment({
         },
       }}
     >
-      <PayForm amountLabel={amountLabel} reference={reference} />
+      <PayForm amountLabel={amountLabel} reference={reference} paymentIntentId={paymentIntentId} />
     </Elements>
   );
 }

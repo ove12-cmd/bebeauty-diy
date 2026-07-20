@@ -345,3 +345,24 @@
   margin-top: 1.25rem;
   width: 100%;
 }
+
+/* ── Order summary on the confirmation page ── */
+.bb-checkout__confirm-summary {
+  width: 100%;
+  max-width: 440px;
+  text-align: left;
+  position: static;
+  margin-top: 8px;
+}
+
+.bb-checkout__confirm-meta {
+  font-family: var(--bb-hand);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--bb-ink-2);
+  margin: 16px 0 0;
+}
+.bb-checkout__confirm-meta strong {
+  font-family: var(--bb-font);
+  color: var(--bb-ink);
+}

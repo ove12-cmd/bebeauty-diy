@@ -33,6 +33,7 @@ export default function CheckoutPage() {
   const [payError, setPayError] = useState(false);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [reference, setReference] = useState("");
+  const [paymentIntentId, setPaymentIntentId] = useState("");
 
   // Locker picker state
   const [lockers, setLockers] = useState<Locker[]>([]);
@@ -100,6 +101,7 @@ export default function CheckoutPage() {
       if (!data.clientSecret) throw new Error();
       setClientSecret(data.clientSecret);
       setReference(data.reference);
+      setPaymentIntentId(data.paymentIntentId);
       setSubmitting(false);
     } catch {
       setPayError(true);
@@ -131,7 +133,12 @@ export default function CheckoutPage() {
               <button type="button" className="bb-checkout__back" onClick={() => setClientSecret(null)}>← Muuda andmeid</button>
               <h2 className="bb-checkout__section-title">Maksmine</h2>
               <p className="bb-checkout__pay-hint">Sisesta oma kaardiandmed. Makse on turvaline ja krüpteeritud.</p>
-              <CheckoutPayment clientSecret={clientSecret} amountLabel={eur(total)} reference={reference} />
+              <CheckoutPayment
+                clientSecret={clientSecret}
+                amountLabel={eur(total)}
+                reference={reference}
+                paymentIntentId={paymentIntentId}
+              />
             </div>
           ) : (
           <form className="bb-checkout__form" onSubmit={handleSubmit}>
