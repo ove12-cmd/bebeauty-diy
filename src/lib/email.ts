@@ -50,24 +50,32 @@ export async function sendOrderEmails(order: OrderEmailData): Promise<void> {
     .filter(Boolean)
     .join("");
 
-  // Owner notification
+  // Owner notification — one separate email per owner address. Sending each
+  // individually (rather than one email with several recipients) keeps every
+  // inbox out of the others' spam heuristics and gives per-recipient delivery
+  // tracking in Resend.
   if (ownerTo && ownerTo.length > 0) {
-    try {
-      await resend.emails.send({
-        from,
-        to: ownerTo,
-        subject: `🟢 Uus tellimus ${order.reference} — ${total}`,
-        html: `
-          <h2>Uus makstud tellimus</h2>
-          <p><strong>Number:</strong> ${esc(order.reference)}</p>
-          <p><strong>Summa:</strong> ${total}</p>
-          ${detailRows}
-          ${itemsHtml ? `<p><strong>Tooted:</strong></p><ul>${itemsHtml}</ul>` : ""}
-        `,
-      });
-    } catch (err) {
-      console.error("[email] owner notification failed:", err);
-    }
+    const ownerHtml = `
+      <h2>Uus makstud tellimus</h2>
+      <p><strong>Number:</strong> ${esc(order.reference)}</p>
+      <p><strong>Summa:</strong> ${total}</p>
+      ${detailRows}
+      ${itemsHtml ? `<p><strong>Tooted:</strong></p><ul>${itemsHtml}</ul>` : ""}
+    `;
+    await Promise.allSettled(
+      ownerTo.map((to) =>
+        resend.emails
+          .send({
+            from,
+            to,
+            subject: `🟢 Uus tellimus ${order.reference} — ${total}`,
+            html: ownerHtml,
+          })
+          .catch((err) => {
+            console.error(`[email] owner notification to ${to} failed:`, err);
+          }),
+      ),
+    );
   }
 
   // Customer confirmation
