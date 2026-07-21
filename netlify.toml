@@ -4,6 +4,10 @@
 
 [build.environment]
   NODE_VERSION = "22"
+  # DASHBOARD_USERNAME's value ("admin") is too common a word to scan for —
+  # it false-positive matches inside Next.js's own build output/internals.
+  # Not a real secret on its own; DASHBOARD_PASSWORD still gates the login.
+  SECRETS_SCAN_OMIT_KEYS = "DASHBOARD_USERNAME"
 
 # Official Next.js runtime — handles App Router, route handlers (/api/lockers),
 # ISR/revalidate, and the security headers from next.config.ts.
