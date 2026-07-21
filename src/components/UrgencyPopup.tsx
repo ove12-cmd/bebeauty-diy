@@ -2,23 +2,11 @@
 
 import Image from "next/image";
 import Button from "@/components/ui/Button";
+import { FUNNY_DISCOUNT_CODES } from "@/lib/pricing";
 import { useEffect, useState } from "react";
 
-const FUNNY_CODES = [
-  "BB-HAMBAKE",
-  "BB-KULLAKE",
-  "BB-SÄRASILM",
-  "BB-KIMALANE",
-  "BB-HELKUR",
-  "BB-KULDHAMMAS",
-  "BB-NAERATA",
-  "BB-KRISTALL",
-  "BB-HIILGUS",
-  "BB-BLINGSTAR",
-];
-
 function generateCode() {
-  return FUNNY_CODES[Math.floor(Math.random() * FUNNY_CODES.length)];
+  return FUNNY_DISCOUNT_CODES[Math.floor(Math.random() * FUNNY_DISCOUNT_CODES.length)];
 }
 
 function getSecsLeft() {
@@ -76,7 +64,6 @@ export default function UrgencyPopup({ autoOpen = true }: { autoOpen?: boolean }
     const newCode = generateCode();
     const expiry = Date.now() + 15 * 60 * 1000;
     localStorage.setItem("bbDiscountCode", newCode);
-    localStorage.setItem("bbDiscountPct", "10");
     localStorage.setItem("bbCodeExpiry", String(expiry));
     window.dispatchEvent(new CustomEvent("bb:codeGenerated"));
     setCode(newCode);

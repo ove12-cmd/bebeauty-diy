@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 type Body = {
   items: IncomingItem[];
-  discountPct?: number;
+  discountCode?: string;
   delivery: string;
   contact: { name: string; email: string; phone: string };
   locker?: string | null;
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
   // Recompute every total server-side from canonical prices.
   let priced;
   try {
-    priced = priceOrder({ items: body.items, discountPct: body.discountPct, delivery: body.delivery });
+    priced = priceOrder({ items: body.items, discountCode: body.discountCode, delivery: body.delivery });
   } catch (err) {
     return NextResponse.json({ error: (err as Error).message }, { status: 400 });
   }

@@ -12,8 +12,34 @@ export const VARIANT_PRICES: Record<string, number> = {
   s23: 35,
 };
 
-// Highest discount a code may grant. Caps whatever the client claims.
-export const MAX_DISCOUNT_PCT = 10;
+// Auto-generated marketing codes (see UrgencyPopup) — always the standard rate.
+export const FUNNY_DISCOUNT_CODES = [
+  "BB-HAMBAKE",
+  "BB-KULLAKE",
+  "BB-SÄRASILM",
+  "BB-KIMALANE",
+  "BB-HELKUR",
+  "BB-KULDHAMMAS",
+  "BB-NAERATA",
+  "BB-KRISTALL",
+  "BB-HIILGUS",
+  "BB-BLINGSTAR",
+] as const;
+
+export const STANDARD_DISCOUNT_PCT = 10;
+
+// Server-authoritative code → discount % lookup. The client only ever sends
+// the code string, never a percentage — the server decides the discount.
+export const DISCOUNT_CODES: Record<string, number> = {
+  BEBEAUTY10: STANDARD_DISCOUNT_PCT,
+  ...Object.fromEntries(FUNNY_DISCOUNT_CODES.map((c) => [c, STANDARD_DISCOUNT_PCT])),
+  TEST95: 95, // internal testing only — not shown in any customer-facing UI
+};
+
+export function discountPctForCode(code?: string | null): number {
+  if (!code) return 0;
+  return DISCOUNT_CODES[code.trim().toUpperCase()] ?? 0;
+}
 
 export const DELIVERY: Record<string, { label: string; price: number }> = {
   omniva: { label: "Omniva pakiautomaat", price: 0 },
@@ -45,7 +71,7 @@ function money(n: number): number {
  */
 export function priceOrder(input: {
   items: IncomingItem[];
-  discountPct?: number;
+  discountCode?: string;
   delivery: string;
 }): PricedOrder {
   if (!Array.isArray(input.items) || input.items.length === 0) {
@@ -62,7 +88,7 @@ export function priceOrder(input: {
 
   const subtotal = money(lines.reduce((sum, l) => sum + l.unitPrice * l.qty, 0));
 
-  const discountPct = Math.min(MAX_DISCOUNT_PCT, Math.max(0, Math.floor(Number(input.discountPct) || 0)));
+  const discountPct = discountPctForCode(input.discountCode);
   const discount = money(subtotal * (discountPct / 100));
 
   const delivery = DELIVERY[input.delivery];

@@ -8,6 +8,7 @@ import UrgencyPopup from "@/components/UrgencyPopup";
 import JsonLd from "@/components/JsonLd";
 import Button from "@/components/ui/Button";
 import { productSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
+import { discountPctForCode } from "@/lib/pricing";
 import { useCart } from "@/hooks/useCart";
 
 const VARIANTS = [
@@ -32,7 +33,6 @@ const RESULTS: { type: "image" | "video"; src: string }[] = [
   { type: "image", src: "/results/result-3.jpg" },
 ];
 
-const FALLBACK_CODE = "BEBEAUTY10";
 const DISCOUNT = 0.10;
 
 function priceStr(n: number) {
@@ -212,18 +212,23 @@ export default function ShopPage() {
   const [code, setCode] = useState("");
   const [codeApplied, setCodeApplied] = useState(false);
   const [codeError, setCodeError] = useState(false);
+  const [appliedPct, setAppliedPct] = useState(0);
 
-  const basePrice = codeApplied ? Math.round(variant.price * (1 - DISCOUNT) * 100) / 100 : variant.price;
+  const basePrice = codeApplied ? Math.round(variant.price * (1 - appliedPct / 100) * 100) / 100 : variant.price;
   const finalPrice = basePrice * qty;
 
   function applyCode() {
     const entered = code.trim().toUpperCase();
     const stored = typeof window !== "undefined" ? localStorage.getItem("bbDiscountCode")?.toUpperCase() : null;
-    if (entered === FALLBACK_CODE || (stored && entered === stored)) {
+    const mappedPct = discountPctForCode(entered);
+    const isGeneratedMatch = Boolean(stored && entered === stored);
+    const pct = mappedPct > 0 ? mappedPct : isGeneratedMatch ? DISCOUNT * 100 : 0;
+    if (pct > 0) {
       setCodeApplied(true);
       setCodeError(false);
-      // Persist so the checkout applies the same 10% discount
-      localStorage.setItem("bbDiscountPct", String(DISCOUNT * 100));
+      setAppliedPct(pct);
+      // Persist the code itself — checkout re-derives the discount server-side.
+      localStorage.setItem("bbDiscountCode", entered);
     } else {
       setCodeError(true);
       setCodeApplied(false);
@@ -352,7 +357,7 @@ export default function ShopPage() {
               />
               <button className="bb-discount__btn" onClick={applyCode}>Rakenda</button>
             </div>
-            {codeApplied && <p className="bb-discount__ok">✓ Kood rakendatud — 10% soodustus!</p>}
+            {codeApplied && <p className="bb-discount__ok">✓ Kood rakendatud — {appliedPct}% soodustus!</p>}
             {codeError && <p className="bb-discount__err">Vigane kood. Proovi uuesti.</p>}
           </div>
 
@@ -366,7 +371,7 @@ export default function ShopPage() {
               <div className="bb-shop__prices">
                 <span className="bb-shop__price">{priceStr(finalPrice)}</span>
                 <span className="bb-shop__price-original">{priceStr(variant.original * qty)}</span>
-                {codeApplied && <span className="bb-discount__badge">-10%</span>}
+                {codeApplied && <span className="bb-discount__badge">-{appliedPct}%</span>}
               </div>
             </div>
             <Button className="bb-shop__cta" onClick={addToCart}><IconCart />Lisa korvi</Button>

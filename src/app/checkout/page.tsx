@@ -5,6 +5,7 @@ import Button from "@/components/ui/Button";
 import CheckoutPayment from "@/components/CheckoutPayment";
 import { useCart } from "@/hooks/useCart";
 import { searchLockers, type Locker } from "@/lib/lockers";
+import { discountPctForCode } from "@/lib/pricing";
 import { useEffect, useMemo, useState } from "react";
 import "./checkout.css";
 
@@ -19,7 +20,8 @@ function eur(n: number) {
 
 export default function CheckoutPage() {
   const { items, subtotal, count } = useCart();
-  const [discountPct, setDiscountPct] = useState(0);
+  const [discountCode, setDiscountCode] = useState("");
+  const discountPct = discountPctForCode(discountCode);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -44,8 +46,8 @@ export default function CheckoutPage() {
   const [lockerError, setLockerError] = useState(false);
 
   useEffect(() => {
-    const pct = Number(localStorage.getItem("bbDiscountPct") || 0);
-    if (pct > 0) setDiscountPct(pct);
+    const code = localStorage.getItem("bbDiscountCode") || "";
+    if (code) setDiscountCode(code);
     const p = new URLSearchParams(window.location.search).get("payment");
     if (p === "failed" || p === "cancelled") {
       setPayError(true);
@@ -86,7 +88,7 @@ export default function CheckoutPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           items: items.map((i) => ({ id: i.id, label: i.label, qty: i.qty })),
-          discountPct,
+          discountCode,
           delivery: form.delivery,
           contact: { name: form.name, email: form.email, phone: form.phone },
           locker: form.delivery === "omniva" ? selectedLocker?.name ?? manualLocker.trim() : null,
