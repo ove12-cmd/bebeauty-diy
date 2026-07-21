@@ -30,7 +30,9 @@ export async function sendOrderEmails(order: OrderEmailData): Promise<void> {
   }
 
   const from = process.env.ORDER_EMAIL_FROM || "beBeauty DIY <onboarding@resend.dev>";
-  const ownerTo = process.env.ORDER_EMAIL_TO;
+  const ownerTo = process.env.ORDER_EMAIL_TO?.split(",")
+    .map((e) => e.trim())
+    .filter(Boolean);
   const resend = new Resend(apiKey);
 
   const money = (n: number) => `${n.toFixed(2).replace(".", ",")} ${order.currency}`;
@@ -49,7 +51,7 @@ export async function sendOrderEmails(order: OrderEmailData): Promise<void> {
     .join("");
 
   // Owner notification
-  if (ownerTo) {
+  if (ownerTo && ownerTo.length > 0) {
     try {
       await resend.emails.send({
         from,
