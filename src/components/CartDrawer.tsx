@@ -2,11 +2,20 @@
 
 import Button from "@/components/ui/Button";
 import { useCart } from "@/hooks/useCart";
+import { useDiscountPct } from "@/hooks/useDiscountPct";
+
+const money = (n: number) => (n % 1 === 0 ? String(n) : n.toFixed(2).replace(".", ",")) + "€";
+const round2 = (n: number) => Math.round(n * 100) / 100;
 
 export default function CartDrawer() {
   const { items, isOpen, close, remove, setQty, subtotal, count } = useCart();
+  const discountPct = useDiscountPct();
 
   if (!isOpen) return null;
+
+  const hasDiscount = discountPct > 0;
+  const discountedTotal = round2(subtotal * (1 - discountPct / 100));
+  const discountAmount = round2(subtotal - discountedTotal);
 
   return (
     <div className="bb-cart-overlay" onClick={close}>
@@ -34,7 +43,14 @@ export default function CartDrawer() {
                 <div key={item.id} className="bb-cart-item">
                   <div className="bb-cart-item__info">
                     <span className="bb-cart-item__label">{item.label}</span>
-                    <span className="bb-cart-item__price">{item.price * item.qty}€</span>
+                    <span className="bb-cart-item__price">
+                      {hasDiscount && (
+                        <span className="bb-cart-item__price-original">
+                          {money(item.price * item.qty)}
+                        </span>
+                      )}
+                      {money(round2(item.price * item.qty * (1 - discountPct / 100)))}
+                    </span>
                   </div>
                   <div className="bb-cart-item__controls">
                     <div className="bb-cart-item__qty">
@@ -51,11 +67,27 @@ export default function CartDrawer() {
             </div>
 
             <div className="bb-cart__foot">
+              {hasDiscount && (
+                <>
+                  <div className="bb-cart__row">
+                    <span>Vahesumma</span>
+                    <span>{money(subtotal)}</span>
+                  </div>
+                  <div className="bb-cart__row bb-cart__row--discount">
+                    <span>Sooduskood (−{discountPct}%)</span>
+                    <span>−{money(discountAmount)}</span>
+                  </div>
+                </>
+              )}
               <div className="bb-cart__subtotal">
-                <span>Vahesumma</span>
-                <span>{subtotal}€</span>
+                <span>{hasDiscount ? "Kokku" : "Vahesumma"}</span>
+                <span>{money(hasDiscount ? discountedTotal : subtotal)}</span>
               </div>
-              <p className="bb-cart__note">Tasuta tarne · sooduskood lisatakse vormistamisel</p>
+              <p className="bb-cart__note">
+                {hasDiscount
+                  ? "Tasuta tarne · sooduskood arvestatud"
+                  : "Tasuta tarne · sooduskood lisatakse vormistamisel"}
+              </p>
               <Button href="/checkout" className="bb-cart__checkout" onClick={close} arrow>
                 Vormista tellimus
               </Button>

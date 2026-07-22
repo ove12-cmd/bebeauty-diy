@@ -179,13 +179,24 @@ function StickyBar({ price, original, onAdd }: { price: string; original: string
   );
 }
 
+const CODE_WINDOW_MS = 15 * 60 * 1000;
+
 function useCodeTimer() {
   const [secsLeft, setSecsLeft] = useState<number | null>(null);
   useEffect(() => {
     function sync() {
       const expiry = Number(localStorage.getItem("bbCodeExpiry") || 0);
-      const remaining = Math.max(0, Math.round((expiry - Date.now()) / 1000));
-      setSecsLeft(expiry ? remaining : null);
+      if (!expiry) {
+        setSecsLeft(null);
+        return;
+      }
+      let remaining = Math.round((expiry - Date.now()) / 1000);
+      // Ran out — just restart the window so the code never dead-ends.
+      if (remaining <= 0) {
+        localStorage.setItem("bbCodeExpiry", String(Date.now() + CODE_WINDOW_MS));
+        remaining = CODE_WINDOW_MS / 1000;
+      }
+      setSecsLeft(remaining);
     }
     sync();
     const t = setInterval(sync, 1000);
@@ -194,7 +205,6 @@ function useCodeTimer() {
     return () => { clearInterval(t); window.removeEventListener("bb:codeGenerated", handler); };
   }, []);
   if (secsLeft === null) return null;
-  if (secsLeft === 0) return "Aegunud";
   const m = String(Math.floor(secsLeft / 60)).padStart(2, "0");
   const s = String(secsLeft % 60).padStart(2, "0");
   return `${m}:${s}`;
@@ -229,6 +239,7 @@ export default function ShopPage() {
       setAppliedPct(pct);
       // Persist the code itself — checkout re-derives the discount server-side.
       localStorage.setItem("bbDiscountCode", entered);
+      window.dispatchEvent(new CustomEvent("bb:discountChanged"));
     } else {
       setCodeError(true);
       setCodeApplied(false);
@@ -325,7 +336,7 @@ export default function ShopPage() {
           <div className="bb-urgency__bar">
             <div className="bb-urgency__timer">
               <span className="bb-urgency__timer-label">
-                {codeTimer && codeTimer !== "Aegunud" ? (
+                {codeTimer ? (
                   <>Sooduskood kehtib veel — saad <strong>−10%</strong> allahindlust</>
                 ) : (
                   <>

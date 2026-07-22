@@ -216,6 +216,12 @@ html, body {
 }
 .bb-cart-item__label { font-size: 14px; font-weight: 600; color: var(--bb-ink); }
 .bb-cart-item__price { font-size: 14px; font-weight: 700; color: var(--bb-ink); white-space: nowrap; }
+.bb-cart-item__price-original {
+  font-weight: 600;
+  color: var(--bb-ink-2);
+  text-decoration: line-through;
+  margin-right: 6px;
+}
 
 .bb-cart-item__controls {
   display: flex;
@@ -270,6 +276,14 @@ html, body {
   font-weight: 800;
   color: var(--bb-ink);
 }
+
+.bb-cart__row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--bb-ink-2);
+}
+.bb-cart__row--discount { color: var(--bb-gold); font-weight: 600; }
 
 .bb-cart__note { font-size: 12px; color: var(--bb-ink-2); margin: 0; }
 
