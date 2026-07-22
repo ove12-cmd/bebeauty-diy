@@ -3,6 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Kasutustingimused",
+  description: "beBeauty DIY e-poe kasutustingimused — tellimine, maksmine, tarne ja tagastus.",
   alternates: { canonical: "/tingimused" },
 };
 

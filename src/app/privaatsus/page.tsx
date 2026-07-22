@@ -3,6 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Privaatsuspoliitika",
+  description: "beBeauty DIY privaatsuspoliitika — kuidas kogume, kasutame ja kaitseme sinu isikuandmeid.",
   alternates: { canonical: "/privaatsus" },
 };
 

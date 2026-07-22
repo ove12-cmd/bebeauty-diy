@@ -3,6 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Tarne ja tagastus",
+  description: "beBeauty DIY tarne- ja tagastustingimused — kohaletoimetamine Eestis, tarneajad ja tagastuse kord.",
   alternates: { canonical: "/tarne" },
 };
 
