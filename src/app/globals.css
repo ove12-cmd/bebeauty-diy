@@ -301,7 +301,7 @@ html, body {
   text-decoration: none;
 }
 .bb-logo-badge__img {
-  height: 28px;
+  height: 37px; /* 28px + 33% */
   width: auto;
 }
 
