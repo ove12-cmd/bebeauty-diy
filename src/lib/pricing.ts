@@ -41,6 +41,14 @@ export function discountPctForCode(code?: string | null): number {
   return DISCOUNT_CODES[code.trim().toUpperCase()] ?? 0;
 }
 
+// True only for codes the popup itself can generate — never for BEBEAUTY10,
+// internal test codes, or anything else someone might type into the box.
+// Gates the time-limited ticker/popup-restore UI specifically.
+export function isGeneratedMarketingCode(code?: string | null): boolean {
+  if (!code) return false;
+  return (FUNNY_DISCOUNT_CODES as readonly string[]).includes(code.trim().toUpperCase());
+}
+
 export const DELIVERY: Record<string, { label: string; price: number }> = {
   omniva: { label: "Omniva pakiautomaat", price: 0 },
   courier: { label: "Kuller koju", price: 3.9 },

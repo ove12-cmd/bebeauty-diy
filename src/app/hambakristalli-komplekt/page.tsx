@@ -8,7 +8,7 @@ import UrgencyPopup from "@/components/UrgencyPopup";
 import JsonLd from "@/components/JsonLd";
 import Button from "@/components/ui/Button";
 import { productSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
-import { discountPctForCode } from "@/lib/pricing";
+import { discountPctForCode, isGeneratedMarketingCode } from "@/lib/pricing";
 import { useCart } from "@/hooks/useCart";
 
 const VARIANTS = [
@@ -185,6 +185,10 @@ function useCodeTimer() {
   const [secsLeft, setSecsLeft] = useState<number | null>(null);
   useEffect(() => {
     function sync() {
+      if (!isGeneratedMarketingCode(localStorage.getItem("bbDiscountCode"))) {
+        setSecsLeft(null);
+        return;
+      }
       const expiry = Number(localStorage.getItem("bbCodeExpiry") || 0);
       if (!expiry) {
         setSecsLeft(null);
@@ -202,7 +206,12 @@ function useCodeTimer() {
     const t = setInterval(sync, 1000);
     const handler = () => sync();
     window.addEventListener("bb:codeGenerated", handler);
-    return () => { clearInterval(t); window.removeEventListener("bb:codeGenerated", handler); };
+    window.addEventListener("bb:discountChanged", handler);
+    return () => {
+      clearInterval(t);
+      window.removeEventListener("bb:codeGenerated", handler);
+      window.removeEventListener("bb:discountChanged", handler);
+    };
   }, []);
   if (secsLeft === null) return null;
   const m = String(Math.floor(secsLeft / 60)).padStart(2, "0");

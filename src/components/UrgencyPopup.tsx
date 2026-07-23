@@ -2,8 +2,10 @@
 
 import Image from "next/image";
 import Button from "@/components/ui/Button";
-import { FUNNY_DISCOUNT_CODES } from "@/lib/pricing";
+import { FUNNY_DISCOUNT_CODES, isGeneratedMarketingCode } from "@/lib/pricing";
 import { useEffect, useState } from "react";
+
+const POPUP_THROTTLE_MS = 24 * 60 * 60 * 1000;
 
 function generateCode() {
   return FUNNY_DISCOUNT_CODES[Math.floor(Math.random() * FUNNY_DISCOUNT_CODES.length)];
@@ -26,25 +28,33 @@ export default function UrgencyPopup({ autoOpen = true }: { autoOpen?: boolean }
   const [copied, setCopied] = useState(false);
   const [secsLeft, setSecsLeft] = useState<number | null>(null);
 
-  // Auto-open after 8s (landing page only)
+  // Auto-open after 8s (landing page only) — at most once every 24h.
   useEffect(() => {
     if (!autoOpen) return;
+    const lastShown = Number(localStorage.getItem("bbPopupLastShown") || 0);
+    if (Date.now() - lastShown < POPUP_THROTTLE_MS) return;
     const t = setTimeout(() => setVisible(true), 8000);
     return () => clearTimeout(t);
   }, [autoOpen]);
 
-  // Listen for manual open trigger
+  // Listen for manual open trigger (always opens, ignores the 24h throttle)
   useEffect(() => {
     const handler = () => setVisible(true);
     window.addEventListener("bb:openPopup", handler);
     return () => window.removeEventListener("bb:openPopup", handler);
   }, []);
 
-  // Restore existing code if still valid
+  // Record every time the popup is actually shown, for the 24h throttle above.
+  useEffect(() => {
+    if (visible) localStorage.setItem("bbPopupLastShown", String(Date.now()));
+  }, [visible]);
+
+  // Restore existing code if still valid — only ever a code this popup
+  // itself generated, never BEBEAUTY10 or an internal test code.
   useEffect(() => {
     const saved = localStorage.getItem("bbDiscountCode");
     const secs = getSecsLeft();
-    if (saved && secs && secs > 0) {
+    if (saved && isGeneratedMarketingCode(saved) && secs && secs > 0) {
       setCode(saved);
       setSecsLeft(secs);
     }
