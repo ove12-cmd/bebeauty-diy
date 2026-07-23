@@ -34,6 +34,7 @@ html, body {
   color: var(--bb-ink);
   font-family: var(--bb-font);
   -webkit-font-smoothing: antialiased;
+  text-wrap: pretty;
 }
 
 /* ============================================================
