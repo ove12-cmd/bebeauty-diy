@@ -293,28 +293,19 @@ html, body {
   margin-top: 4px;
 }
 
-/* ── Wordmark ── */
-.bb-wordmark {
-  display: flex;
+/* ── Logo ── */
+.bb-logo-badge {
+  display: inline-flex;
   align-items: center;
-  gap: 9px;
-  font-weight: var(--bb-fw-display);
-  font-size: 24px;
-  letter-spacing: -0.035em;
   flex-shrink: 0;
+  background: #ffffff;
+  border-radius: 999px;
+  padding: 8px 16px;
   text-decoration: none;
 }
-.bb-wordmark__be { color: #ffffff; }
-.bb-wordmark__tag {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  background: var(--bb-gold);
-  color: #111111;
-  padding: 4px 9px;
-  border-radius: 999px;
-  transform: translateY(-1px);
+.bb-logo-badge__img {
+  height: 22px;
+  width: auto;
 }
 
 /* ── Buttons ── */

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Button from "@/components/ui/Button";
+import Logo from "@/components/ui/Logo";
 import { useState } from "react";
 import { useCart } from "@/hooks/useCart";
 
@@ -41,16 +42,6 @@ function IconClose() {
   );
 }
 
-/* ── Wordmark ── */
-function Wordmark() {
-  return (
-    <div className="bb-wordmark">
-      <span className="bb-wordmark__be">beBeauty</span>
-      <span className="bb-wordmark__tag">DIY</span>
-    </div>
-  );
-}
-
 /* ── Image Placeholder Slot ── */
 function ImageSlot({ label, variant = "default", src, alt }: { label: string; variant?: "default" | "lav"; src?: string; alt?: string }) {
   return (
@@ -85,19 +76,21 @@ export default function Hero() {
 
       {/* NAV */}
       <nav className="bb-nav">
-        <Wordmark />
+        <a href="/" className="bb-logo-badge" aria-label="beBeauty DIY">
+          <Logo className="bb-logo-badge__img" priority />
+        </a>
 
         {/* Desktop links — hidden via CSS when they'd wrap */}
         <div className="bb-nav__links">
           <a href="/" className="bb-nav__link bb-nav__link--active">Pood</a>
-          <a href="/shop" className="bb-nav__link">Komplektid</a>
+          <a href="/hambakristalli-komplekt" className="bb-nav__link">Komplektid</a>
           <a href="/#kuidas" className="bb-nav__link">Kuidas see töötab</a>
           <a href="/juhend" className="bb-nav__link">Juhend</a>
           <a href="/#galerii" className="bb-nav__link">Galerii</a>
         </div>
 
         <div className="bb-nav__right">
-          <Button href="/shop" className="bb-nav__cta" arrow>
+          <Button href="/hambakristalli-komplekt" className="bb-nav__cta" arrow>
             Osta komplekt
           </Button>
           <button className="bb-icon-btn bb-nav__cart" aria-label="Ostukorv" onClick={openCart}>
@@ -119,11 +112,11 @@ export default function Hero() {
       {menuOpen && (
         <div className="bb-nav__mobile-menu">
           <a href="/" className="bb-nav__mobile-link bb-nav__mobile-link--active" onClick={() => setMenuOpen(false)}>Pood</a>
-          <a href="/shop" className="bb-nav__mobile-link" onClick={() => setMenuOpen(false)}>Komplektid</a>
+          <a href="/hambakristalli-komplekt" className="bb-nav__mobile-link" onClick={() => setMenuOpen(false)}>Komplektid</a>
           <a href="/#kuidas" className="bb-nav__mobile-link" onClick={() => setMenuOpen(false)}>Kuidas see töötab</a>
           <a href="/juhend" className="bb-nav__mobile-link" onClick={() => setMenuOpen(false)}>Juhend</a>
           <a href="/#galerii" className="bb-nav__mobile-link" onClick={() => setMenuOpen(false)}>Galerii</a>
-          <Button href="/shop" className="bb-nav__mobile-cta" arrow onClick={() => setMenuOpen(false)}>
+          <Button href="/hambakristalli-komplekt" className="bb-nav__mobile-cta" arrow onClick={() => setMenuOpen(false)}>
             Osta komplekt
           </Button>
         </div>
@@ -153,7 +146,7 @@ export default function Hero() {
             </div>
             <div className="bb-cta-card__buy">
               <span className="bb-cta-card__price">alates 35€</span>
-              <Button href="/shop" arrow>
+              <Button href="/hambakristalli-komplekt" arrow>
                 Osta komplekt
               </Button>
             </div>
