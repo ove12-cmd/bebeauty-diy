@@ -3,13 +3,6 @@ import Button from "@/components/ui/Button";
 import Logo from "@/components/ui/Logo";
 import Link from "next/link";
 
-const TRUST_ITEMS = [
-  { icon: "🛡", title: "Ohutu ja tõhus", sub: "Ohutu emailile" },
-  { icon: "⏱", title: "Kiire tulemus", sub: "Paigaldus vaid 10 minutiga" },
-  { icon: "💎", title: "Premium kristallid", sub: "Preciosa & Primero" },
-  { icon: "✨", title: "Püsiv sära", sub: "Püsib kuni 2–4 nädalat" },
-];
-
 export default function Footer() {
   return (
     <footer className="bb-footer">
@@ -24,17 +17,6 @@ export default function Footer() {
             SALONGIVÄÄRILINE <em className="bb-footer__headline-em">TULEMUS</em>,<br />
             ILMA SALONGITA.
           </h2>
-          <div className="bb-footer__trust">
-            {TRUST_ITEMS.map((t, i) => (
-              <div key={i} className="bb-footer__trust-item">
-                <span className="bb-footer__trust-icon">{t.icon}</span>
-                <div>
-                  <span className="bb-footer__trust-title">{t.title}</span>
-                  <span className="bb-footer__trust-sub">{t.sub}</span>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* Middle — link columns */}
