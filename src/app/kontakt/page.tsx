@@ -24,7 +24,7 @@ export default function ContactPage() {
         <div className="bb-contact__info">
           <div className="bb-contact__item">
             <span className="bb-contact__icon">📧</span>
-            <a href="mailto:info@bebeauty-diy.ee">info@bebeauty-diy.ee</a>
+            <a href="mailto:iluinfo1@gmail.com">iluinfo1@gmail.com</a>
           </div>
           <div className="bb-contact__item">
             <span className="bb-contact__icon">📱</span>

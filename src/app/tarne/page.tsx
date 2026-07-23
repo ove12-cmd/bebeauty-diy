@@ -38,13 +38,13 @@ export default function ShippingPage() {
 
         <h2>Tagastus</h2>
         <p>Tagastamisõigus 30 päeva jooksul alates pakk kättesaamisest. Toode peab olema avamata ja originaalpakendis.</p>
-        <p>Tagastuse algatamiseks kirjutage: <a href="mailto:info@bebeauty-diy.ee">info@bebeauty-diy.ee</a></p>
+        <p>Tagastuse algatamiseks kirjutage: <a href="mailto:iluinfo1@gmail.com">iluinfo1@gmail.com</a></p>
 
         <h2>Tagasimakse</h2>
         <p>Tagasimakse tehakse 5–10 tööpäeva jooksul pärast tagastuse kättesaamist, samale makseviisile.</p>
 
         <h2>Küsimused</h2>
-        <p>Kirjutage meile: <a href="mailto:info@bebeauty-diy.ee">info@bebeauty-diy.ee</a></p>
+        <p>Kirjutage meile: <a href="mailto:iluinfo1@gmail.com">iluinfo1@gmail.com</a></p>
       </div>
     </main>
   );

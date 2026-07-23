@@ -31,7 +31,7 @@ export default function TermsPage() {
         <p>beBeauty DIY ei vastuta toote väärkasutusest tulenevate kahjude eest. Järgige alati kaasasolevat juhendit.</p>
 
         <h2>6. Kontakt</h2>
-        <p>Küsimuste korral: <a href="mailto:info@bebeauty-diy.ee">info@bebeauty-diy.ee</a></p>
+        <p>Küsimuste korral: <a href="mailto:iluinfo1@gmail.com">iluinfo1@gmail.com</a></p>
       </div>
     </main>
   );

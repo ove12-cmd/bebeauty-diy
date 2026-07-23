@@ -28,10 +28,10 @@ export default function PrivacyPage() {
         <p>Kasutame küpsiseid veebilehe funktsionaalsuse tagamiseks ja kasutuskogemuse parandamiseks. Võite küpsised igal ajal brauseris keelata.</p>
 
         <h2>5. Teie õigused</h2>
-        <p>Teil on õigus pääseda juurde oma isikuandmetele, neid parandada või kustutada. Võtke meiega ühendust: <a href="mailto:info@bebeauty-diy.ee">info@bebeauty-diy.ee</a></p>
+        <p>Teil on õigus pääseda juurde oma isikuandmetele, neid parandada või kustutada. Võtke meiega ühendust: <a href="mailto:iluinfo1@gmail.com">iluinfo1@gmail.com</a></p>
 
         <h2>6. Kontakt</h2>
-        <p>Küsimuste korral kirjutage: <a href="mailto:info@bebeauty-diy.ee">info@bebeauty-diy.ee</a></p>
+        <p>Küsimuste korral kirjutage: <a href="mailto:iluinfo1@gmail.com">iluinfo1@gmail.com</a></p>
       </div>
     </main>
   );
