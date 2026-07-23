@@ -1663,9 +1663,14 @@ html, body {
 
 @media (max-width: 1024px) {
   .bb-results__grid3 { grid-template-columns: repeat(2, 1fr); }
-  /* 9th image would sit alone in a half-width cell — let it fill the row */
+  /* 9th image would sit alone in a half-width cell — let it fill the row.
+     Reset the square padding-bottom hack from the base rule first — it
+     conflicts with aspect-ratio (both trying to size height from width)
+     and was blowing this card's rendered width out past the grid track. */
   .bb-results__grid3 .bb-rcard:last-child:nth-child(odd) {
     grid-column: span 2;
+    height: auto;
+    padding-bottom: 0;
     aspect-ratio: 2 / 1;
   }
 }

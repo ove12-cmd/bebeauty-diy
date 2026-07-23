@@ -840,6 +840,9 @@
 
   /* Steps */
   .bb-shop-steps__head { flex-direction: column; align-items: flex-start; gap: 16px; }
+  /* Long button text can't stay on one line in the narrow stacked column —
+     let it wrap instead of forcing the button past the container edge. */
+  .bb-shop-steps__guide-btn { white-space: normal; text-align: center; width: 100%; justify-content: center; }
   .bb-shop-steps { grid-template-columns: 1fr; gap: 20px; }
 
   /* Before/after */
