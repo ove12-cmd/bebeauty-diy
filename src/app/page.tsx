@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import FinalCTA from "@/components/FinalCTA";
 import FloatingCTA from "@/components/FloatingCTA";
 import Hero from "@/components/Hero";
@@ -11,11 +10,7 @@ import UrgencyPopup from "@/components/UrgencyPopup";
 import VideoSection from "@/components/VideoSection";
 import WhyBeBeauty from "@/components/WhyBeBeauty";
 
-export const metadata: Metadata = {
-  // title intentionally omitted — inherits the layout's untemplated default
-  // ("beBeauty DIY — Salongi sära, ilma salongita") to avoid brand duplication.
-  description: "Proovi DIY hambakristalli komplekti. Salongivääriline sära kodus vaid 10 minutiga. Preciosa & Primero kristallid.",
-};
+// No page-level metadata — inherits title/description from the root layout.
 
 export default function Home() {
   return (
