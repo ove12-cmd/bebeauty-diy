@@ -27,7 +27,7 @@ export default function Footer() {
             <Link href="/#kuidas" className="bb-footer__link">Kuidas see töötab</Link>
             <Link href="/juhend" className="bb-footer__link">Paigaldusjuhend</Link>
             <Link href="/hambakristalli-komplekt#arvustused" className="bb-footer__link">KKK</Link>
-            <Link href="/kontakt" className="bb-footer__link">Kontakt</Link>
+            {/* Kontakt hidden for now */}
             <Link href="/tarne" className="bb-footer__link">Tarne ja tagastus</Link>
             <Link href="/privaatsus" className="bb-footer__link">Privaatsuspoliitika</Link>
             <Link href="/tingimused" className="bb-footer__link">Tingimused</Link>
