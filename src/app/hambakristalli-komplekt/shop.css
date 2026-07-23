@@ -117,15 +117,24 @@
 
 .bb-shop-step { display: flex; flex-direction: column; gap: 0; }
 
-.bb-shop-steps__cta {
+.bb-shop-steps__head {
   display: flex;
-  justify-content: center;
-  margin-top: 40px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 40px;
 }
+.bb-shop-steps__head .bb-shop-section__title { margin: 0; }
+
 .bb-shop-steps__guide-btn {
   background: transparent;
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid #ffffff;
   color: #ffffff;
+  box-shadow: none;
+  flex-shrink: 0;
+}
+.bb-shop-steps__guide-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .bb-shop-step__img {
@@ -830,6 +839,7 @@
   .bb-box-row__num { font-size: 24px; }
 
   /* Steps */
+  .bb-shop-steps__head { flex-direction: column; align-items: flex-start; gap: 16px; }
   .bb-shop-steps { grid-template-columns: 1fr; gap: 20px; }
 
   /* Before/after */

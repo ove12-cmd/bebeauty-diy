@@ -438,7 +438,12 @@ export default function ShopPage() {
 
       {/* ── How to apply ── */}
       <div className="bb-shop-section bb-shop-section--dark" id="paigaldus">
-        <h2 className="bb-shop-section__title bb-shop-section__title--light">Kuidas paigaldada</h2>
+        <div className="bb-shop-steps__head">
+          <h2 className="bb-shop-section__title bb-shop-section__title--light">Kuidas paigaldada</h2>
+          <Button href="/juhend" className="bb-shop-steps__guide-btn" arrow>
+            Vaata täielikku paigaldusjuhendit
+          </Button>
+        </div>
         <div className="bb-shop-steps">
           {STEPS.map(step => (
             <div key={step.n} className="bb-shop-step">
@@ -456,11 +461,6 @@ export default function ShopPage() {
               <p className="bb-shop-step__desc">{step.desc}</p>
             </div>
           ))}
-        </div>
-        <div className="bb-shop-steps__cta">
-          <Button href="/juhend" className="bb-shop-steps__guide-btn" arrow>
-            Vaata täielikku paigaldusjuhendit
-          </Button>
         </div>
       </div>
 
