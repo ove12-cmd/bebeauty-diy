@@ -38,12 +38,12 @@ function priceStr(n: number) {
 }
 
 const BOX_ITEMS = [
-  { name: "UV LED lamp", desc: "Professionaalne UV-lamp kiirlampimiseks" },
-  { name: "Kristallid", desc: "9× selge, 9× roosa, 4× lisavärvi — Primero & Preciosa" },
-  { name: "Liim & söövituslahus", desc: "Profitaseme liim ja etch, hambasõbralik" },
-  { name: "Aplikaatorid", desc: "5× kristalliaplikaator, 3× vatipulk" },
-  { name: "Põsepidur", desc: "Hõlbustab paigaldust" },
-  { name: "Kinkekarp", desc: "Kaunis must karp — sobib kingituseks" },
+  { name: "UV LED-lamp", desc: "Kiireks ja ühtlaseks kõvastamiseks." },
+  { name: "Premium kristallid", desc: "22 Primero & Preciosa kristalli kolmes erinevas kujus." },
+  { name: "Liim & Etch", desc: "Professionaalseks kinnitamiseks ja paremaks püsivuseks." },
+  { name: "Aplikaatorid", desc: "Kõik vajalik kristallide täpseks paigaldamiseks." },
+  { name: "Põsehoidja", desc: "Hoiab tööala mugavalt avatuna." },
+  { name: "Valmis kasutamiseks", desc: "Ava karp ja alusta kohe." },
 ];
 
 const STEPS = [
