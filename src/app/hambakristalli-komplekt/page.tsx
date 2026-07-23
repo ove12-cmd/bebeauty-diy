@@ -64,9 +64,9 @@ const FAQS = [
 ];
 
 const REVIEWS = [
-  { name: "Laura K.", stars: 5, text: "Täpselt selline nagu ootasin! Kristall püsis kolm kuud ja nägi välja nagu salongist.", date: "märts 2025", img: "/testimonials/testimonial-1.jpg", pos: "center 25%" },
-  { name: "Marii T.", stars: 5, text: "Super lihtne panna. Kõik mu sõbrad küsisid kust sain 😍", date: "aprill 2025", img: "/testimonials/testimonial-2.jpg", pos: "center 35%" },
-  { name: "Keidi L.", stars: 5, text: "Ostsin Glam Kiti — väärt iga senti. Kristallid on ilusad ja liim peab tõesti kinni.", date: "mai 2025", img: "/testimonials/testimonial-3.jpg", pos: "center 62%" },
+  { name: "Laura K.", stars: 5, text: "Täpselt selline tulemus, nagu lootsin. Paigaldamine oli lihtne ja kristall püsis üllatavalt hästi. 10 minutit ja valmis.", date: "märts 2025", img: "/testimonials/testimonial-1.jpg", pos: "center 25%" },
+  { name: "Marii T.", stars: 5, text: "Olin alguses skeptiline, aga tulemus jäi tõesti ilus. Sain paigaldamisega esimese korraga hakkama.", date: "aprill 2025", img: "/testimonials/testimonial-2.jpg", pos: "center 35%" },
+  { name: "Keidi L.", stars: 5, text: "Väga kvaliteetne komplekt. Kõik vajalik oli kaasas ja tulemus jäi täpselt selline, nagu soovisin. 2.0 mm oli ideaalne valik – täpselt piisavalt märgatav.", date: "mai 2025", img: "/testimonials/testimonial-3.jpg", pos: "center 62%" },
 ];
 
 function Stars({ n }: { n: number }) {
