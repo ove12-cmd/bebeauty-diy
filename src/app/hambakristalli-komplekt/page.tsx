@@ -115,10 +115,10 @@ const TRUST = [
 ];
 
 const STATS = [
-  { num: "2400+", label: "õnnelikku klienti" },
-  { num: "4.9★", label: "keskmine hinne" },
-  { num: "1–2p", label: "tarne Eestis" },
-  { num: "100%", label: "hambasõbralik" },
+  { num: "10 min", label: "Paigaldusaeg" },
+  { num: "22", label: "Premium kristalli komplektis" },
+  { num: "1–2p", label: "Tarne Eestis" },
+  { num: "2–4 nädalat", label: "Keskmine püsivus" },
 ];
 
 const SIZE_GUIDE = [
