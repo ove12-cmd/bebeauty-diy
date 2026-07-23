@@ -118,7 +118,7 @@ export default function UrgencyPopup({ autoOpen = true }: { autoOpen?: boolean }
                   Kehtib veel <span className="bb-popup__timer-val">{formatTime(secsLeft)}</span>
                 </p>
               )}
-              <Button href="/shop" className="bb-popup__cta" onClick={() => setVisible(false)}>
+              <Button href="/hambakristalli-komplekt" className="bb-popup__cta" onClick={() => setVisible(false)}>
                 Kasuta koodi →
               </Button>
             </div>

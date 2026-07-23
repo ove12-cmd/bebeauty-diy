@@ -117,7 +117,7 @@ export default function CheckoutPage() {
         <div className="bb-checkout__inner bb-checkout__empty">
           <h1 className="bb-checkout__title">Ostukorv on tühi</h1>
           <p>Lisa komplekt korvi, et tellimus vormistada.</p>
-          <Button href="/shop" arrow>Vaata komplekte</Button>
+          <Button href="/hambakristalli-komplekt" arrow>Vaata komplekte</Button>
         </div>
       </main>
     );
@@ -126,7 +126,7 @@ export default function CheckoutPage() {
   return (
     <main className="bb-checkout">
       <div className="bb-checkout__inner">
-        <Link href="/shop" className="bb-checkout__back">← Tagasi poodi</Link>
+        <Link href="/hambakristalli-komplekt" className="bb-checkout__back">← Tagasi poodi</Link>
         <h1 className="bb-checkout__title">Vormista tellimus</h1>
 
         <div className="bb-checkout__grid">

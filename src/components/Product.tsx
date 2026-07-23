@@ -41,7 +41,7 @@ export default function Product() {
             </li>
           ))}
         </ul>
-        <Button href="/shop" className="bb-product__cta" arrow>
+        <Button href="/hambakristalli-komplekt" className="bb-product__cta" arrow>
           Osta komplekt
         </Button>
       </div>

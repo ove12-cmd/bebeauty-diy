@@ -31,7 +31,7 @@ export function productSchema({ price, currency = "EUR" }: { price: number; curr
       priceCurrency: currency,
       price: String(price),
       availability: "https://schema.org/InStock",
-      url: `${BASE_URL}/shop`,
+      url: `${BASE_URL}/hambakristalli-komplekt`,
     },
     aggregateRating: {
       "@type": "AggregateRating",

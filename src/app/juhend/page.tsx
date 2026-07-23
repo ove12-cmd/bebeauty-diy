@@ -206,7 +206,7 @@ export default function GuidePage() {
             </div>
 
             <div className="bb-guide__done-actions">
-              <Button href="/shop" arrow>
+              <Button href="/hambakristalli-komplekt" arrow>
                 Osta komplekt
               </Button>
               <button className="bb-guide__restart" onClick={() => setStep(0)}>Alusta uuesti</button>

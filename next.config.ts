@@ -64,6 +64,12 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      // Old shop URL → keyword slug (permanent, preserves any existing links).
+      { source: "/shop", destination: "/hambakristalli-komplekt", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -28,7 +28,7 @@ export default function FinalCTA() {
         Lisa oma naeratusele särav detail vaid mõne minutiga.<br />
         Telli täna – komplekt on peagi sinu lähimas pakiautomaadis.
       </p>
-      <Button href="/shop" className="bb-cta__btn" arrow>
+      <Button href="/hambakristalli-komplekt" className="bb-cta__btn" arrow>
         Osta komplekt
       </Button>
     </section>

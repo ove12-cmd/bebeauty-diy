@@ -12,7 +12,7 @@ export default function NotFound() {
           <Button href="/" arrow>
             Tagasi avalehele
           </Button>
-          <Link href="/shop" className="bb-notfound__shop">
+          <Link href="/hambakristalli-komplekt" className="bb-notfound__shop">
             Vaata tooteid
           </Link>
         </div>

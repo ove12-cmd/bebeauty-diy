@@ -34,7 +34,7 @@ export default function CartDrawer() {
         {items.length === 0 ? (
           <div className="bb-cart__empty">
             <p>Sinu ostukorv on tühi.</p>
-            <Button href="/shop" onClick={close} arrow>Vaata komplekte</Button>
+            <Button href="/hambakristalli-komplekt" onClick={close} arrow>Vaata komplekte</Button>
           </div>
         ) : (
           <>

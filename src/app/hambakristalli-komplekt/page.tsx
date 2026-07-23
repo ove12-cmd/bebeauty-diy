@@ -267,7 +267,7 @@ export default function ShopPage() {
     <main className="bb-shop">
       <JsonLd data={productSchema({ price: variant.price })} />
       <JsonLd data={faqSchema(FAQS)} />
-      <JsonLd data={breadcrumbSchema([{ name: "Avaleht", path: "/" }, { name: "Pood", path: "/shop" }])} />
+      <JsonLd data={breadcrumbSchema([{ name: "Avaleht", path: "/" }, { name: "Hambakristalli komplekt", path: "/hambakristalli-komplekt" }])} />
       <UrgencyPopup autoOpen={false} />
       <StickyBar price={priceStr(finalPrice)} original={priceStr(variant.original)} onAdd={addToCart} />
       <Link href="/" className="bb-shop__back">← Tagasi</Link>

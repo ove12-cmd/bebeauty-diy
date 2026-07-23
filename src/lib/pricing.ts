@@ -5,7 +5,7 @@
 export const CURRENCY = "EUR";
 export const LOCALE = "et";
 
-// Variant id → unit price (€). Mirrors VARIANTS in src/app/shop/page.tsx.
+// Variant id → unit price (€). Mirrors VARIANTS in src/app/hambakristalli-komplekt/page.tsx.
 export const VARIANT_PRICES: Record<string, number> = {
   s17: 35,
   s20: 35,
