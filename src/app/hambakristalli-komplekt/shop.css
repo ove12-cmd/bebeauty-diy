@@ -117,6 +117,17 @@
 
 .bb-shop-step { display: flex; flex-direction: column; gap: 0; }
 
+.bb-shop-steps__cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+.bb-shop-steps__guide-btn {
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+}
+
 .bb-shop-step__img {
   width: 100%;
   aspect-ratio: 1 / 1.5;

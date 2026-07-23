@@ -457,6 +457,11 @@ export default function ShopPage() {
             </div>
           ))}
         </div>
+        <div className="bb-shop-steps__cta">
+          <Button href="/juhend" className="bb-shop-steps__guide-btn" arrow>
+            Vaata täielikku paigaldusjuhendit
+          </Button>
+        </div>
       </div>
 
       {/* ── Before / After gallery ── */}
