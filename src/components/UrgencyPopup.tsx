@@ -52,7 +52,7 @@ export default function UrgencyPopup({ autoOpen = true }: { autoOpen?: boolean }
   // Restore existing code if still valid — only ever a code this popup
   // itself generated, never BEBEAUTY10 or an internal test code.
   useEffect(() => {
-    const saved = localStorage.getItem("bbDiscountCode");
+    const saved = localStorage.getItem("bbGeneratedCode");
     const secs = getSecsLeft();
     if (saved && isGeneratedMarketingCode(saved) && secs && secs > 0) {
       setCode(saved);
@@ -73,7 +73,11 @@ export default function UrgencyPopup({ autoOpen = true }: { autoOpen?: boolean }
   function handleGenerate() {
     const newCode = generateCode();
     const expiry = Date.now() + 15 * 60 * 1000;
-    localStorage.setItem("bbDiscountCode", newCode);
+    // Only store the *generated* code + its timer. The discount is not
+    // "applied" until the user enters it and clicks Rakenda on the product
+    // page (which sets bbDiscountCode) — generating alone must not discount
+    // the cart or checkout.
+    localStorage.setItem("bbGeneratedCode", newCode);
     localStorage.setItem("bbCodeExpiry", String(expiry));
     window.dispatchEvent(new CustomEvent("bb:codeGenerated"));
     setCode(newCode);

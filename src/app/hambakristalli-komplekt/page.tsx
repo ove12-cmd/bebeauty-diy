@@ -33,8 +33,6 @@ const RESULTS: { type: "image" | "video"; src: string }[] = [
   { type: "image", src: "/results/result-3.jpg" },
 ];
 
-const DISCOUNT = 0.10;
-
 function priceStr(n: number) {
   return (n % 1 === 0 ? String(n) : n.toFixed(2).replace(".", ",")) + "€";
 }
@@ -185,7 +183,7 @@ function useCodeTimer() {
   const [secsLeft, setSecsLeft] = useState<number | null>(null);
   useEffect(() => {
     function sync() {
-      if (!isGeneratedMarketingCode(localStorage.getItem("bbDiscountCode"))) {
+      if (!isGeneratedMarketingCode(localStorage.getItem("bbGeneratedCode"))) {
         setSecsLeft(null);
         return;
       }
@@ -238,15 +236,13 @@ export default function ShopPage() {
 
   function applyCode() {
     const entered = code.trim().toUpperCase();
-    const stored = typeof window !== "undefined" ? localStorage.getItem("bbDiscountCode")?.toUpperCase() : null;
-    const mappedPct = discountPctForCode(entered);
-    const isGeneratedMatch = Boolean(stored && entered === stored);
-    const pct = mappedPct > 0 ? mappedPct : isGeneratedMatch ? DISCOUNT * 100 : 0;
+    const pct = discountPctForCode(entered);
     if (pct > 0) {
       setCodeApplied(true);
       setCodeError(false);
       setAppliedPct(pct);
-      // Persist the code itself — checkout re-derives the discount server-side.
+      // Persist only on apply — bbDiscountCode is the "applied" key the cart
+      // and checkout read. Generating a code alone must never set it.
       localStorage.setItem("bbDiscountCode", entered);
       window.dispatchEvent(new CustomEvent("bb:discountChanged"));
     } else {
