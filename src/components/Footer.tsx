@@ -21,13 +21,7 @@ export default function Footer() {
 
         {/* Middle — link columns */}
         <div className="bb-footer__cols">
-          <div className="bb-footer__col">
-            <span className="bb-footer__col-title">Pood</span>
-            <Link href="/hambakristalli-komplekt" className="bb-footer__link">Komplektid</Link>
-            <Link href="/hambakristalli-komplekt" className="bb-footer__link">Kristallid</Link>
-            <Link href="/hambakristalli-komplekt" className="bb-footer__link">Tarvikud</Link>
-            <Link href="/hambakristalli-komplekt" className="bb-footer__link">Kinkekaardid</Link>
-          </div>
+          {/* Pood column hidden for now */}
           <div className="bb-footer__col">
             <span className="bb-footer__col-title">Info</span>
             <Link href="/#kuidas" className="bb-footer__link">Kuidas see töötab</Link>

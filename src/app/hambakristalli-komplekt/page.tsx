@@ -494,10 +494,6 @@ export default function ShopPage() {
       <div className="bb-shop-section bb-shop-section--cream" id="arvustused">
         <div className="bb-shop-reviews__header">
           <h2 className="bb-shop-section__title">Arvustused</h2>
-          <div className="bb-shop-reviews__avg">
-            <Stars n={5} />
-            <span className="bb-shop-reviews__count">2400+ arvustust</span>
-          </div>
         </div>
         <div className="bb-shop-reviews">
           {REVIEWS.map((r, i) => (
