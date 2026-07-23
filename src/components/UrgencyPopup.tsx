@@ -92,7 +92,27 @@ export default function UrgencyPopup({ autoOpen = true }: { autoOpen?: boolean }
 
   const expired = secsLeft !== null && secsLeft <= 0;
 
-  if (!visible) return null;
+  const popupImg = (
+    <Image
+      src="/popupo.jpg"
+      alt=""
+      fill
+      sizes="(max-width: 600px) 0px, 340px"
+      priority
+      style={{ objectFit: "cover" }}
+    />
+  );
+
+  if (!visible) {
+    // Keep the exact same <Image> (same src/sizes) mounted off-screen so the
+    // browser fetches and caches it well before the popup ever opens — by
+    // the time visible flips true, there's nothing left to load.
+    return (
+      <div aria-hidden style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", opacity: 0, pointerEvents: "none" }}>
+        {popupImg}
+      </div>
+    );
+  }
 
   return (
     <div className="bb-popup-overlay" onClick={() => setVisible(false)}>
@@ -100,13 +120,7 @@ export default function UrgencyPopup({ autoOpen = true }: { autoOpen?: boolean }
         <button className="bb-popup__close" onClick={() => setVisible(false)} aria-label="Sulge">✕</button>
 
         <div className="bb-popup__img">
-          <Image
-            src="/popupo.jpg"
-            alt=""
-            fill
-            sizes="(max-width: 600px) 0px, 340px"
-            style={{ objectFit: "cover" }}
-          />
+          {popupImg}
         </div>
 
         <div className="bb-popup__body">
