@@ -2761,7 +2761,7 @@ html, body {
   .bb-showcase__side { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .bb-showcase__side .bb-slot { height: 180px; }
   .bb-cta-card { padding: 20px; }
-  .bb-cta-card__heading { font-size: 17.5px; }
+  .bb-cta-card__heading { font-size: 26.25px; } /* 50% larger than the prior 17.5px mobile size */
   .bb-cta-card__price { font-size: 20px; }
   .bb-cta-card__buy { flex-wrap: wrap; row-gap: 10px; }
 
