@@ -22,16 +22,16 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      // Scripts: self + Next.js inline scripts + Stripe.js (embedded card fields)
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com",
+      // Scripts: self + Next.js inline scripts + Stripe.js (embedded card fields) + gtag.js
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://www.googletagmanager.com",
       // Styles: self + inline (Tailwind/CSS-in-JS needs this)
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       // Fonts
       "font-src 'self' https://fonts.gstatic.com",
-      // Images: self + Unsplash CDN + data URIs
-      "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com",
-      // Connect: self + Unsplash API + Stripe API (PaymentIntent confirmation)
-      "connect-src 'self' https://images.unsplash.com https://plus.unsplash.com https://api.stripe.com",
+      // Images: self + Unsplash CDN + data URIs + GA's pixel fallback
+      "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://www.google-analytics.com",
+      // Connect: self + Unsplash API + Stripe API (PaymentIntent confirmation) + GA beacon
+      "connect-src 'self' https://images.unsplash.com https://plus.unsplash.com https://api.stripe.com https://www.google-analytics.com https://analytics.google.com",
       // Stripe's embedded card fields render inside a same-origin-looking iframe it controls
       "frame-src https://js.stripe.com https://hooks.stripe.com",
       // No plugins

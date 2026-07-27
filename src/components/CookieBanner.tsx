@@ -14,11 +14,13 @@ export default function CookieBanner() {
 
   function accept() {
     localStorage.setItem("bbCookies", "accepted");
+    window.dispatchEvent(new CustomEvent("bb:cookiesUpdated"));
     setVisible(false);
   }
 
   function decline() {
     localStorage.setItem("bbCookies", "declined");
+    window.dispatchEvent(new CustomEvent("bb:cookiesUpdated"));
     setVisible(false);
   }
 

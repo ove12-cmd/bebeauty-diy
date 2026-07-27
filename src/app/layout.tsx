@@ -3,6 +3,7 @@ import { Bricolage_Grotesque, Kalam } from "next/font/google";
 import JsonLd from "@/components/JsonLd";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 import CartDrawer from "@/components/CartDrawer";
 import { CartProvider } from "@/hooks/useCart";
 import { organizationSchema, websiteSchema } from "@/lib/seo";
@@ -55,6 +56,7 @@ export default function RootLayout({
       <body className="min-h-full">
         <JsonLd data={organizationSchema} />
         <JsonLd data={websiteSchema} />
+        <GoogleAnalytics />
         <CartProvider>
           {children}
           <Footer />
