@@ -4,6 +4,7 @@ import JsonLd from "@/components/JsonLd";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import MetaPixel from "@/components/MetaPixel";
 import CartDrawer from "@/components/CartDrawer";
 import { CartProvider } from "@/hooks/useCart";
 import { organizationSchema, websiteSchema } from "@/lib/seo";
@@ -57,6 +58,7 @@ export default function RootLayout({
         <JsonLd data={organizationSchema} />
         <JsonLd data={websiteSchema} />
         <GoogleAnalytics />
+        <MetaPixel />
         <CartProvider>
           {children}
           <Footer />

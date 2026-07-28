@@ -1,7 +1,7 @@
 "use client";
 
 import Script from "next/script";
-import { useEffect, useState } from "react";
+import { useCookieConsent } from "@/hooks/useCookieConsent";
 
 const GA_MEASUREMENT_ID = "G-Z8Z9HJGYVW";
 
@@ -11,14 +11,7 @@ const GA_MEASUREMENT_ID = "G-Z8Z9HJGYVW";
  * read it, so analytics would otherwise fire regardless of Accept/Decline.
  */
 export default function GoogleAnalytics() {
-  const [consented, setConsented] = useState(false);
-
-  useEffect(() => {
-    const check = () => setConsented(localStorage.getItem("bbCookies") === "accepted");
-    check();
-    window.addEventListener("bb:cookiesUpdated", check);
-    return () => window.removeEventListener("bb:cookiesUpdated", check);
-  }, []);
+  const consented = useCookieConsent();
 
   if (!consented) return null;
 
