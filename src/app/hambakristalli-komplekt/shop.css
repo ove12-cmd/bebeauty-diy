@@ -811,6 +811,7 @@
 
   /* Gallery */
   .bb-shop__gallery { gap: 10px; }
+  .bb-shop__img--main { aspect-ratio: 3 / 2; max-height: none; }
 
   /* Variants */
   .bb-variants { gap: 8px; }
@@ -856,14 +857,15 @@
   .bb-faq__a { padding: 0 16px 18px 60px; }
 
   /* Stats */
-  .bb-stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .bb-stats-bar { grid-template-columns: 1fr; }
 
   /* Trust */
   .bb-trust { grid-template-columns: repeat(2, 1fr); }
 
-  /* Section paddings */
-  .bb-shop-section--dark, .bb-shop-section--cream { padding: 36px 16px; border-radius: 20px; }
+  /* Section paddings — base rule first so --dark/--cream's side padding
+     (equal specificity) isn't overridden by cascade order. */
   .bb-shop-section { padding: 56px 0; }
+  .bb-shop-section--dark, .bb-shop-section--cream { padding: 36px 16px; border-radius: 20px; }
 
   /* Subnav */
   .bb-shop-subnav { padding: 0 16px; margin-left: -16px; margin-right: -16px; overflow-x: auto; white-space: nowrap; }
