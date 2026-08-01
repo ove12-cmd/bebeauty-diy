@@ -2804,7 +2804,7 @@ html, body {
   .bb-footer__cols { flex-wrap: wrap; gap: 28px; }
   .bb-footer__col { min-width: 120px; }
   .bb-footer__card { width: 100%; flex-direction: column; }
-  .bb-footer__card-img { width: 100%; aspect-ratio: 16 / 7; }
+  .bb-footer__card-img { width: 100%; aspect-ratio: 3 / 2; }
   .bb-footer__bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
   .bb-footer__payments { flex-wrap: wrap; }
 
