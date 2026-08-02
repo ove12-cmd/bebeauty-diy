@@ -68,6 +68,8 @@ const nextConfig: NextConfig = {
     return [
       // Old shop URL → keyword slug (permanent, preserves any existing links).
       { source: "/shop", destination: "/hambakristalli-komplekt", permanent: true },
+      // Old product URL → keyword slug (permanent, preserves any existing links).
+      { source: "/product/diy-hambakristalli-komplekt", destination: "/hambakristalli-komplekt", permanent: true },
       // Kontakt page hidden for now — temporary (not permanent) so it's a
       // one-line revert once the page comes back.
       { source: "/kontakt", destination: "/", permanent: false },
