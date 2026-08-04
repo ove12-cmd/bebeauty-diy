@@ -177,8 +177,6 @@ function StickyBar({ price, original, onAdd }: { price: string; original: string
   );
 }
 
-const CODE_WINDOW_MS = 15 * 60 * 1000;
-
 function useCodeTimer() {
   const [secsLeft, setSecsLeft] = useState<number | null>(null);
   useEffect(() => {
@@ -188,17 +186,12 @@ function useCodeTimer() {
         return;
       }
       const expiry = Number(localStorage.getItem("bbCodeExpiry") || 0);
-      if (!expiry) {
-        setSecsLeft(null);
-        return;
-      }
-      let remaining = Math.round((expiry - Date.now()) / 1000);
-      // Ran out — just restart the window so the code never dead-ends.
-      if (remaining <= 0) {
-        localStorage.setItem("bbCodeExpiry", String(Date.now() + CODE_WINDOW_MS));
-        remaining = CODE_WINDOW_MS / 1000;
-      }
-      setSecsLeft(remaining);
+      const remaining = expiry ? Math.round((expiry - Date.now()) / 1000) : 0;
+      // Truly expired — hide the ticker (the "Genereeri sooduskood" CTA
+      // takes over below). Do NOT auto-extend: that silently resurrects the
+      // ticker forever on every future visit for anyone who ever generated
+      // a code once, with no further action on their part.
+      setSecsLeft(remaining > 0 ? remaining : null);
     }
     sync();
     const t = setInterval(sync, 1000);
