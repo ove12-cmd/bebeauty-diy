@@ -22,16 +22,16 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      // Scripts: self + Next.js inline scripts + Stripe.js (embedded card fields) + gtag.js + Meta Pixel
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://www.googletagmanager.com https://connect.facebook.net",
+      // Scripts: self + Next.js inline scripts + Stripe.js (embedded card fields) + gtag.js + Meta Pixel + Clarity
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://www.googletagmanager.com https://connect.facebook.net https://www.clarity.ms",
       // Styles: self + inline (Tailwind/CSS-in-JS needs this)
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       // Fonts
       "font-src 'self' https://fonts.gstatic.com",
       // Images: self + Unsplash CDN + data URIs + GA's pixel fallback + Meta Pixel beacon
       "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://www.google-analytics.com https://www.facebook.com",
-      // Connect: self + Unsplash API + Stripe API (PaymentIntent confirmation) + GA/Meta beacons
-      "connect-src 'self' https://images.unsplash.com https://plus.unsplash.com https://api.stripe.com https://www.google-analytics.com https://analytics.google.com https://www.facebook.com https://connect.facebook.net",
+      // Connect: self + Unsplash API + Stripe API (PaymentIntent confirmation) + GA/Meta/Clarity beacons
+      "connect-src 'self' https://images.unsplash.com https://plus.unsplash.com https://api.stripe.com https://www.google-analytics.com https://analytics.google.com https://www.facebook.com https://connect.facebook.net https://*.clarity.ms",
       // Stripe's embedded card fields render inside a same-origin-looking iframe it controls
       "frame-src https://js.stripe.com https://hooks.stripe.com",
       // No plugins
