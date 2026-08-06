@@ -97,7 +97,7 @@ export default function UrgencyPopup({ autoOpen = true }: { autoOpen?: boolean }
       src="/popupo.jpg"
       alt=""
       fill
-      sizes="(max-width: 600px) 0px, 340px"
+      sizes="(max-width: 768px) 100vw, 340px"
       priority
       style={{ objectFit: "cover" }}
     />

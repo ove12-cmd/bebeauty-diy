@@ -11,7 +11,7 @@
   --bb-ink-2:   #4a4a4a;
 
   --bb-font:    var(--font-bricolage), system-ui, sans-serif;
-  --bb-hand:    var(--font-kalam), cursive;
+  --bb-hand:    var(--font-kalam), var(--font-bricolage), system-ui, sans-serif;
 
   --bb-shadow:  0 18px 50px -28px rgba(0, 0, 0, 0.35);
 
@@ -2671,7 +2671,7 @@ html, body {
 
 @media (max-width: 600px) {
   .bb-popup { grid-template-columns: 1fr; }
-  .bb-popup__img { display: none; }
+  .bb-popup__img { min-height: 200px; max-height: 200px; }
   .bb-popup__body { padding: 40px 28px 32px; }
 }
 
@@ -2810,7 +2810,7 @@ html, body {
 
   /* ── Popup ── */
   .bb-popup { grid-template-columns: 1fr; max-width: 92vw; }
-  .bb-popup__img { display: none; }
+  .bb-popup__img { min-height: 200px; max-height: 200px; }
   .bb-popup__body { padding: 36px 24px 28px; }
   .bb-popup__title { font-size: 22px; }
   .bb-popup__code-wrap { flex-direction: column; gap: 10px; }
