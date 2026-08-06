@@ -23,7 +23,7 @@ const securityHeaders = [
     value: [
       "default-src 'self'",
       // Scripts: self + Next.js inline scripts + Stripe.js (embedded card fields) + gtag.js + Meta Pixel + Clarity
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://www.googletagmanager.com https://connect.facebook.net https://www.clarity.ms",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://www.googletagmanager.com https://connect.facebook.net https://*.clarity.ms",
       // Styles: self + inline (Tailwind/CSS-in-JS needs this)
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       // Fonts
