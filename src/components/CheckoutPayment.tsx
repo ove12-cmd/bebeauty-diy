@@ -19,7 +19,7 @@ function PayForm({
 }) {
   const stripe = useStripe();
   const elements = useElements();
-  const { clear } = useCart();
+  const { clear, items } = useCart();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,6 +46,24 @@ function PayForm({
     }
 
     if (paymentIntent?.status === "succeeded") {
+      // Snapshot for the Purchase event fired on /checkout/success — must be
+      // written (and items read) before clear() empties the cart below.
+      try {
+        sessionStorage.setItem(
+          "bbLastOrder",
+          JSON.stringify({
+            order_id: paymentIntent.id,
+            // amount_received isn't on @stripe/stripe-js's lighter client type
+            // (only the server SDK's) — amount is what was actually charged
+            // for a card payment that just reported "succeeded" here.
+            value: (paymentIntent.amount ?? 0) / 100,
+            currency: "EUR",
+            content_ids: items.map((i) => i.id),
+          }),
+        );
+      } catch {
+        /* ignore storage errors — Purchase tracking is best-effort */
+      }
       clear();
       window.location.href = successUrl;
       return;

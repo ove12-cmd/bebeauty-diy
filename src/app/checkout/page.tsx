@@ -6,7 +6,8 @@ import CheckoutPayment from "@/components/CheckoutPayment";
 import { useCart } from "@/hooks/useCart";
 import { searchLockers, type Locker } from "@/lib/lockers";
 import { discountPctForCode } from "@/lib/pricing";
-import { useEffect, useMemo, useState } from "react";
+import { trackMeta, CURRENCY } from "@/lib/meta-pixel";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./checkout.css";
 
 const DELIVERY = [
@@ -53,6 +54,20 @@ export default function CheckoutPage() {
       setPayError(true);
     }
   }, []);
+
+  // InitiateCheckout — once per visit, only once the cart has actually
+  // hydrated from localStorage (count is 0 for a tick before that).
+  const initiateCheckoutFired = useRef(false);
+  useEffect(() => {
+    if (initiateCheckoutFired.current || count === 0) return;
+    initiateCheckoutFired.current = true;
+    trackMeta("InitiateCheckout", {
+      content_ids: items.map((i) => i.id),
+      value: subtotal,
+      num_items: count,
+      currency: CURRENCY,
+    });
+  }, [count, items, subtotal]);
 
   // Fetch Omniva lockers the first time the parcel-machine option is active.
   useEffect(() => {

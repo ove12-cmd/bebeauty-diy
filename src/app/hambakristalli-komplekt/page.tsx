@@ -3,12 +3,13 @@
 import "./shop.css";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import UrgencyPopup from "@/components/UrgencyPopup";
 import JsonLd from "@/components/JsonLd";
 import Button from "@/components/ui/Button";
 import { productSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
 import { discountPctForCode, isGeneratedMarketingCode } from "@/lib/pricing";
+import { trackMeta, CURRENCY } from "@/lib/meta-pixel";
 import { useCart } from "@/hooks/useCart";
 
 const VARIANTS = [
@@ -219,6 +220,20 @@ export default function ShopPage() {
   const addToCart = () =>
     add({ id: variant.id, label: `DIY Hambakristalli komplekt · ${variant.label}`, price: variant.price }, qty);
   const codeTimer = useCodeTimer();
+
+  // ViewContent — once per distinct variant selected, not on every re-render.
+  const viewedVariants = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    if (viewedVariants.current.has(variant.id)) return;
+    viewedVariants.current.add(variant.id);
+    trackMeta("ViewContent", {
+      content_ids: [variant.id],
+      content_name: `DIY Hambakristalli komplekt · ${variant.label}`,
+      content_type: "product",
+      value: variant.price,
+      currency: CURRENCY,
+    });
+  }, [variant.id, variant.label, variant.price]);
   const [code, setCode] = useState("");
   const [codeApplied, setCodeApplied] = useState(false);
   const [codeError, setCodeError] = useState(false);

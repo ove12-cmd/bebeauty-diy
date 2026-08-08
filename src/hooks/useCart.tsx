@@ -8,6 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { trackMeta, CURRENCY } from "@/lib/meta-pixel";
 
 export type CartItem = {
   id: string;
@@ -67,6 +68,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return [...prev, { ...item, qty }];
     });
     setIsOpen(true);
+    // Fired here (the data source) rather than on each "Lisa korvi" button,
+    // since there are several of those across the page.
+    trackMeta("AddToCart", {
+      content_ids: [item.id],
+      content_name: item.label,
+      content_type: "product",
+      value: item.price * qty,
+      currency: CURRENCY,
+    });
   }, []);
 
   const remove = useCallback((id: string) => {

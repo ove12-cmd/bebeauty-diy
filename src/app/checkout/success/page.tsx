@@ -2,9 +2,12 @@
 
 import Button from "@/components/ui/Button";
 import { useCart } from "@/hooks/useCart";
+import { trackMeta } from "@/lib/meta-pixel";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import "../checkout.css";
+
+type OrderSnapshot = { order_id: string; value: number; currency: string; content_ids: string[] };
 
 type OrderItem = { name: string; quantity: number; finalPrice: number };
 
@@ -37,6 +40,34 @@ function SuccessInner() {
   useEffect(() => {
     clear();
   }, [clear]);
+
+  // Purchase — fires exactly once per completed order. Absence of the
+  // snapshot (already-removed, or a refresh/direct hit) means "do nothing",
+  // which is what prevents double-counting.
+  const purchaseFired = useRef(false);
+  useEffect(() => {
+    if (purchaseFired.current) return;
+    purchaseFired.current = true;
+    const raw = sessionStorage.getItem("bbLastOrder");
+    if (!raw) return;
+    sessionStorage.removeItem("bbLastOrder");
+    try {
+      const snap = JSON.parse(raw) as OrderSnapshot;
+      trackMeta(
+        "Purchase",
+        {
+          content_ids: snap.content_ids,
+          content_type: "product",
+          value: snap.value,
+          currency: snap.currency,
+          order_id: snap.order_id,
+        },
+        snap.order_id,
+      );
+    } catch {
+      /* ignore a malformed snapshot */
+    }
+  }, []);
 
   useEffect(() => {
     if (!pi) return;

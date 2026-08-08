@@ -52,6 +52,15 @@ export async function POST(req: NextRequest) {
     priced.lines.map((l) => ({ name: l.name, quantity: l.qty, finalPrice: l.unitPrice }))
   ).slice(0, 490);
 
+  // Captured now (from the customer's own request) so the Stripe webhook —
+  // which only sees Stripe's server-to-server call — can still rebuild a
+  // well-matched Meta Conversions API event later.
+  const contentIds = priced.lines.map((l) => l.id).join(",");
+  const clientIp = (req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()) || req.headers.get("x-real-ip") || "";
+  const clientUa = (req.headers.get("user-agent") || "").slice(0, 250);
+  const fbp = req.cookies.get("_fbp")?.value || "";
+  const fbc = req.cookies.get("_fbc")?.value || "";
+
   try {
     const intent = await stripe().paymentIntents.create({
       amount: Math.round(priced.grandTotal * 100),
@@ -70,6 +79,11 @@ export async function POST(req: NextRequest) {
         subtotal: String(priced.subtotal),
         deliveryPrice: String(priced.deliveryPrice),
         itemsJson,
+        contentIds,
+        clientIp,
+        clientUa,
+        fbp,
+        fbc,
       },
     });
 
