@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Button from "@/components/ui/Button";
 import Logo from "@/components/ui/Logo";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "@/hooks/useCart";
 
 /* ── Icons ── */
@@ -70,6 +70,23 @@ function ImageSlot({ label, variant = "default", src, alt }: { label: string; va
 export default function Hero() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { count: cartCount, open: openCart } = useCart();
+  const [viewers, setViewers] = useState<number | null>(null);
+
+  useEffect(() => {
+    setViewers(7);
+    function scheduleNext(current: number) {
+      const delay = Math.floor(Math.random() * (240000 - 30000) + 30000);
+      return setTimeout(() => {
+        const change = Math.floor(Math.random() * 3) + 1;
+        const direction = Math.random() > 0.5 ? 1 : -1;
+        const next = Math.min(25, Math.max(4, current + change * direction));
+        setViewers(next);
+        scheduleNext(next);
+      }, delay);
+    }
+    const t = scheduleNext(7);
+    return () => clearTimeout(t);
+  }, []);
 
   return (
     <section className="bb-hero">
@@ -149,6 +166,10 @@ export default function Hero() {
               <Button href="/hambakristalli-komplekt" arrow>
                 Osta komplekt
               </Button>
+            </div>
+            <div className="bb-hero-urgency">
+              <span className="bb-hero-urgency__viewers">🔥 <strong>{viewers ?? "–"}</strong> inimest vaatab seda praegu</span>
+              <span className="bb-hero-urgency__stock">⚠ Ainult 3 komplekti laos</span>
             </div>
             <div className="bb-cta-card__rating">
               <span className="bb-cta-card__meta">Telli täna – komplekt on peagi sinu lähimas pakiautomaadis.</span>
