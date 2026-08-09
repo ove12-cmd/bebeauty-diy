@@ -43,13 +43,14 @@ function IconClose() {
 }
 
 /* ── Image Placeholder Slot ── */
-function ImageSlot({ label, variant = "default", src, alt }: { label: string; variant?: "default" | "lav"; src?: string; alt?: string }) {
+function ImageSlot({ label, variant = "default", src, alt, badge }: { label: string; variant?: "default" | "lav"; src?: string; alt?: string; badge?: React.ReactNode }) {
   return (
     <div className="bb-slot">
       <div className={`bb-slot__pill ${variant === "lav" ? "bb-slot__pill--lav" : ""}`}>
         <span className="bb-slot__dot" />
         {label}
       </div>
+      {badge}
       {src ? (
         <Image
           src={src}
@@ -155,7 +156,17 @@ export default function Hero() {
           <ImageSlot label="Tulemus" src="/home/hero.jpg" alt="Särav naeratus hambakristalliga" />
         </div>
         <div className="bb-showcase__side">
-          <ImageSlot label="Komplekt" variant="lav" src="/home/product.png" alt="beBeauty DIY hambakristalli komplekt" />
+          <ImageSlot
+            label="Komplekt"
+            variant="lav"
+            src="/home/product.png"
+            alt="beBeauty DIY hambakristalli komplekt"
+            badge={
+              <div className="bb-slot__viewers">
+                🔥 <strong>{viewers ?? "–"}</strong> vaatab seda praegu
+              </div>
+            }
+          />
           <div className="bb-cta-card">
             <div className="bb-cta-card__heading">
               Kõik ühes väikeses komplektis.
@@ -168,7 +179,6 @@ export default function Hero() {
               </Button>
             </div>
             <div className="bb-hero-urgency">
-              <span className="bb-hero-urgency__viewers">🔥 <strong>{viewers ?? "–"}</strong> inimest vaatab seda praegu</span>
               <span className="bb-hero-urgency__stock">⚠ Ainult 3 komplekti laos</span>
             </div>
             <div className="bb-cta-card__rating">

@@ -1,7 +1,4 @@
-"use client";
-
 import Image from "next/image";
-import { useRef } from "react";
 
 const REVIEWS = [
   { name: "Laura K.", text: "Täpselt selline tulemus, nagu lootsin. Paigaldamine oli lihtne ja kristall püsis üllatavalt hästi. 10 minutit ja valmis.", date: "märts 2025", img: "/testimonials/testimonial-1.jpg", pos: "center 25%" },
@@ -13,18 +10,12 @@ const REVIEWS = [
 ];
 
 export default function ReviewsSlider() {
-  const trackRef = useRef<HTMLDivElement>(null);
-
-  function scroll(dir: 1 | -1) {
-    trackRef.current?.scrollBy({ left: dir * 320, behavior: "smooth" });
-  }
-
   return (
     <section className="bb-testi">
       <span className="bb-testi__label">⭐ 500+ rahulolevat klienti</span>
       <h2 className="bb-testi__heading">Mida meie kliendid ütlevad</h2>
 
-      <div className="bb-testi__track" ref={trackRef}>
+      <div className="bb-testi__grid">
         {REVIEWS.map((r, i) => (
           <div key={i} className="bb-testi__card">
             <div className="bb-testi__img">
@@ -32,7 +23,7 @@ export default function ReviewsSlider() {
                 src={r.img}
                 alt={`${r.name} tulemus`}
                 fill
-                sizes="(max-width: 768px) 80vw, 320px"
+                sizes="(max-width: 768px) 100vw, 33vw"
                 style={{ objectFit: "cover", objectPosition: r.pos }}
               />
             </div>
@@ -44,15 +35,6 @@ export default function ReviewsSlider() {
             </div>
           </div>
         ))}
-      </div>
-
-      <div className="bb-testi__nav">
-        <button className="bb-testi__nav-btn" aria-label="Eelmised arvustused" onClick={() => scroll(-1)}>
-          ‹
-        </button>
-        <button className="bb-testi__nav-btn" aria-label="Järgmised arvustused" onClick={() => scroll(1)}>
-          ›
-        </button>
       </div>
     </section>
   );
