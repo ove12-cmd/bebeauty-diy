@@ -1,4 +1,8 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
+import ImageLightbox from "@/components/ImageLightbox";
 import ReviewSubmitPopup from "@/components/ReviewSubmitPopup";
 
 const REVIEWS = [
@@ -11,6 +15,8 @@ const REVIEWS = [
 ];
 
 export default function ReviewsSlider() {
+  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
+
   return (
     <section className="bb-testi">
       <h2 className="bb-testi__heading">Mida meie kliendid ütlevad</h2>
@@ -27,7 +33,12 @@ export default function ReviewsSlider() {
             </div>
             <span className="bb-stars">★★★★★</span>
             <p className="bb-testi__text">{r.text}</p>
-            <div className="bb-testi__photo">
+            <button
+              type="button"
+              className="bb-testi__photo"
+              aria-label={`Suurenda ${r.name} tulemuse foto`}
+              onClick={() => setLightbox({ src: r.img, alt: `${r.name} tulemus` })}
+            >
               <Image
                 src={r.img}
                 alt={`${r.name} tulemus`}
@@ -35,7 +46,7 @@ export default function ReviewsSlider() {
                 height={72}
                 style={{ objectFit: "cover", objectPosition: r.pos }}
               />
-            </div>
+            </button>
           </div>
         ))}
       </div>
@@ -43,6 +54,10 @@ export default function ReviewsSlider() {
       <div className="bb-testi__add">
         <ReviewSubmitPopup />
       </div>
+
+      {lightbox && (
+        <ImageLightbox src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox(null)} />
+      )}
     </section>
   );
 }
