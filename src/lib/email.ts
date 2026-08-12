@@ -100,3 +100,42 @@ export async function sendOrderEmails(order: OrderEmailData): Promise<void> {
     }
   }
 }
+
+export type ReviewSubmission = { name: string; rating: number; text: string };
+
+// Owner-only notification for a review a visitor submitted through the
+// "Lisa enda tagasiside" popup — nothing is published automatically, this
+// just lands in the inbox for manual review before it's added to the site.
+export async function sendReviewSubmissionEmail(review: ReviewSubmission): Promise<void> {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    console.warn("[email] RESEND_API_KEY missing — skipping review submission email");
+    return;
+  }
+
+  const from = process.env.ORDER_EMAIL_FROM || "beBeauty DIY <onboarding@resend.dev>";
+  const ownerTo = process.env.ORDER_EMAIL_TO?.split(",")
+    .map((e) => e.trim())
+    .filter(Boolean);
+  if (!ownerTo || ownerTo.length === 0) return;
+
+  const resend = new Resend(apiKey);
+  const stars = "★".repeat(review.rating) + "☆".repeat(5 - review.rating);
+  const html = `
+    <h2>Uus arvustus veebilehelt</h2>
+    <p><strong>Nimi:</strong> ${esc(review.name)}</p>
+    <p><strong>Hinnang:</strong> ${stars}</p>
+    <p><strong>Tekst:</strong></p>
+    <p>${esc(review.text).replace(/\n/g, "<br>")}</p>
+  `;
+
+  await Promise.allSettled(
+    ownerTo.map((to) =>
+      resend.emails
+        .send({ from, to, subject: `📝 Uus arvustus — ${review.name}`, html })
+        .catch((err) => {
+          console.error(`[email] review notification to ${to} failed:`, err);
+        }),
+    ),
+  );
+}

@@ -1505,16 +1505,6 @@ html, body {
   text-align: center;
 }
 
-.bb-testi__label {
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--bb-gold);
-  margin: 0 0 16px;
-}
-
 .bb-testi__heading {
   font-size: clamp(28px, 3.6vw, 42px);
   font-weight: var(--bb-fw-display);
@@ -1566,12 +1556,117 @@ html, body {
 .bb-testi__name { font-size: 13px; font-weight: 700; color: var(--bb-ink); }
 .bb-testi__date { font-size: 12px; color: var(--bb-ink-2); }
 
+.bb-testi__add {
+  margin-top: 32px;
+  text-align: center;
+}
+
+.bb-testi__add-btn {
+  background: transparent;
+  color: var(--bb-ink);
+  border: 1.5px solid #d8ceb5;
+  box-shadow: none;
+}
+
+.bb-testi__add-btn:hover {
+  background: #faf9f6;
+}
+
+/* ── Review submission popup ── */
+.bb-review-popup {
+  background: #ffffff;
+  border-radius: 28px;
+  max-width: 440px;
+  width: 100%;
+  position: relative;
+  padding: 40px 36px;
+  animation: popupIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.bb-review-popup__title {
+  font-size: 24px;
+  font-weight: var(--bb-fw-display);
+  color: var(--bb-ink);
+  margin: 0 0 20px;
+}
+
+.bb-review-popup__form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bb-review-popup__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bb-ink);
+  margin-top: 10px;
+  padding: 0;
+}
+
+.bb-review-popup__input,
+.bb-review-popup__textarea {
+  font-family: var(--bb-font);
+  font-size: 15px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1.5px solid #e5e0d5;
+  background: #faf9f6;
+  color: var(--bb-ink);
+  resize: none;
+}
+
+.bb-review-popup__input:focus,
+.bb-review-popup__textarea:focus {
+  outline: 2px solid var(--bb-gold);
+  outline-offset: 1px;
+}
+
+.bb-review-popup__stars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bb-review-popup__star {
+  background: none;
+  border: none;
+  font-size: 26px;
+  line-height: 1;
+  color: var(--bb-gold);
+  cursor: pointer;
+  padding: 2px;
+}
+
+.bb-review-popup__submit {
+  margin-top: 16px;
+  width: 100%;
+  justify-content: center;
+}
+
+.bb-review-popup__success {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.bb-review-popup__success-icon { font-size: 40px; margin: 0 0 12px; }
+
+.bb-review-popup__sub {
+  font-size: 14px;
+  color: var(--bb-ink-2);
+  margin: 8px 0 0;
+}
+
 @media (max-width: 900px) {
   .bb-testi__grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {
   .bb-testi { padding: 56px 16px 32px; }
+  .bb-review-popup { padding: 32px 24px; max-width: 92vw; }
 }
 
 /* ============================================================
