@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import Button from "@/components/ui/Button";
 
 export default function ReviewSubmitPopup() {
@@ -40,7 +41,7 @@ export default function ReviewSubmitPopup() {
         Lisa enda tagasiside
       </Button>
 
-      {open && (
+      {open && createPortal(
         <div className="bb-popup-overlay" onClick={close}>
           <div className="bb-review-popup" onClick={(e) => e.stopPropagation()}>
             <button className="bb-popup__close" onClick={close} aria-label="Sulge">✕</button>
@@ -98,7 +99,8 @@ export default function ReviewSubmitPopup() {
               </form>
             )}
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   );
