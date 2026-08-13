@@ -27,6 +27,16 @@ export const VARIANT_PRICES: Record<string, number> = {
   ...Object.fromEntries(EXTRA_GEM_TYPES.map((g) => [g.id, GEM_PRICE])),
 };
 
+const GEM_IDS: Set<string> = new Set(EXTRA_GEM_TYPES.map((g) => g.id));
+
+// Buying crystals with no kit in the order — the /kristallid page enforces
+// both of these client-side; priceOrder() re-checks them server-side too.
+export const MIN_STANDALONE_GEMS = 10;
+
+export function isGemOnlyOrder(ids: string[]): boolean {
+  return ids.length > 0 && ids.every((id) => GEM_IDS.has(id));
+}
+
 // Auto-generated marketing codes (see UrgencyPopup) — always the standard rate.
 export const FUNNY_DISCOUNT_CODES = [
   "BB-HAMBAKE",
@@ -109,6 +119,14 @@ export function priceOrder(input: {
     return { id: item.id, name: item.label?.slice(0, 255) || item.id, qty, unitPrice };
   });
 
+  const gemOnly = isGemOnlyOrder(lines.map((l) => l.id));
+  if (gemOnly) {
+    const totalGems = lines.reduce((sum, l) => sum + l.qty, 0);
+    if (totalGems < MIN_STANDALONE_GEMS) {
+      throw new Error(`Minimum ${MIN_STANDALONE_GEMS} crystals for a standalone order`);
+    }
+  }
+
   const subtotal = money(lines.reduce((sum, l) => sum + l.unitPrice * l.qty, 0));
 
   const discountPct = discountPctForCode(input.discountCode);
@@ -116,8 +134,10 @@ export function priceOrder(input: {
 
   const delivery = DELIVERY[input.delivery];
   if (!delivery) throw new Error(`Unknown delivery method: ${input.delivery}`);
+  // No free Omniva perk for a crystals-only order — only kit purchases get it.
+  const deliveryPrice = gemOnly ? Math.max(delivery.price, DELIVERY.courier.price) : delivery.price;
 
-  const grandTotal = money(Math.max(0, subtotal - discount) + delivery.price);
+  const grandTotal = money(Math.max(0, subtotal - discount) + deliveryPrice);
 
   return {
     lines,
@@ -126,7 +146,7 @@ export function priceOrder(input: {
     discount,
     deliveryId: input.delivery,
     deliveryLabel: delivery.label,
-    deliveryPrice: delivery.price,
+    deliveryPrice,
     grandTotal,
   };
 }

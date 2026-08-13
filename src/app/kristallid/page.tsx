@@ -6,7 +6,7 @@ import { useState } from "react";
 import ImageLightbox from "@/components/ImageLightbox";
 import SiteNav from "@/components/SiteNav";
 import Button from "@/components/ui/Button";
-import { EXTRA_GEM_TYPES, GEM_PRICE } from "@/lib/pricing";
+import { EXTRA_GEM_TYPES, GEM_PRICE, MIN_STANDALONE_GEMS } from "@/lib/pricing";
 import { useCart } from "@/hooks/useCart";
 
 function priceStr(n: number) {
@@ -41,7 +41,10 @@ export default function CrystalsPage() {
   const total = Object.values(qtys).reduce((sum, n) => sum + n, 0);
   const cost = total * GEM_PRICE;
 
+  const belowMin = total > 0 && total < MIN_STANDALONE_GEMS;
+
   function addToCart() {
+    if (total < MIN_STANDALONE_GEMS) return;
     EXTRA_GEM_TYPES.forEach(g => {
       const n = qtys[g.id] ?? 0;
       if (n > 0) add({ id: g.id, label: g.label, price: GEM_PRICE }, n);
@@ -57,6 +60,9 @@ export default function CrystalsPage() {
         <h1 className="bb-crystals__title">Osta kristalle eraldi</h1>
         <p className="bb-crystals__sub">
           Lisa juurde oma lemmikkristalle — sobib olemasoleva komplekti täiendamiseks või uue disaini loomiseks. Ei ole vaja tellida uut komplekti.
+        </p>
+        <p className="bb-crystals__note">
+          Minimaalne tellimus {MIN_STANDALONE_GEMS} kristalli. Eraldi tellimisel tasuta transporti ei kehti.
         </p>
       </div>
 
@@ -88,10 +94,16 @@ export default function CrystalsPage() {
 
       <div className="bb-crystals__bar">
         <div className="bb-crystals__bar-info">
-          <span className="bb-crystals__bar-count">{total} kristalli</span>
+          <span className={`bb-crystals__bar-count ${belowMin ? "bb-crystals__bar-count--warn" : ""}`}>
+            {total === 0
+              ? `Vähemalt ${MIN_STANDALONE_GEMS} kristalli`
+              : belowMin
+                ? `Vajad veel ${MIN_STANDALONE_GEMS - total} kristalli (min. ${MIN_STANDALONE_GEMS})`
+                : `${total} kristalli`}
+          </span>
           <span className="bb-crystals__bar-price">{priceStr(cost)}</span>
         </div>
-        <Button className="bb-crystals__cta" onClick={addToCart} disabled={total === 0}>
+        <Button className="bb-crystals__cta" onClick={addToCart} disabled={total < MIN_STANDALONE_GEMS}>
           <IconCart />Lisa korvi
         </Button>
       </div>

@@ -24,6 +24,12 @@
   margin: 0;
 }
 
+.bb-crystals__note {
+  font-size: 13px;
+  color: var(--bb-ink-2);
+  margin: 10px 0 0;
+}
+
 .bb-crystals__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -89,6 +95,11 @@
 .bb-crystals__bar-count {
   font-size: 13px;
   color: var(--bb-ink-2);
+}
+
+.bb-crystals__bar-count--warn {
+  color: #a32d2d;
+  font-weight: 600;
 }
 
 .bb-crystals__bar-price {
