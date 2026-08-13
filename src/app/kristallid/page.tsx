@@ -6,7 +6,7 @@ import { useState } from "react";
 import ImageLightbox from "@/components/ImageLightbox";
 import SiteNav from "@/components/SiteNav";
 import Button from "@/components/ui/Button";
-import { EXTRA_GEM_TYPES, GEM_PRICE, GEM_SIZES, MIN_STANDALONE_GEMS, gemSizeId } from "@/lib/pricing";
+import { EXTRA_GEM_TYPES, GEM_SIZES, MIN_STANDALONE_GEMS, STANDALONE_GEM_PRICE, gemSizeId } from "@/lib/pricing";
 import { useCart } from "@/hooks/useCart";
 
 function priceStr(n: number) {
@@ -39,7 +39,7 @@ export default function CrystalsPage() {
   }
 
   const total = Object.values(qtys).reduce((sum, n) => sum + n, 0);
-  const cost = total * GEM_PRICE;
+  const cost = total * STANDALONE_GEM_PRICE;
 
   const belowMin = total > 0 && total < MIN_STANDALONE_GEMS;
 
@@ -49,7 +49,7 @@ export default function CrystalsPage() {
       GEM_SIZES.forEach(s => {
         const key = gemSizeId(g.id, s.id);
         const n = qtys[key] ?? 0;
-        if (n > 0) add({ id: key, label: `${g.label} · ${s.label}`, price: GEM_PRICE }, n);
+        if (n > 0) add({ id: key, label: `${g.label} · ${s.label}`, price: STANDALONE_GEM_PRICE }, n);
       });
     });
     setQtys({});
@@ -81,7 +81,7 @@ export default function CrystalsPage() {
               <Image src={g.img} alt={g.label} width={72} height={72} style={{ objectFit: "contain" }} />
             </button>
             <span className="bb-crystals__name">{g.label}</span>
-            <span className="bb-crystals__price">{priceStr(GEM_PRICE)}/tk</span>
+            <span className="bb-crystals__price">{priceStr(STANDALONE_GEM_PRICE)}/tk</span>
             <div className="bb-crystals__sizes">
               {GEM_SIZES.map(s => {
                 const key = gemSizeId(g.id, s.id);

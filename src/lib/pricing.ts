@@ -10,6 +10,10 @@ export const LOCALE = "et";
 // reaches checkout on its own.
 export const GEM_PRICE = 1;
 
+// Buying crystals with no kit, on /kristallid — priced separately from the
+// bundled add-on above.
+export const STANDALONE_GEM_PRICE = 2;
+
 export const EXTRA_GEM_TYPES = [
   { id: "gem-clear", label: "Swarovski Kristall läbipaistev", img: "/crystals/gem-clear.jpg" },
   { id: "gem-ab", label: "Swarovski Boreale", img: "/crystals/gem-ab.jpg" },
@@ -36,7 +40,7 @@ export const VARIANT_PRICES: Record<string, number> = {
   s23: 35,
   ...Object.fromEntries(EXTRA_GEM_TYPES.map((g) => [g.id, GEM_PRICE])),
   ...Object.fromEntries(
-    EXTRA_GEM_TYPES.flatMap((g) => GEM_SIZES.map((s) => [gemSizeId(g.id, s.id), GEM_PRICE])),
+    EXTRA_GEM_TYPES.flatMap((g) => GEM_SIZES.map((s) => [gemSizeId(g.id, s.id), STANDALONE_GEM_PRICE])),
   ),
 };
 
