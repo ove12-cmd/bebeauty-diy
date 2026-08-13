@@ -11,9 +11,9 @@ export const LOCALE = "et";
 export const GEM_PRICE = 1;
 
 export const EXTRA_GEM_TYPES = [
-  { id: "gem-clear", label: "Kristall läbipaistev", img: "/crystals/gem-clear.jpg" },
-  { id: "gem-ab", label: "Aurore Boreale", img: "/crystals/gem-ab.jpg" },
-  { id: "gem-ab-butterfly", label: "Aurore Boreale Butterfly", img: "/crystals/gem-ab-butterfly.jpg" },
+  { id: "gem-clear", label: "Swarovski Kristall läbipaistev", img: "/crystals/gem-clear.jpg" },
+  { id: "gem-ab", label: "Swarovski Boreale", img: "/crystals/gem-ab.jpg" },
+  { id: "gem-ab-butterfly", label: "Swarovski Boreale Butterfly", img: "/crystals/gem-ab-butterfly.jpg" },
 ] as const;
 
 // Sizes for the standalone /kristallid page only — same labels as the kit's
