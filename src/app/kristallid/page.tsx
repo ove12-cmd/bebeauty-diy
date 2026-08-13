@@ -6,7 +6,7 @@ import { useState } from "react";
 import ImageLightbox from "@/components/ImageLightbox";
 import SiteNav from "@/components/SiteNav";
 import Button from "@/components/ui/Button";
-import { EXTRA_GEM_TYPES, GEM_PRICE, MIN_STANDALONE_GEMS } from "@/lib/pricing";
+import { EXTRA_GEM_TYPES, GEM_PRICE, GEM_SIZES, MIN_STANDALONE_GEMS, gemSizeId } from "@/lib/pricing";
 import { useCart } from "@/hooks/useCart";
 
 function priceStr(n: number) {
@@ -46,8 +46,11 @@ export default function CrystalsPage() {
   function addToCart() {
     if (total < MIN_STANDALONE_GEMS) return;
     EXTRA_GEM_TYPES.forEach(g => {
-      const n = qtys[g.id] ?? 0;
-      if (n > 0) add({ id: g.id, label: g.label, price: GEM_PRICE }, n);
+      GEM_SIZES.forEach(s => {
+        const key = gemSizeId(g.id, s.id);
+        const n = qtys[key] ?? 0;
+        if (n > 0) add({ id: key, label: `${g.label} · ${s.label}`, price: GEM_PRICE }, n);
+      });
     });
     setQtys({});
   }
@@ -79,14 +82,24 @@ export default function CrystalsPage() {
             </button>
             <span className="bb-crystals__name">{g.label}</span>
             <span className="bb-crystals__price">{priceStr(GEM_PRICE)}/tk</span>
-            <div className="bb-qty__ctrl">
-              <button className="bb-qty__btn" onClick={() => bump(g.id, -1)} aria-label={`Vähenda ${g.label}`}>
-                <IconMinus />
-              </button>
-              <span className="bb-qty__num">{qtys[g.id] ?? 0}</span>
-              <button className="bb-qty__btn" onClick={() => bump(g.id, 1)} aria-label={`Suurenda ${g.label}`}>
-                <IconPlus />
-              </button>
+            <div className="bb-crystals__sizes">
+              {GEM_SIZES.map(s => {
+                const key = gemSizeId(g.id, s.id);
+                return (
+                  <div key={key} className="bb-crystals__size-row">
+                    <span className="bb-crystals__size-label">{s.label}</span>
+                    <div className="bb-qty__ctrl bb-qty__ctrl--sm">
+                      <button className="bb-qty__btn" onClick={() => bump(key, -1)} aria-label={`Vähenda ${g.label} ${s.label}`}>
+                        <IconMinus />
+                      </button>
+                      <span className="bb-qty__num">{qtys[key] ?? 0}</span>
+                      <button className="bb-qty__btn" onClick={() => bump(key, 1)} aria-label={`Suurenda ${g.label} ${s.label}`}>
+                        <IconPlus />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         ))}

@@ -8,7 +8,7 @@ export const LOCALE = "et";
 // Extra crystals, purchasable only alongside a kit — the product page adds
 // them to the cart in the same click as the kit itself, so a gem line never
 // reaches checkout on its own.
-export const GEM_PRICE = 0.5;
+export const GEM_PRICE = 1;
 
 export const EXTRA_GEM_TYPES = [
   { id: "gem-clear", label: "Kristall läbipaistev", img: "/crystals/gem-clear.jpg" },
@@ -16,15 +16,34 @@ export const EXTRA_GEM_TYPES = [
   { id: "gem-ab-butterfly", label: "Aurore Boreale Butterfly", img: "/crystals/gem-ab-butterfly.jpg" },
 ] as const;
 
+// Sizes for the standalone /kristallid page only — same labels as the kit's
+// own VARIANTS, but a distinct id shape (gem id + size id) so they can
+// never collide with a bare kit id like "s20".
+export const GEM_SIZES = [
+  { id: "s17", label: "1.7mm" },
+  { id: "s20", label: "2.0mm" },
+  { id: "s23", label: "2.3mm" },
+] as const;
+
+export function gemSizeId(gemId: string, sizeId: string): string {
+  return `${gemId}-${sizeId}`;
+}
+
 // Variant id → unit price (€). Mirrors VARIANTS in src/app/hambakristalli-komplekt/page.tsx.
 export const VARIANT_PRICES: Record<string, number> = {
   s17: 35,
   s20: 35,
   s23: 35,
   ...Object.fromEntries(EXTRA_GEM_TYPES.map((g) => [g.id, GEM_PRICE])),
+  ...Object.fromEntries(
+    EXTRA_GEM_TYPES.flatMap((g) => GEM_SIZES.map((s) => [gemSizeId(g.id, s.id), GEM_PRICE])),
+  ),
 };
 
-const GEM_IDS: Set<string> = new Set(EXTRA_GEM_TYPES.map((g) => g.id));
+const GEM_IDS: Set<string> = new Set([
+  ...EXTRA_GEM_TYPES.map((g) => g.id),
+  ...EXTRA_GEM_TYPES.flatMap((g) => GEM_SIZES.map((s) => gemSizeId(g.id, s.id))),
+]);
 
 // Buying crystals with no kit in the order — the /kristallid page enforces
 // both of these client-side; priceOrder() re-checks them server-side too.
