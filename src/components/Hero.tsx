@@ -3,17 +3,15 @@
 import Image from "next/image";
 import Button from "@/components/ui/Button";
 import SiteNav from "@/components/SiteNav";
-import { useEffect, useState } from "react";
 
 /* ── Image Placeholder Slot ── */
-function ImageSlot({ label, variant = "default", src, alt, badge }: { label: string; variant?: "default" | "lav"; src?: string; alt?: string; badge?: React.ReactNode }) {
+function ImageSlot({ label, variant = "default", src, alt }: { label: string; variant?: "default" | "lav"; src?: string; alt?: string }) {
   return (
     <div className="bb-slot">
       <div className={`bb-slot__pill ${variant === "lav" ? "bb-slot__pill--lav" : ""}`}>
         <span className="bb-slot__dot" />
         {label}
       </div>
-      {badge}
       {src ? (
         <Image
           src={src}
@@ -32,24 +30,6 @@ function ImageSlot({ label, variant = "default", src, alt, badge }: { label: str
 
 /* ── Hero ── */
 export default function Hero() {
-  const [viewers, setViewers] = useState<number | null>(null);
-
-  useEffect(() => {
-    setViewers(7);
-    function scheduleNext(current: number) {
-      const delay = Math.floor(Math.random() * (240000 - 30000) + 30000);
-      return setTimeout(() => {
-        const change = Math.floor(Math.random() * 3) + 1;
-        const direction = Math.random() > 0.5 ? 1 : -1;
-        const next = Math.min(25, Math.max(4, current + change * direction));
-        setViewers(next);
-        scheduleNext(next);
-      }, delay);
-    }
-    const t = scheduleNext(7);
-    return () => clearTimeout(t);
-  }, []);
-
   return (
     <section className="bb-hero">
 
@@ -76,11 +56,6 @@ export default function Hero() {
             variant="lav"
             src="/home/product.png"
             alt="beBeauty DIY hambakristalli komplekt"
-            badge={
-              <div className="bb-slot__viewers">
-                🔥 <strong>{viewers ?? "–"}</strong> vaatab seda praegu
-              </div>
-            }
           />
           <div className="bb-cta-card">
             <div className="bb-cta-card__heading">
@@ -92,9 +67,6 @@ export default function Hero() {
               <Button href="/hambakristalli-komplekt" arrow>
                 Osta komplekt
               </Button>
-            </div>
-            <div className="bb-hero-urgency">
-              <span className="bb-hero-urgency__stock">⚠ Ainult 3 komplekti laos</span>
             </div>
             <div className="bb-cta-card__rating">
               <span className="bb-cta-card__meta">Telli täna – komplekt on peagi sinu lähimas pakiautomaadis.</span>
