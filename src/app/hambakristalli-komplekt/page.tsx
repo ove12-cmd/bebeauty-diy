@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import UrgencyPopup from "@/components/UrgencyPopup";
 import JsonLd from "@/components/JsonLd";
+import ImageLightbox from "@/components/ImageLightbox";
 import ReviewsSlider from "@/components/ReviewsSlider";
 import SiteNav from "@/components/SiteNav";
 import Button from "@/components/ui/Button";
@@ -209,6 +210,7 @@ export default function ShopPage() {
   const variant = VARIANTS.find(v => v.id === selected)!;
   const { add } = useCart();
   const [gemQtys, setGemQtys] = useState<Record<string, number>>({});
+  const [gemLightbox, setGemLightbox] = useState<{ src: string; alt: string } | null>(null);
   const totalGems = Object.values(gemQtys).reduce((sum, n) => sum + n, 0);
   const gemsCost = totalGems * GEM_PRICE;
   function bumpGemQty(id: string, delta: number) {
@@ -348,7 +350,17 @@ export default function ShopPage() {
             </div>
             {EXTRA_GEM_TYPES.map(g => (
               <div key={g.id} className="bb-extra-gems__row">
-                <span className="bb-extra-gems__name">{g.label}</span>
+                <div className="bb-extra-gems__info">
+                  <button
+                    type="button"
+                    className="bb-extra-gems__thumb"
+                    aria-label={`Suurenda ${g.label}`}
+                    onClick={() => setGemLightbox({ src: g.img, alt: g.label })}
+                  >
+                    <Image src={g.img} alt={g.label} width={36} height={36} style={{ objectFit: "contain" }} />
+                  </button>
+                  <span className="bb-extra-gems__name">{g.label}</span>
+                </div>
                 <div className="bb-qty__ctrl bb-qty__ctrl--sm">
                   <button
                     className="bb-qty__btn"
@@ -542,6 +554,10 @@ export default function ShopPage() {
         <h2 className="bb-shop-section__title bb-faq__title">Korduma kippuvad küsimused</h2>
         <FAQ />
       </div>
+
+      {gemLightbox && (
+        <ImageLightbox src={gemLightbox.src} alt={gemLightbox.alt} onClose={() => setGemLightbox(null)} />
+      )}
     </main>
   );
 }

@@ -677,6 +677,27 @@
   padding: 8px 0;
 }
 
+.bb-extra-gems__info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bb-extra-gems__thumb {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid #ebebeb;
+  border-radius: 8px;
+  background: #f7f6f2;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
 .bb-extra-gems__name {
   font-size: 14px;
   color: var(--bb-ink);
