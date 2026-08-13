@@ -49,8 +49,12 @@ const GEM_IDS: Set<string> = new Set([
 // both of these client-side; priceOrder() re-checks them server-side too.
 export const MIN_STANDALONE_GEMS = 10;
 
+export function isGemId(id: string): boolean {
+  return GEM_IDS.has(id);
+}
+
 export function isGemOnlyOrder(ids: string[]): boolean {
-  return ids.length > 0 && ids.every((id) => GEM_IDS.has(id));
+  return ids.length > 0 && ids.every(isGemId);
 }
 
 // Auto-generated marketing codes (see UrgencyPopup) — always the standard rate.
@@ -145,8 +149,13 @@ export function priceOrder(input: {
 
   const subtotal = money(lines.reduce((sum, l) => sum + l.unitPrice * l.qty, 0));
 
+  // Extra gems never get the discount code — only kit lines are discountable.
+  const discountableSubtotal = money(
+    lines.filter((l) => !isGemId(l.id)).reduce((sum, l) => sum + l.unitPrice * l.qty, 0),
+  );
+
   const discountPct = discountPctForCode(input.discountCode);
-  const discount = money(subtotal * (discountPct / 100));
+  const discount = money(discountableSubtotal * (discountPct / 100));
 
   const delivery = DELIVERY[input.delivery];
   if (!delivery) throw new Error(`Unknown delivery method: ${input.delivery}`);

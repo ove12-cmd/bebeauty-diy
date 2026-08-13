@@ -5,7 +5,7 @@ import Button from "@/components/ui/Button";
 import CheckoutPayment from "@/components/CheckoutPayment";
 import { useCart } from "@/hooks/useCart";
 import { searchLockers, type Locker } from "@/lib/lockers";
-import { discountPctForCode, isGemOnlyOrder } from "@/lib/pricing";
+import { discountPctForCode, isGemId, isGemOnlyOrder } from "@/lib/pricing";
 import { trackMeta, CURRENCY } from "@/lib/meta-pixel";
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./checkout.css";
@@ -94,7 +94,9 @@ export default function CheckoutPage() {
   const results = useMemo(() => searchLockers(lockers, query), [lockers, query]);
 
   const delivery = DELIVERY.find((d) => d.id === form.delivery)!;
-  const discount = Math.round(subtotal * (discountPct / 100) * 100) / 100;
+  // Extra gems never get the discount code — only kit lines are discountable.
+  const discountableSubtotal = items.filter((i) => !isGemId(i.id)).reduce((sum, i) => sum + i.price * i.qty, 0);
+  const discount = Math.round(discountableSubtotal * (discountPct / 100) * 100) / 100;
   const total = Math.max(0, subtotal - discount) + delivery.price;
 
   async function handleSubmit(e: React.FormEvent) {
