@@ -15,6 +15,9 @@ import { discountPctForCode, isGeneratedMarketingCode, EXTRA_GEM_TYPES, GEM_PRIC
 import { trackMeta, CURRENCY } from "@/lib/meta-pixel";
 import { useCart } from "@/hooks/useCart";
 
+// Toggle off while the extra-gems add-on is paused — flip back on to restore it.
+const SHOW_EXTRA_GEMS = false;
+
 const VARIANTS = [
   { id: "s17", label: "1.7mm", desc: "Väiksem, peenem kristall", price: 35, original: 45 },
   { id: "s20", label: "2.0mm", desc: "Kõige populaarsem valik", price: 35, original: 45 },
@@ -348,60 +351,62 @@ export default function ShopPage() {
             <span className="bb-included__value">10× standard Swarovski kristalli</span>
           </div>
 
-          {/* Extra gems */}
-          <div className="bb-extra-gems">
-            <button
-              type="button"
-              className="bb-extra-gems__head"
-              onClick={() => setGemsOpen(o => !o)}
-              aria-expanded={gemsOpen}
-            >
-              <span className="bb-extra-gems__title">Lisa ekstra kristalle</span>
-              <span className="bb-extra-gems__head-right">
-                <span className="bb-extra-gems__rate">{priceStr(GEM_PRICE)}/tk</span>
-                <span className={`bb-extra-gems__arrow ${gemsOpen ? "bb-extra-gems__arrow--open" : ""}`}>
-                  <IconChevron />
+          {/* Extra gems — hidden for now, not deleted */}
+          {SHOW_EXTRA_GEMS && (
+            <div className="bb-extra-gems">
+              <button
+                type="button"
+                className="bb-extra-gems__head"
+                onClick={() => setGemsOpen(o => !o)}
+                aria-expanded={gemsOpen}
+              >
+                <span className="bb-extra-gems__title">Lisa ekstra kristalle</span>
+                <span className="bb-extra-gems__head-right">
+                  <span className="bb-extra-gems__rate">{priceStr(GEM_PRICE)}/tk</span>
+                  <span className={`bb-extra-gems__arrow ${gemsOpen ? "bb-extra-gems__arrow--open" : ""}`}>
+                    <IconChevron />
+                  </span>
                 </span>
-              </span>
-            </button>
-            {gemsOpen && EXTRA_GEM_TYPES.map(g => (
-              <div key={g.id} className="bb-extra-gems__row">
-                <div className="bb-extra-gems__info">
-                  <button
-                    type="button"
-                    className="bb-extra-gems__thumb"
-                    aria-label={`Suurenda ${g.label}`}
-                    onClick={() => setGemLightbox({ src: g.img, alt: g.label })}
-                  >
-                    <Image src={g.img} alt={g.label} width={36} height={36} style={{ objectFit: "contain" }} />
-                  </button>
-                  <span className="bb-extra-gems__name">{g.label}</span>
+              </button>
+              {gemsOpen && EXTRA_GEM_TYPES.map(g => (
+                <div key={g.id} className="bb-extra-gems__row">
+                  <div className="bb-extra-gems__info">
+                    <button
+                      type="button"
+                      className="bb-extra-gems__thumb"
+                      aria-label={`Suurenda ${g.label}`}
+                      onClick={() => setGemLightbox({ src: g.img, alt: g.label })}
+                    >
+                      <Image src={g.img} alt={g.label} width={36} height={36} style={{ objectFit: "contain" }} />
+                    </button>
+                    <span className="bb-extra-gems__name">{g.label}</span>
+                  </div>
+                  <div className="bb-qty__ctrl bb-qty__ctrl--sm">
+                    <button
+                      className="bb-qty__btn"
+                      onClick={() => bumpGemQty(g.id, -1)}
+                      aria-label={`Vähenda ${g.label}`}
+                    >
+                      <IconMinus />
+                    </button>
+                    <span className="bb-qty__num">{gemQtys[g.id] ?? 0}</span>
+                    <button
+                      className="bb-qty__btn"
+                      onClick={() => bumpGemQty(g.id, 1)}
+                      aria-label={`Suurenda ${g.label}`}
+                    >
+                      <IconPlus />
+                    </button>
+                  </div>
                 </div>
-                <div className="bb-qty__ctrl bb-qty__ctrl--sm">
-                  <button
-                    className="bb-qty__btn"
-                    onClick={() => bumpGemQty(g.id, -1)}
-                    aria-label={`Vähenda ${g.label}`}
-                  >
-                    <IconMinus />
-                  </button>
-                  <span className="bb-qty__num">{gemQtys[g.id] ?? 0}</span>
-                  <button
-                    className="bb-qty__btn"
-                    onClick={() => bumpGemQty(g.id, 1)}
-                    aria-label={`Suurenda ${g.label}`}
-                  >
-                    <IconPlus />
-                  </button>
-                </div>
-              </div>
-            ))}
-            {gemsOpen && (
-              <Link href="/kristallid" className="bb-extra-gems__link">
-                Osta kristalle eraldi, ilma komplekti tellimata →
-              </Link>
-            )}
-          </div>
+              ))}
+              {gemsOpen && (
+                <Link href="/kristallid" className="bb-extra-gems__link">
+                  Osta kristalle eraldi, ilma komplekti tellimata →
+                </Link>
+              )}
+            </div>
+          )}
 
           <div className="bb-urgency__bar">
             <div className="bb-urgency__timer">
