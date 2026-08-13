@@ -735,15 +735,16 @@
   margin-bottom: 12px;
 }
 
-.bb-qty__ctrl--sm .bb-qty__btn {
-  width: 30px;
-  height: 30px;
-}
-
-.bb-qty__ctrl--sm .bb-qty__num {
-  min-width: 30px;
+.bb-extra-gems__link {
+  display: block;
   font-size: 13px;
-  line-height: 30px;
+  font-weight: 600;
+  color: var(--bb-gold-2);
+  text-decoration: none;
+  margin-top: 8px;
+}
+.bb-extra-gems__link:hover {
+  text-decoration: underline;
 }
 
 .bb-shop__sub {
@@ -917,39 +918,3 @@
   opacity: 1;
 }
 
-/* ============================================================
-   Quantity Selector
-   ============================================================ */
-.bb-qty__ctrl {
-  display: flex;
-  align-items: center;
-  border: 1.5px solid #e0dbd2;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.bb-qty__btn {
-  width: 40px;
-  height: 40px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--bb-ink);
-  transition: background 0.15s;
-}
-.bb-qty__btn:hover { background: #f5f2ed; }
-.bb-qty__btn:active { background: #ede8e0; }
-
-.bb-qty__num {
-  min-width: 44px;
-  text-align: center;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--bb-ink);
-  border-left: 1.5px solid #e0dbd2;
-  border-right: 1.5px solid #e0dbd2;
-  line-height: 40px;
-}

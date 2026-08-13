@@ -2,6 +2,7 @@
 
 import "./shop.css";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import UrgencyPopup from "@/components/UrgencyPopup";
 import JsonLd from "@/components/JsonLd";
@@ -395,6 +396,11 @@ export default function ShopPage() {
                 </div>
               </div>
             ))}
+            {gemsOpen && (
+              <Link href="/kristallid" className="bb-extra-gems__link">
+                Osta kristalle eraldi, ilma komplekti tellimata →
+              </Link>
+            )}
           </div>
 
           <div className="bb-urgency__bar">
