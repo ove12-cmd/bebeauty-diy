@@ -9,7 +9,7 @@ import ReviewsSlider from "@/components/ReviewsSlider";
 import SiteNav from "@/components/SiteNav";
 import Button from "@/components/ui/Button";
 import { productSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
-import { discountPctForCode, isGeneratedMarketingCode } from "@/lib/pricing";
+import { discountPctForCode, isGeneratedMarketingCode, EXTRA_GEM_TYPES, GEM_PRICE } from "@/lib/pricing";
 import { trackMeta, CURRENCY } from "@/lib/meta-pixel";
 import { useCart } from "@/hooks/useCart";
 
@@ -41,7 +41,7 @@ function priceStr(n: number) {
 
 const BOX_ITEMS = [
   { name: "UV LED-lamp", desc: "Kiireks ja ühtlaseks kõvastamiseks." },
-  { name: "Premium kristallid", desc: "22 Primero & Preciosa kristalli kolmes erinevas kujus." },
+  { name: "Premium kristallid", desc: "10 Swarovski kristalli komplektis." },
   { name: "Liim & Etch", desc: "Professionaalseks kinnitamiseks ja paremaks püsivuseks." },
   { name: "Aplikaatorid", desc: "Kõik vajalik kristallide täpseks paigaldamiseks." },
   { name: "Põsehoidja", desc: "Hoiab tööala mugavalt avatuna." },
@@ -60,7 +60,7 @@ const FAQS = [
   { q: "Mis suurust valida?", a: "1.7mm on peenem ja loomulikum, 2.0mm on populaarseim ning 2.3mm annab julge ja silmatorkava efekti. Kõik suurused sobivad algajatele." },
   { q: "Kas saan ise eemaldada?", a: "Jah — eemaldamiseks kasuta komplektis olevat vahendit või hambaniiti. Eemalda õrnalt ilma hammast kahjustamata." },
   { q: "Kui kiiresti pakk saabub?", a: "Eesti tarne 1–2 tööpäeva. Tasuta saatmine üle Eesti." },
-  { q: "Kas kristalle saab juurde tellida?", a: "Jah, Primero ja Preciosa kristalle saab eraldi juurde osta meie poest." },
+  { q: "Kas kristalle saab juurde tellida?", a: "Jah — saad valida ja lisada ekstra Swarovski kristalle otse siin lehel, enne ostukorvi lisamist." },
 ];
 
 function IconCart() {
@@ -108,7 +108,7 @@ const TRUST = [
 
 const STATS = [
   { num: "10 min", label: "Paigaldusaeg" },
-  { num: "22", label: "Premium kristalli komplektis" },
+  { num: "10", label: "Premium kristalli komplektis" },
   { num: "1–2p", label: "Tarne Eestis" },
   { num: "2–4 nädalat", label: "Keskmine püsivus" },
 ];
@@ -208,8 +208,22 @@ export default function ShopPage() {
   const [mainImg, setMainImg] = useState(0);
   const variant = VARIANTS.find(v => v.id === selected)!;
   const { add } = useCart();
-  const addToCart = () =>
+  const [gemQtys, setGemQtys] = useState<Record<string, number>>({});
+  const totalGems = Object.values(gemQtys).reduce((sum, n) => sum + n, 0);
+  const gemsCost = totalGems * GEM_PRICE;
+  function bumpGemQty(id: string, delta: number) {
+    setGemQtys(prev => ({ ...prev, [id]: Math.max(0, Math.min(50, (prev[id] ?? 0) + delta)) }));
+  }
+  const addToCart = () => {
     add({ id: variant.id, label: `DIY Hambakristalli komplekt · ${variant.label}`, price: variant.price }, qty);
+    // Gems only ever reach the cart here — alongside the kit, in this same
+    // click — so a gem line never exists without one.
+    EXTRA_GEM_TYPES.forEach(g => {
+      const n = gemQtys[g.id] ?? 0;
+      if (n > 0) add({ id: g.id, label: g.label, price: GEM_PRICE }, n);
+    });
+    setGemQtys({});
+  };
   const codeTimer = useCodeTimer();
 
   // ViewContent — once per distinct variant selected, not on every re-render.
@@ -231,7 +245,7 @@ export default function ShopPage() {
   const [appliedPct, setAppliedPct] = useState(0);
 
   const basePrice = codeApplied ? Math.round(variant.price * (1 - appliedPct / 100) * 100) / 100 : variant.price;
-  const finalPrice = basePrice * qty;
+  const finalPrice = basePrice * qty + gemsCost;
 
   function applyCode() {
     const entered = code.trim().toUpperCase();
@@ -307,7 +321,7 @@ export default function ShopPage() {
         <div className="bb-shop__panel">
           <div className="bb-urgency__viewers">🔥 <span className="bb-urgency__viewers-num">{viewers ?? "–"}</span> inimest vaatab seda toodet praegu</div>
           <h1 className="bb-shop__name">DIY Hambakristalli<br />komplekt.</h1>
-          <p className="bb-shop__sub">Preciosa & Primero kristallid · Valmistatud Euroopas</p>
+          <p className="bb-shop__sub">Swarovski kristallid · Valmistatud Euroopas</p>
 
           <div className="bb-shop__variants">
             {VARIANTS.map(v => (
@@ -320,21 +334,40 @@ export default function ShopPage() {
             ))}
           </div>
 
-          {/* Crystal chips */}
-          <p className="bb-crystal-chips__title">Kristallid komplektis</p>
-          <div className="bb-crystal-chips">
-            <div className="bb-crystal-chip">
-              <Image src="/crystals/69bc42fded13775022181fa5_ChatGPT Image Mar 19, 2026, 07_16_57 PM 2.webp" alt="AB kristall" width={36} height={36} />
-              <span className="bb-crystal-chip__count">9×</span>
+          {/* Included crystals */}
+          <div className="bb-included">
+            <span className="bb-included__label">Komplektis</span>
+            <span className="bb-included__value">10× standard Swarovski kristalli</span>
+          </div>
+
+          {/* Extra gems */}
+          <div className="bb-extra-gems">
+            <div className="bb-extra-gems__head">
+              <span className="bb-extra-gems__title">Lisa ekstra kristalle</span>
+              <span className="bb-extra-gems__rate">{priceStr(GEM_PRICE)}/tk</span>
             </div>
-            <div className="bb-crystal-chip">
-              <Image src="/crystals/69bc42ff9c6cf4797bbb5a51_ChatGPT Image Mar 19, 2026, 07_33_09 PM 2.webp" alt="Selge kristall" width={36} height={36} />
-              <span className="bb-crystal-chip__count">9×</span>
-            </div>
-            <div className="bb-crystal-chip">
-              <Image src="/crystals/69bc430285769d6a39b5a507_ChatGPT Image Mar 19, 2026, 07_34_41 PM 2.webp" alt="Navette kristall" width={36} height={36} />
-              <span className="bb-crystal-chip__count">4×</span>
-            </div>
+            {EXTRA_GEM_TYPES.map(g => (
+              <div key={g.id} className="bb-extra-gems__row">
+                <span className="bb-extra-gems__name">{g.label}</span>
+                <div className="bb-qty__ctrl bb-qty__ctrl--sm">
+                  <button
+                    className="bb-qty__btn"
+                    onClick={() => bumpGemQty(g.id, -1)}
+                    aria-label={`Vähenda ${g.label}`}
+                  >
+                    <IconMinus />
+                  </button>
+                  <span className="bb-qty__num">{gemQtys[g.id] ?? 0}</span>
+                  <button
+                    className="bb-qty__btn"
+                    onClick={() => bumpGemQty(g.id, 1)}
+                    aria-label={`Suurenda ${g.label}`}
+                  >
+                    <IconPlus />
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
 
           <div className="bb-urgency__bar">
@@ -376,6 +409,13 @@ export default function ShopPage() {
             {codeError && <p className="bb-discount__err">Vigane kood. Proovi uuesti.</p>}
           </div>
 
+          {totalGems > 0 && (
+            <div className="bb-extra-gems__summary">
+              <span>Ekstra kristallid ({totalGems}×)</span>
+              <span>{priceStr(gemsCost)}</span>
+            </div>
+          )}
+
           <div className="bb-shop__buy">
             <div className="bb-shop__buy-left">
               <div className="bb-qty__ctrl">
@@ -395,9 +435,9 @@ export default function ShopPage() {
 
 
           <p className="bb-shop__lead">Kõik vajalik ühes komplektis.</p>
-          <p className="bb-shop__desc">Paigalda hambakristallid mugavalt kodus. Komplekt sisaldab kvaliteetseid Preciosa ja Primero kristalle ning kõiki vajalikke töövahendeid kiireks ja lihtsaks paigalduseks.</p>
+          <p className="bb-shop__desc">Paigalda hambakristallid mugavalt kodus. Komplekt sisaldab kvaliteetseid Swarovski kristalle ning kõiki vajalikke töövahendeid kiireks ja lihtsaks paigalduseks.</p>
           <ul className="bb-shop__features">
-            <li>Premium Preciosa & Primero kristallid</li>
+            <li>Premium Swarovski kristallid</li>
             <li>Püsib kuni 2–4 nädalat</li>
             <li>Paigaldus umbes 10 minutiga</li>
             <li>Sobib ka algajale</li>

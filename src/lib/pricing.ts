@@ -5,11 +5,26 @@
 export const CURRENCY = "EUR";
 export const LOCALE = "et";
 
+// Extra crystals, purchasable only alongside a kit — the product page adds
+// them to the cart in the same click as the kit itself, so a gem line never
+// reaches checkout on its own. Placeholder names until real ones are picked.
+export const GEM_PRICE = 0.5;
+
+export const EXTRA_GEM_TYPES = [
+  { id: "gem-a", label: "Kristall A" },
+  { id: "gem-b", label: "Kristall B" },
+  { id: "gem-c", label: "Kristall C" },
+  { id: "gem-d", label: "Kristall D" },
+  { id: "gem-e", label: "Kristall E" },
+  { id: "gem-standard", label: "Standard (lisa)" },
+] as const;
+
 // Variant id → unit price (€). Mirrors VARIANTS in src/app/hambakristalli-komplekt/page.tsx.
 export const VARIANT_PRICES: Record<string, number> = {
   s17: 35,
   s20: 35,
   s23: 35,
+  ...Object.fromEntries(EXTRA_GEM_TYPES.map((g) => [g.id, GEM_PRICE])),
 };
 
 // Auto-generated marketing codes (see UrgencyPopup) — always the standard rate.
@@ -90,7 +105,7 @@ export function priceOrder(input: {
     const unitPrice = VARIANT_PRICES[item.id];
     if (unitPrice === undefined) throw new Error(`Unknown product: ${item.id}`);
     const qty = Math.floor(Number(item.qty));
-    if (!Number.isFinite(qty) || qty < 1 || qty > 20) throw new Error("Invalid quantity");
+    if (!Number.isFinite(qty) || qty < 1 || qty > 50) throw new Error("Invalid quantity");
     return { id: item.id, name: item.label?.slice(0, 255) || item.id, qty, unitPrice };
   });
 

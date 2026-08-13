@@ -85,7 +85,7 @@ export default function Hero() {
           <div className="bb-cta-card">
             <div className="bb-cta-card__heading">
               Kõik ühes väikeses komplektis.
-              <b>20+ kristalli · liimipliiats · aplikaator</b>
+              <b>10 kristalli · liimipliiats · aplikaator</b>
             </div>
             <div className="bb-cta-card__buy">
               <span className="bb-cta-card__price">Hind: 35€</span>

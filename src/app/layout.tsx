@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     default: "DIY Hambakristalli Komplekt | beBeauty DIY",
     template: "%s | beBeauty DIY",
   },
-  description: "Paigalda hambakristallid kodus 10 minutiga. Primero ja Preciosa kristallid, UV lamp ja kõik vajalik komplektis. Tasuta tarne.",
+  description: "Paigalda hambakristallid kodus 10 minutiga. Swarovski kristallid, UV lamp ja kõik vajalik komplektis. Tasuta tarne.",
   keywords: ["hambakristall", "tooth gem", "DIY", "hambakristalli komplekt", "hambaehistus", "Eesti"],
   alternates: { canonical: "/" },
   openGraph: {
@@ -39,12 +39,12 @@ export const metadata: Metadata = {
     url: "https://bebeauty-diy.ee",
     siteName: "beBeauty DIY",
     title: "DIY Hambakristalli Komplekt | beBeauty DIY",
-    description: "Paigalda hambakristallid kodus 10 minutiga. Primero ja Preciosa kristallid, UV lamp ja kõik vajalik komplektis. Tasuta tarne.",
+    description: "Paigalda hambakristallid kodus 10 minutiga. Swarovski kristallid, UV lamp ja kõik vajalik komplektis. Tasuta tarne.",
   },
   twitter: {
     card: "summary_large_image",
     title: "DIY Hambakristalli Komplekt | beBeauty DIY",
-    description: "Paigalda hambakristallid kodus 10 minutiga. Primero ja Preciosa kristallid, UV lamp ja kõik vajalik.",
+    description: "Paigalda hambakristallid kodus 10 minutiga. Swarovski kristallid, UV lamp ja kõik vajalik.",
   },
 };
 

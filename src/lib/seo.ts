@@ -23,7 +23,7 @@ export function productSchema({ price, currency = "EUR" }: { price: number; curr
     "@type": "Product",
     name: "DIY Hambakristalli komplekt",
     description:
-      "Kõik vajalik ühes komplektis, et paigaldada hambakristalle ise kodus. Preciosa & Primero kristallid, tugev sära ja hea püsivus.",
+      "Kõik vajalik ühes komplektis, et paigaldada hambakristalle ise kodus. Swarovski kristallid, tugev sära ja hea püsivus.",
     image: [`${BASE_URL}/product%20package.jpg`, `${BASE_URL}/home/gallery/4.png`],
     brand: { "@type": "Brand", name: "beBeauty DIY" },
     offers: {
