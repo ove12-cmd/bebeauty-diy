@@ -654,9 +654,32 @@
 
 .bb-extra-gems__head {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
+  width: 100%;
   margin-bottom: 10px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+
+.bb-extra-gems__head-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bb-extra-gems__arrow {
+  display: flex;
+  color: var(--bb-ink-2);
+  transition: transform 0.2s ease;
+}
+
+.bb-extra-gems__arrow--open {
+  transform: rotate(180deg);
 }
 
 .bb-extra-gems__title {

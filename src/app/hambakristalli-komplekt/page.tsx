@@ -80,6 +80,10 @@ function IconMinus() {
   return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 12h14" /></svg>;
 }
 
+function IconChevron() {
+  return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>;
+}
+
 function FAQ() {
   const [open, setOpen] = useState<number | null>(null);
   return (
@@ -210,6 +214,7 @@ export default function ShopPage() {
   const variant = VARIANTS.find(v => v.id === selected)!;
   const { add } = useCart();
   const [gemQtys, setGemQtys] = useState<Record<string, number>>({});
+  const [gemsOpen, setGemsOpen] = useState(true);
   const [gemLightbox, setGemLightbox] = useState<{ src: string; alt: string } | null>(null);
   const totalGems = Object.values(gemQtys).reduce((sum, n) => sum + n, 0);
   const gemsCost = totalGems * GEM_PRICE;
@@ -344,11 +349,21 @@ export default function ShopPage() {
 
           {/* Extra gems */}
           <div className="bb-extra-gems">
-            <div className="bb-extra-gems__head">
+            <button
+              type="button"
+              className="bb-extra-gems__head"
+              onClick={() => setGemsOpen(o => !o)}
+              aria-expanded={gemsOpen}
+            >
               <span className="bb-extra-gems__title">Lisa ekstra kristalle</span>
-              <span className="bb-extra-gems__rate">{priceStr(GEM_PRICE)}/tk</span>
-            </div>
-            {EXTRA_GEM_TYPES.map(g => (
+              <span className="bb-extra-gems__head-right">
+                <span className="bb-extra-gems__rate">{priceStr(GEM_PRICE)}/tk</span>
+                <span className={`bb-extra-gems__arrow ${gemsOpen ? "bb-extra-gems__arrow--open" : ""}`}>
+                  <IconChevron />
+                </span>
+              </span>
+            </button>
+            {gemsOpen && EXTRA_GEM_TYPES.map(g => (
               <div key={g.id} className="bb-extra-gems__row">
                 <div className="bb-extra-gems__info">
                   <button
