@@ -649,8 +649,8 @@
 }
 
 .bb-extra-gems {
-  background: rgba(255, 248, 236, 0.4);
-  border: 1px solid #ffe4a0;
+  background: #ffffff;
+  border: 1px solid #ece7db;
   border-radius: 14px;
   padding: 14px 16px;
   margin-bottom: 16px;
@@ -702,7 +702,7 @@
   text-transform: uppercase;
   color: #1a1a1a;
   background: #ffffff;
-  border: 1px solid #ffe4a0;
+  border: 1px solid #ece7db;
   padding: 3px 8px;
   border-radius: 999px;
 }
@@ -717,7 +717,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 0;
-  border-top: 1px solid #ffe4a0;
+  border-top: 1px solid #ece7db;
 }
 
 .bb-extra-gems__info {
