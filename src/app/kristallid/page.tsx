@@ -7,7 +7,7 @@ import { useState } from "react";
 import ImageLightbox from "@/components/ImageLightbox";
 import SiteNav from "@/components/SiteNav";
 import Button from "@/components/ui/Button";
-import { EXTRA_GEM_TYPES, GEM_SIZES, MIN_STANDALONE_GEMS, STANDALONE_GEM_PRICE, gemSizeId } from "@/lib/pricing";
+import { EXTRA_GEM_TYPES, FREE_SHIPPING_GEM_THRESHOLD, GEM_SIZES, MIN_STANDALONE_GEMS, STANDALONE_GEM_PRICE, gemSizeId } from "@/lib/pricing";
 import { useCart } from "@/hooks/useCart";
 
 function priceStr(n: number) {
@@ -110,7 +110,11 @@ export default function CrystalsPage() {
         ))}
       </div>
 
-      <p className="bb-crystals__shipping-note">📦 Eraldi tellimisel tasuta transporti ei kehti.</p>
+      <p className={`bb-crystals__shipping-note ${total >= FREE_SHIPPING_GEM_THRESHOLD ? "bb-crystals__shipping-note--met" : ""}`}>
+        {total >= FREE_SHIPPING_GEM_THRESHOLD
+          ? "🎉 Tasuta transport rakendub!"
+          : `📦 Tasuta transport alates ${FREE_SHIPPING_GEM_THRESHOLD} kristallist${total > 0 ? ` — lisa veel ${FREE_SHIPPING_GEM_THRESHOLD - total}` : ""}.`}
+      </p>
 
       <div className="bb-crystals__bar">
         <div className="bb-crystals__bar-info">

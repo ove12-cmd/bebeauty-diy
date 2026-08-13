@@ -48,8 +48,13 @@
 
 .bb-crystals__shipping-note {
   font-size: 13px;
+  font-weight: 600;
   color: var(--bb-ink-2);
   margin: 0 0 10px;
+}
+
+.bb-crystals__shipping-note--met {
+  color: #3b6d11;
 }
 
 .bb-crystals__grid {

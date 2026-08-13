@@ -5,16 +5,16 @@ import Button from "@/components/ui/Button";
 import CheckoutPayment from "@/components/CheckoutPayment";
 import { useCart } from "@/hooks/useCart";
 import { searchLockers, type Locker } from "@/lib/lockers";
-import { discountPctForCode, isGemId, isGemOnlyOrder } from "@/lib/pricing";
+import { FREE_SHIPPING_GEM_THRESHOLD, discountPctForCode, isGemId, isGemOnlyOrder } from "@/lib/pricing";
 import { trackMeta, CURRENCY } from "@/lib/meta-pixel";
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./checkout.css";
 
-// Mirrors the courier rate in lib/pricing.ts — no free Omniva perk when the
-// order is crystals only, since priceOrder() will charge it server-side too.
-function deliveryOptions(gemOnly: boolean) {
+// Mirrors lib/pricing.ts's priceOrder() — a crystals-only order pays the
+// courier rate for Omniva too, unless it clears the free-shipping threshold.
+function deliveryOptions(gemOnly: boolean, freeShipping: boolean) {
   return [
-    gemOnly
+    gemOnly && !freeShipping
       ? { id: "omniva", label: "Omniva pakiautomaat", price: 3.9, note: "3,90 € · 1–2 tööpäeva" }
       : { id: "omniva", label: "Omniva pakiautomaat", price: 0, note: "Tasuta · 1–2 tööpäeva" },
     { id: "courier", label: "Kuller koju", price: 3.9, note: "3,90 € · 1–3 tööpäeva" },
@@ -28,7 +28,9 @@ function eur(n: number) {
 export default function CheckoutPage() {
   const { items, subtotal, count } = useCart();
   const gemOnly = isGemOnlyOrder(items.map((i) => i.id));
-  const DELIVERY = deliveryOptions(gemOnly);
+  const totalGems = gemOnly ? items.reduce((sum, i) => sum + i.qty, 0) : 0;
+  const freeShipping = totalGems >= FREE_SHIPPING_GEM_THRESHOLD;
+  const DELIVERY = deliveryOptions(gemOnly, freeShipping);
   const [discountCode, setDiscountCode] = useState("");
   const discountPct = discountPctForCode(discountCode);
   const [form, setForm] = useState({

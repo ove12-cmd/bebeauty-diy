@@ -50,8 +50,9 @@ const GEM_IDS: Set<string> = new Set([
 ]);
 
 // Buying crystals with no kit in the order — the /kristallid page enforces
-// both of these client-side; priceOrder() re-checks them server-side too.
+// all of these client-side; priceOrder() re-checks them server-side too.
 export const MIN_STANDALONE_GEMS = 10;
+export const FREE_SHIPPING_GEM_THRESHOLD = 20;
 
 export function isGemId(id: string): boolean {
   return GEM_IDS.has(id);
@@ -144,11 +145,9 @@ export function priceOrder(input: {
   });
 
   const gemOnly = isGemOnlyOrder(lines.map((l) => l.id));
-  if (gemOnly) {
-    const totalGems = lines.reduce((sum, l) => sum + l.qty, 0);
-    if (totalGems < MIN_STANDALONE_GEMS) {
-      throw new Error(`Minimum ${MIN_STANDALONE_GEMS} crystals for a standalone order`);
-    }
+  const totalGems = gemOnly ? lines.reduce((sum, l) => sum + l.qty, 0) : 0;
+  if (gemOnly && totalGems < MIN_STANDALONE_GEMS) {
+    throw new Error(`Minimum ${MIN_STANDALONE_GEMS} crystals for a standalone order`);
   }
 
   const subtotal = money(lines.reduce((sum, l) => sum + l.unitPrice * l.qty, 0));
@@ -163,8 +162,12 @@ export function priceOrder(input: {
 
   const delivery = DELIVERY[input.delivery];
   if (!delivery) throw new Error(`Unknown delivery method: ${input.delivery}`);
-  // No free Omniva perk for a crystals-only order — only kit purchases get it.
-  const deliveryPrice = gemOnly ? Math.max(delivery.price, DELIVERY.courier.price) : delivery.price;
+  // A crystals-only order pays the courier rate regardless of method — unless
+  // it clears the free-shipping threshold, then it behaves like a normal order.
+  const deliveryPrice =
+    gemOnly && totalGems < FREE_SHIPPING_GEM_THRESHOLD
+      ? Math.max(delivery.price, DELIVERY.courier.price)
+      : delivery.price;
 
   const grandTotal = money(Math.max(0, subtotal - discount) + deliveryPrice);
 
