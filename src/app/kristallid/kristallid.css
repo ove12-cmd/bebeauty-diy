@@ -30,6 +30,28 @@
   margin: 10px 0 0;
 }
 
+.bb-crystals__back-cta {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bb-gold-2);
+  text-decoration: none;
+  background: #faf9f6;
+  border: 1px solid #ece7db;
+  border-radius: 999px;
+  padding: 10px 18px;
+  margin-bottom: 32px;
+}
+.bb-crystals__back-cta:hover {
+  text-decoration: underline;
+}
+
+.bb-crystals__shipping-note {
+  font-size: 13px;
+  color: var(--bb-ink-2);
+  margin: 0 0 10px;
+}
+
 .bb-crystals__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

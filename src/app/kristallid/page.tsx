@@ -2,6 +2,7 @@
 
 import "./kristallid.css";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import ImageLightbox from "@/components/ImageLightbox";
 import SiteNav from "@/components/SiteNav";
@@ -65,9 +66,13 @@ export default function CrystalsPage() {
           Lisa juurde oma lemmikkristalle — sobib olemasoleva komplekti täiendamiseks või uue disaini loomiseks. Ei ole vaja tellida uut komplekti.
         </p>
         <p className="bb-crystals__note">
-          Minimaalne tellimus {MIN_STANDALONE_GEMS} kristalli. Eraldi tellimisel tasuta transporti ei kehti.
+          Minimaalne tellimus {MIN_STANDALONE_GEMS} kristalli.
         </p>
       </div>
+
+      <Link href="/hambakristalli-komplekt" className="bb-crystals__back-cta">
+        Pole veel komplekti? Osta DIY Hambakristalli komplekt →
+      </Link>
 
       <div className="bb-crystals__grid">
         {EXTRA_GEM_TYPES.map(g => (
@@ -104,6 +109,8 @@ export default function CrystalsPage() {
           </div>
         ))}
       </div>
+
+      <p className="bb-crystals__shipping-note">📦 Eraldi tellimisel tasuta transporti ei kehti.</p>
 
       <div className="bb-crystals__bar">
         <div className="bb-crystals__bar-info">

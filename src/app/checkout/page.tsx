@@ -141,8 +141,8 @@ export default function CheckoutPage() {
       <main className="bb-checkout">
         <div className="bb-checkout__inner bb-checkout__empty">
           <h1 className="bb-checkout__title">Ostukorv on tühi</h1>
-          <p>Lisa komplekt korvi, et tellimus vormistada.</p>
-          <Button href="/hambakristalli-komplekt" arrow>Vaata komplekte</Button>
+          <p>Lisa tooteid ostukorvi, et tellimus vormistada.</p>
+          <Button href="/hambakristalli-komplekt" arrow>Vaata tooteid</Button>
         </div>
       </main>
     );

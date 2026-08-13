@@ -360,7 +360,10 @@ export default function ShopPage() {
                 onClick={() => setGemsOpen(o => !o)}
                 aria-expanded={gemsOpen}
               >
-                <span className="bb-extra-gems__title">Lisa ekstra kristalle</span>
+                <span className="bb-extra-gems__title">
+                  Lisa ekstra kristalle
+                  <span className="bb-extra-gems__badge">Populaarne</span>
+                </span>
                 <span className="bb-extra-gems__head-right">
                   <span className="bb-extra-gems__rate">{priceStr(GEM_PRICE)}/tk</span>
                   <span className={`bb-extra-gems__arrow ${gemsOpen ? "bb-extra-gems__arrow--open" : ""}`}>

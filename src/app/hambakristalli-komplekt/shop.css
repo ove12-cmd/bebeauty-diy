@@ -649,6 +649,10 @@
 }
 
 .bb-extra-gems {
+  background: #fff8ec;
+  border: 1px solid #ffe4a0;
+  border-radius: 14px;
+  padding: 14px 16px;
   margin-bottom: 16px;
 }
 
@@ -683,9 +687,23 @@
 }
 
 .bb-extra-gems__title {
-  font-size: 14px;
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
   color: var(--bb-ink);
+}
+
+.bb-extra-gems__badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  background: linear-gradient(180deg, #d8af45, #bd9230);
+  padding: 3px 8px;
+  border-radius: 999px;
 }
 
 .bb-extra-gems__rate {
@@ -697,22 +715,23 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 0;
+  padding: 10px 0;
+  border-top: 1px solid #ffe4a0;
 }
 
 .bb-extra-gems__info {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .bb-extra-gems__thumb {
-  width: 36px;
-  height: 36px;
+  width: 48px;
+  height: 48px;
   padding: 0;
   border: 1px solid #ebebeb;
-  border-radius: 8px;
-  background: #f7f6f2;
+  border-radius: 10px;
+  background: #ffffff;
   cursor: pointer;
   display: flex;
   align-items: center;
