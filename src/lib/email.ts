@@ -101,7 +101,12 @@ export async function sendOrderEmails(order: OrderEmailData): Promise<void> {
   }
 }
 
-export type ReviewSubmission = { name: string; rating: number; text: string };
+export type ReviewSubmission = {
+  name: string;
+  rating: number;
+  text: string;
+  photo?: { filename: string; content: string }; // content is base64
+};
 
 // Owner-only notification for a review a visitor submitted through the
 // "Lisa enda tagasiside" popup — nothing is published automatically, this
@@ -129,10 +134,12 @@ export async function sendReviewSubmissionEmail(review: ReviewSubmission): Promi
     <p>${esc(review.text).replace(/\n/g, "<br>")}</p>
   `;
 
+  const attachments = review.photo ? [{ filename: review.photo.filename, content: review.photo.content }] : undefined;
+
   await Promise.allSettled(
     ownerTo.map((to) =>
       resend.emails
-        .send({ from, to, subject: `📝 Uus arvustus — ${review.name}`, html })
+        .send({ from, to, subject: `📝 Uus arvustus — ${review.name}`, html, attachments })
         .catch((err) => {
           console.error(`[email] review notification to ${to} failed:`, err);
         }),

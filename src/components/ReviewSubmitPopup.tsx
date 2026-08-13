@@ -4,11 +4,16 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import Button from "@/components/ui/Button";
 
+const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+
 export default function ReviewSubmitPopup() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [rating, setRating] = useState(5);
   const [text, setText] = useState("");
+  const [photo, setPhoto] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [photoError, setPhotoError] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
 
   function close() {
@@ -17,6 +22,32 @@ export default function ReviewSubmitPopup() {
     setName("");
     setRating(5);
     setText("");
+    clearPhoto();
+  }
+
+  function clearPhoto() {
+    if (photoPreview) URL.revokeObjectURL(photoPreview);
+    setPhoto(null);
+    setPhotoPreview(null);
+    setPhotoError(null);
+  }
+
+  function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setPhotoError("Fail peab olema pilt.");
+      return;
+    }
+    if (file.size > MAX_PHOTO_BYTES) {
+      setPhotoError("Pilt on liiga suur (max 5 MB).");
+      return;
+    }
+    if (photoPreview) URL.revokeObjectURL(photoPreview);
+    setPhoto(file);
+    setPhotoPreview(URL.createObjectURL(file));
+    setPhotoError(null);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -24,11 +55,12 @@ export default function ReviewSubmitPopup() {
     if (!name.trim() || !text.trim()) return;
     setStatus("sending");
     try {
-      await fetch("/api/reviews", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, rating, text }),
-      });
+      const body = new FormData();
+      body.set("name", name);
+      body.set("rating", String(rating));
+      body.set("text", text);
+      if (photo) body.set("photo", photo);
+      await fetch("/api/reviews", { method: "POST", body });
     } catch {
       /* best-effort — the success message never depends on this */
     }
@@ -92,6 +124,28 @@ export default function ReviewSubmitPopup() {
                   maxLength={600}
                   rows={4}
                 />
+
+                <label className="bb-review-popup__label" htmlFor="rf-photo">Foto (valikuline)</label>
+                {photoPreview ? (
+                  <div className="bb-review-popup__photo-preview">
+                    <img src={photoPreview} alt="" />
+                    <button type="button" className="bb-review-popup__photo-remove" onClick={clearPhoto} aria-label="Eemalda foto">
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <label htmlFor="rf-photo" className="bb-review-popup__photo-btn">
+                    📷 Lisa foto
+                  </label>
+                )}
+                <input
+                  id="rf-photo"
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoChange}
+                  className="bb-review-popup__photo-input"
+                />
+                {photoError && <p className="bb-review-popup__photo-error">{photoError}</p>}
 
                 <Button type="submit" className="bb-review-popup__submit" disabled={status === "sending"}>
                   {status === "sending" ? "Saadan…" : "Saada tagasiside"}
