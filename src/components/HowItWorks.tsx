@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Button from "@/components/ui/Button";
 
 const STEPS = [
   {
@@ -28,6 +29,11 @@ export default function HowItWorks() {
   return (
     <section id="kuidas" className="bb-hiw">
       <h2 className="bb-hiw__heading">Kuidas see töötab?</h2>
+      <div className="bb-hiw__guide">
+        <Button href="/juhend" className="bb-hiw__guide-btn">
+          Vaata juhendit
+        </Button>
+      </div>
       {STEPS.map((step) => (
         <div key={step.n} className="bb-hiw__card">
           <div className="bb-hiw__img">

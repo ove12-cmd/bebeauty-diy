@@ -191,76 +191,6 @@
   display: block;
 }
 
-.bb-shop-reviews__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 40px;
-}
-
-.bb-shop-reviews__header .bb-shop-section__title { margin: 0; }
-
-.bb-shop-reviews__avg {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.bb-shop-reviews__count {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--bb-ink-2);
-}
-
-.bb-shop-reviews {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.bb-review {
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.bb-review__img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  background: #ede9e0;
-  border-radius: 14px;
-  position: relative;
-  overflow: hidden;
-}
-
-.bb-review__text {
-  font-size: 14px;
-  color: var(--bb-ink);
-  line-height: 1.6;
-  margin: 0;
-  flex: 1;
-}
-
-.bb-review__meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.bb-review__name {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--bb-ink);
-}
-
-.bb-review__date {
-  font-size: 12px;
-  color: var(--bb-ink-2);
-}
-
 .bb-faq-layout {
   display: grid;
   grid-template-columns: 260px 1fr;
@@ -786,7 +716,7 @@
 
 /* ── Tablet ── */
 @media (max-width: 1024px) {
-  .bb-shop { padding: 40px 24px; }
+  .bb-shop { padding: 0 24px 40px; }
   .bb-shop__layout { gap: 40px; }
   .bb-shop-section--dark, .bb-shop-section--cream { padding: 48px 32px; }
   .bb-shop-subnav { padding: 0 32px; margin-left: -32px; margin-right: -32px; }
@@ -796,8 +726,7 @@
 
 /* ── Mobile ── */
 @media (max-width: 768px) {
-  .bb-shop { padding: 24px 16px; }
-  .bb-shop__back { padding: 0 16px; margin-bottom: 16px; font-size: 13px; }
+  .bb-shop { padding: 0 16px 24px; }
   /* minmax(0, 1fr) keeps wide flex rows (buy bar) from blowing the track past the viewport */
   .bb-shop__layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .bb-shop__gallery, .bb-shop__panel { min-width: 0; }
@@ -848,9 +777,6 @@
 
   /* Before/after */
   .bb-shop-ba { grid-template-columns: repeat(2, 1fr); }
-
-  /* Reviews */
-  .bb-shop-reviews { grid-template-columns: 1fr; }
 
   /* FAQ */
   .bb-faq-layout { grid-template-columns: 1fr; gap: 24px; }

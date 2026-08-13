@@ -2,10 +2,11 @@
 
 import "./shop.css";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import UrgencyPopup from "@/components/UrgencyPopup";
 import JsonLd from "@/components/JsonLd";
+import ReviewsSlider from "@/components/ReviewsSlider";
+import SiteNav from "@/components/SiteNav";
 import Button from "@/components/ui/Button";
 import { productSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
 import { discountPctForCode, isGeneratedMarketingCode } from "@/lib/pricing";
@@ -63,14 +64,10 @@ const FAQS = [
 ];
 
 const REVIEWS = [
-  { name: "Laura K.", stars: 5, text: "Täpselt selline tulemus, nagu lootsin. Paigaldamine oli lihtne ja kristall püsis üllatavalt hästi. 10 minutit ja valmis.", date: "märts 2025", img: "/testimonials/testimonial-1.jpg", pos: "center 25%" },
-  { name: "Marii T.", stars: 5, text: "Olin alguses skeptiline, aga tulemus jäi tõesti ilus. Sain paigaldamisega esimese korraga hakkama.", date: "aprill 2025", img: "/testimonials/testimonial-2.jpg", pos: "center 35%" },
-  { name: "Keidi L.", stars: 5, text: "Väga kvaliteetne komplekt. Kõik vajalik oli kaasas ja tulemus jäi täpselt selline, nagu soovisin. 2.0 mm oli ideaalne valik – täpselt piisavalt märgatav.", date: "mai 2025", img: "/testimonials/testimonial-3.jpg", pos: "center 62%" },
+  { name: "Laura K.", text: "Täpselt selline tulemus, nagu lootsin. Paigaldamine oli lihtne ja kristall püsis üllatavalt hästi. 10 minutit ja valmis.", date: "märts 2025", img: "/testimonials/testimonial-1.jpg", pos: "center 25%" },
+  { name: "Marii T.", text: "Olin alguses skeptiline, aga tulemus jäi tõesti ilus. Sain paigaldamisega esimese korraga hakkama.", date: "aprill 2025", img: "/testimonials/testimonial-2.jpg", pos: "center 35%" },
+  { name: "Keidi L.", text: "Väga kvaliteetne komplekt. Kõik vajalik oli kaasas ja tulemus jäi täpselt selline, nagu soovisin. 2.0 mm oli ideaalne valik – täpselt piisavalt märgatav.", date: "mai 2025", img: "/testimonials/testimonial-3.jpg", pos: "center 62%" },
 ];
-
-function Stars({ n }: { n: number }) {
-  return <span className="bb-stars">{"★".repeat(n)}</span>;
-}
 
 function IconCart() {
   return (
@@ -283,7 +280,7 @@ export default function ShopPage() {
       <JsonLd data={breadcrumbSchema([{ name: "Avaleht", path: "/" }, { name: "Hambakristalli komplekt", path: "/hambakristalli-komplekt" }])} />
       <UrgencyPopup autoOpen={false} />
       <StickyBar price={priceStr(finalPrice)} original={priceStr(variant.original)} onAdd={addToCart} />
-      <Link href="/" className="bb-shop__back">← Tagasi</Link>
+      <SiteNav active="komplektid" />
 
       {/* ── Main buy panel ── */}
       <div className="bb-shop__layout" id="kirjeldus">
@@ -448,8 +445,8 @@ export default function ShopPage() {
       <div className="bb-shop-section bb-shop-section--dark" id="paigaldus">
         <div className="bb-shop-steps__head">
           <h2 className="bb-shop-section__title bb-shop-section__title--light">Kuidas paigaldada</h2>
-          <Button href="/juhend" className="bb-shop-steps__guide-btn" arrow>
-            Vaata täielikku paigaldusjuhendit
+          <Button href="/juhend" className="bb-shop-steps__guide-btn">
+            Vaata juhendit
           </Button>
         </div>
         <div className="bb-shop-steps">
@@ -504,26 +501,7 @@ export default function ShopPage() {
       </div>
 
       {/* ── Reviews ── */}
-      <div className="bb-shop-section bb-shop-section--cream" id="arvustused">
-        <div className="bb-shop-reviews__header">
-          <h2 className="bb-shop-section__title">Arvustused</h2>
-        </div>
-        <div className="bb-shop-reviews">
-          {REVIEWS.map((r, i) => (
-            <div key={i} className="bb-review">
-              <div className="bb-review__img">
-                <Image src={r.img} alt={`${r.name} tulemus`} fill sizes="(max-width: 768px) 100vw, 33vw" style={{ objectFit: "cover", objectPosition: r.pos }} />
-              </div>
-              <Stars n={r.stars} />
-              <p className="bb-review__text">{r.text}</p>
-              <div className="bb-review__meta">
-                <span className="bb-review__name">{r.name}</span>
-                <span className="bb-review__date">{r.date}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <ReviewsSlider id="arvustused" heading="Arvustused" reviews={REVIEWS} />
 
       {/* ── FAQ ── */}
       <div className="bb-shop-section">
