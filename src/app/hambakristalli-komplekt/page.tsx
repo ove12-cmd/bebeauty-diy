@@ -63,12 +63,6 @@ const FAQS = [
   { q: "Kas kristalle saab juurde tellida?", a: "Jah, Primero ja Preciosa kristalle saab eraldi juurde osta meie poest." },
 ];
 
-const REVIEWS = [
-  { name: "Laura K.", text: "Täpselt selline tulemus, nagu lootsin. Paigaldamine oli lihtne ja kristall püsis üllatavalt hästi. 10 minutit ja valmis.", date: "märts 2025", img: "/testimonials/testimonial-1.jpg", pos: "center 25%" },
-  { name: "Marii T.", text: "Olin alguses skeptiline, aga tulemus jäi tõesti ilus. Sain paigaldamisega esimese korraga hakkama.", date: "aprill 2025", img: "/testimonials/testimonial-2.jpg", pos: "center 35%" },
-  { name: "Keidi L.", text: "Väga kvaliteetne komplekt. Kõik vajalik oli kaasas ja tulemus jäi täpselt selline, nagu soovisin. 2.0 mm oli ideaalne valik – täpselt piisavalt märgatav.", date: "mai 2025", img: "/testimonials/testimonial-3.jpg", pos: "center 62%" },
-];
-
 function IconCart() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -501,7 +495,7 @@ export default function ShopPage() {
       </div>
 
       {/* ── Reviews ── */}
-      <ReviewsSlider id="arvustused" heading="Arvustused" reviews={REVIEWS} />
+      <ReviewsSlider id="arvustused" heading="Arvustused" />
 
       {/* ── FAQ ── */}
       <div className="bb-shop-section">

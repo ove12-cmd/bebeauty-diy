@@ -757,7 +757,7 @@ html, body {
   .bb-product__img-wrap,
   .bb-product__img {
     min-height: 0;
-    aspect-ratio: 2 / 3;
+    aspect-ratio: 3 / 2;
   }
   .bb-product__content {
     padding: 44px 24px;
@@ -1768,7 +1768,7 @@ html, body {
 .bb-hiw__guide {
   grid-column: 1 / -1;
   text-align: center;
-  margin: 0 0 40px;
+  margin: 32px 0 0;
 }
 
 .bb-hiw__guide-btn {
@@ -1989,14 +1989,12 @@ html, body {
   .bb-results__grid3 { grid-template-columns: repeat(2, 1fr); }
   .bb-results__header { flex-direction: column; gap: 10px; }
   .bb-rcard--wide { grid-column: span 1; }
-  /* Undo the tablet-only "fill the row" treatment — on a narrow phone
-     screen a lone square tile with empty space beside it reads better
-     than a squashed 2:1 banner. */
+  /* Lone 9th tile fills the row, but square (not the tablet's 2:1 banner). */
   .bb-results__grid3 .bb-rcard:last-child:nth-child(odd) {
-    grid-column: span 1;
-    height: 0;
-    padding-bottom: 100%;
-    aspect-ratio: auto;
+    grid-column: span 2;
+    height: auto;
+    padding-bottom: 0;
+    aspect-ratio: 1 / 1;
   }
 }
 
