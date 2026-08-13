@@ -15,8 +15,8 @@ import { discountPctForCode, isGeneratedMarketingCode, EXTRA_GEM_TYPES, GEM_PRIC
 import { trackMeta, CURRENCY } from "@/lib/meta-pixel";
 import { useCart } from "@/hooks/useCart";
 
-// Toggle off while the extra-gems add-on is paused — flip back on to restore it.
-const SHOW_EXTRA_GEMS = false;
+// Toggle off to pause the extra-gems add-on without deleting it.
+const SHOW_EXTRA_GEMS = true;
 
 const VARIANTS = [
   { id: "s17", label: "1.7mm", desc: "Väiksem, peenem kristall", price: 35, original: 45 },

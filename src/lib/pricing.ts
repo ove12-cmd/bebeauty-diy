@@ -7,16 +7,13 @@ export const LOCALE = "et";
 
 // Extra crystals, purchasable only alongside a kit — the product page adds
 // them to the cart in the same click as the kit itself, so a gem line never
-// reaches checkout on its own. Placeholder names until real ones are picked.
+// reaches checkout on its own.
 export const GEM_PRICE = 0.5;
 
 export const EXTRA_GEM_TYPES = [
-  { id: "gem-a", label: "Kristall A", img: "/crystals/69bc42fded13775022181fa5_ChatGPT Image Mar 19, 2026, 07_16_57 PM 2.webp" },
-  { id: "gem-b", label: "Kristall B", img: "/crystals/69bc42ff9c6cf4797bbb5a51_ChatGPT Image Mar 19, 2026, 07_33_09 PM 2.webp" },
-  { id: "gem-c", label: "Kristall C", img: "/crystals/69bc430285769d6a39b5a507_ChatGPT Image Mar 19, 2026, 07_34_41 PM 2.webp" },
-  { id: "gem-d", label: "Kristall D", img: "/crystals/69bc42fded13775022181fa5_ChatGPT Image Mar 19, 2026, 07_16_57 PM 2.webp" },
-  { id: "gem-e", label: "Kristall E", img: "/crystals/69bc42ff9c6cf4797bbb5a51_ChatGPT Image Mar 19, 2026, 07_33_09 PM 2.webp" },
-  { id: "gem-standard", label: "Standard (lisa)", img: "/crystals/69bc430285769d6a39b5a507_ChatGPT Image Mar 19, 2026, 07_34_41 PM 2.webp" },
+  { id: "gem-clear", label: "Kristall läbipaistev", img: "/crystals/gem-clear.jpg" },
+  { id: "gem-ab", label: "Aurore Boreale", img: "/crystals/gem-ab.jpg" },
+  { id: "gem-ab-butterfly", label: "Aurore Boreale Butterfly", img: "/crystals/gem-ab-butterfly.jpg" },
 ] as const;
 
 // Variant id → unit price (€). Mirrors VARIANTS in src/app/hambakristalli-komplekt/page.tsx.
