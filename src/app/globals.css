@@ -2114,32 +2114,20 @@ html, body {
 
 .bb-cookie__inner {
   background: #111111;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1.5px solid var(--bb-gold);
   border-radius: 16px;
-  padding: 16px 20px;
+  padding: 24px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 18px;
 }
 
 .bb-cookie__text {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
-  min-width: 200px;
-}
-
-.bb-cookie__text p {
-  font-size: 13px;
-  color: rgba(255,255,255,0.65);
+  font-size: 15px;
+  color: #ffffff;
   margin: 0;
   line-height: 1.5;
 }
-
-.bb-cookie__emoji { font-size: 20px; flex-shrink: 0; }
 
 .bb-cookie__link {
   color: var(--bb-gold);
@@ -2149,28 +2137,33 @@ html, body {
 
 .bb-cookie__actions {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
+  align-items: stretch;
+  gap: 12px;
 }
 
 .bb-cookie__decline {
+  flex: 1;
   background: none;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1.5px solid rgba(255,255,255,0.25);
   border-radius: 10px;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.55);
   font-family: var(--bb-font);
-  font-size: 13px;
-  font-weight: 600;
-  padding: 9px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
   cursor: pointer;
   transition: border-color 0.15s, color 0.15s;
 }
-.bb-cookie__decline:hover { border-color: rgba(255,255,255,0.4); color: #fff; }
+.bb-cookie__decline:hover { border-color: rgba(255,255,255,0.45); color: #fff; }
 
 .bb-cookie__accept {
-  font-size: 13px !important;
-  padding: 9px 18px !important;
+  flex: 2;
+  justify-content: center;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 /* ============================================================

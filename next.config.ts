@@ -29,9 +29,11 @@ const securityHeaders = [
       // Fonts
       "font-src 'self' https://fonts.gstatic.com",
       // Images: self + Unsplash CDN + data URIs + GA's pixel fallback + Meta Pixel beacon
-      "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://www.google-analytics.com https://www.facebook.com",
+      "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://*.google-analytics.com https://www.facebook.com",
       // Connect: self + Unsplash API + Stripe API (PaymentIntent confirmation) + GA/Meta/Clarity beacons
-      "connect-src 'self' https://images.unsplash.com https://plus.unsplash.com https://api.stripe.com https://www.google-analytics.com https://analytics.google.com https://www.facebook.com https://connect.facebook.net https://*.clarity.ms",
+      // GA4 sends its collect hit to a regional subdomain (e.g. region1.google-analytics.com),
+      // not the bare www host — must wildcard it or every hit gets silently CSP-blocked.
+      "connect-src 'self' https://images.unsplash.com https://plus.unsplash.com https://api.stripe.com https://*.google-analytics.com https://analytics.google.com https://www.facebook.com https://connect.facebook.net https://*.clarity.ms",
       // Stripe's embedded card fields render inside a same-origin-looking iframe it controls
       "frame-src https://js.stripe.com https://hooks.stripe.com",
       // No plugins

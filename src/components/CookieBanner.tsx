@@ -29,15 +29,13 @@ export default function CookieBanner() {
   return (
     <div className="bb-cookie">
       <div className="bb-cookie__inner">
-        <div className="bb-cookie__text">
-          <span className="bb-cookie__emoji">🍪</span>
-          <p>Kasutame küpsiseid, et parandada sinu kogemust. Loe lähemalt meie{" "}
-            <Link href="/privaatsus" className="bb-cookie__link">privaatsuspoliitikast</Link>.
-          </p>
-        </div>
+        <p className="bb-cookie__text">
+          Kasutame küpsiseid, et pakkuda sulle parimat ostukogemust. Loe lähemalt meie{" "}
+          <Link href="/privaatsus" className="bb-cookie__link">privaatsuspoliitikast</Link>.
+        </p>
         <div className="bb-cookie__actions">
-          <button className="bb-cookie__decline" onClick={decline}>Keeldu</button>
           <Button className="bb-cookie__accept" onClick={accept}>Nõustun</Button>
+          <button className="bb-cookie__decline" onClick={decline}>Keeldu</button>
         </div>
       </div>
     </div>
