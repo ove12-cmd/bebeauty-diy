@@ -46,6 +46,9 @@ export const metadata: Metadata = {
     title: "DIY Hambakristalli Komplekt | beBeauty DIY",
     description: "Paigalda hambakristallid kodus 10 minutiga. Swarovski kristallid, UV lamp ja kõik vajalik.",
   },
+  other: {
+    "facebook-domain-verification": "fccyql35zxod7nlarq920tscqb37ev",
+  },
 };
 
 export default function RootLayout({
