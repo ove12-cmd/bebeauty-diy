@@ -12,6 +12,8 @@ type Body = {
   contact: { name: string; email: string; phone: string };
   locker?: string | null;
   address?: { street: string; city: string; zip: string } | null;
+  gaClientId?: string | null;
+  gaSessionId?: string | null;
 };
 
 export async function POST(req: NextRequest) {
@@ -84,6 +86,12 @@ export async function POST(req: NextRequest) {
         clientUa,
         fbp,
         fbc,
+        // GA4 ids for the webhook's server-side purchase hit. No separate
+        // ga_items field — itemsJson + contentIds above already carry name/
+        // qty/price per line, and the webhook rebuilds GA4's items[] from
+        // those instead of duplicating a second (500-char-capped) field.
+        gaClientId: body.gaClientId || "",
+        gaSessionId: body.gaSessionId || "",
       },
     });
 

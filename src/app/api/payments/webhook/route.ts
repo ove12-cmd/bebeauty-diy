@@ -10,6 +10,17 @@ export const dynamic = "force-dynamic";
 const META_PIXEL_ID = "3246042772233645";
 const META_API_VERSION = "v21.0";
 
+// Stripe amounts are in the smallest unit for the currency — a cent for
+// EUR, but these currencies have no minor unit at all (already major units).
+const ZERO_DECIMAL_CURRENCIES = new Set([
+  "BIF", "CLP", "DJF", "GNF", "JPY", "KMF", "KRW", "MGA", "PYG", "RWF",
+  "UGX", "VND", "VUV", "XAF", "XOF", "XPF",
+]);
+
+function stripeAmountToMajorUnits(amount: number, currency: string): number {
+  return ZERO_DECIMAL_CURRENCIES.has(currency.toUpperCase()) ? amount : amount / 100;
+}
+
 function sha256(value: string): string {
   return createHash("sha256").update(value).digest("hex");
 }
@@ -71,6 +82,79 @@ async function sendMetaPurchaseCapi(pi: Stripe.PaymentIntent, reference: string)
   }
 }
 
+type GA4Item = { item_id: string; item_name: string; price: number; quantity: number };
+
+// Fires the "purchase" event via GA4's Measurement Protocol. This — not the
+// browser — is the only place Purchase fires, since a card requiring 3-D
+// Secure/SCA takes the buyer off-site and a browser-only event would miss
+// them. transaction_id = the PaymentIntent id, so a Stripe webhook retry
+// re-sends the identical id and GA4's own dedup keeps it a single purchase.
+// No-ops (with a warning) if GA4_API_SECRET isn't set, or if there's no
+// ga_client_id on the PaymentIntent — never invent a fallback client_id,
+// an unattributed hit is worse than no hit.
+async function sendGA4Purchase(pi: Stripe.PaymentIntent, reference: string): Promise<void> {
+  const apiSecret = process.env.GA4_API_SECRET;
+  const measurementId = process.env.GA4_MEASUREMENT_ID || process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+  if (!apiSecret || !measurementId) {
+    console.warn("[webhook] GA4_API_SECRET/measurement id missing — skipping GA4 purchase for", reference);
+    return;
+  }
+
+  const md = pi.metadata ?? {};
+  const clientId = md.gaClientId;
+  if (!clientId) {
+    console.warn("[webhook] no ga_client_id on PaymentIntent — skipping GA4 purchase for", reference);
+    return;
+  }
+
+  const currency = (pi.currency || "eur").toUpperCase();
+  const value = stripeAmountToMajorUnits(pi.amount_received ?? pi.amount ?? 0, currency);
+
+  // Rebuilt from the same itemsJson/contentIds the order email already
+  // uses — no separate ga_items metadata field to keep under the 500-char cap.
+  let items: GA4Item[] = [];
+  try {
+    const parsedItems = md.itemsJson
+      ? (JSON.parse(md.itemsJson) as { name: string; quantity: number; finalPrice: number }[])
+      : [];
+    const ids = md.contentIds ? md.contentIds.split(",").filter(Boolean) : [];
+    items = parsedItems.map((it, i) => ({
+      item_id: ids[i] || `item_${i}`,
+      item_name: it.name,
+      price: it.finalPrice,
+      quantity: it.quantity,
+    }));
+  } catch {
+    /* ignore malformed metadata — purchase still fires without item detail */
+  }
+
+  const params: Record<string, unknown> = { currency, value, transaction_id: pi.id, items };
+  if (md.gaSessionId) params.session_id = md.gaSessionId;
+
+  // The /debug/mp/collect endpoint only validates a payload, it never
+  // records real data — GA4_DEBUG must not be left on in production or
+  // purchases will silently stop showing up in reports.
+  const debug = process.env.GA4_DEBUG === "1";
+  const base = debug
+    ? "https://www.google-analytics.com/debug/mp/collect"
+    : "https://www.google-analytics.com/mp/collect";
+
+  const res = await fetch(`${base}?measurement_id=${measurementId}&api_secret=${apiSecret}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      client_id: clientId,
+      events: [{ name: "purchase", params }],
+    }),
+  });
+
+  if (!res.ok) {
+    console.error("[webhook] GA4 Measurement Protocol request failed:", res.status, await res.text());
+  } else if (debug) {
+    console.log("[webhook] GA4 debug validation:", await res.text());
+  }
+}
+
 // Stripe calls this server-to-server. This — not the browser — is the
 // trustworthy signal that the card was actually charged.
 export async function POST(req: NextRequest) {
@@ -124,6 +208,13 @@ export async function POST(req: NextRequest) {
     await sendMetaPurchaseCapi(pi, md.reference || pi.id);
   } catch (err) {
     console.error("[webhook] Meta CAPI step failed:", err);
+    // Still 200 — same reasoning as the email step above.
+  }
+
+  try {
+    await sendGA4Purchase(pi, md.reference || pi.id);
+  } catch (err) {
+    console.error("[webhook] GA4 step failed:", err);
     // Still 200 — same reasoning as the email step above.
   }
 

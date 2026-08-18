@@ -13,6 +13,7 @@ import Button from "@/components/ui/Button";
 import { productSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
 import { discountPctForCode, isGeneratedMarketingCode, EXTRA_GEM_TYPES, GEM_PRICE } from "@/lib/pricing";
 import { trackMeta, CURRENCY } from "@/lib/meta-pixel";
+import { trackGA4 } from "@/lib/ga4";
 import { useCart } from "@/hooks/useCart";
 
 // Toggle off to pause the extra-gems add-on without deleting it.
@@ -237,17 +238,25 @@ export default function ShopPage() {
   };
   const codeTimer = useCodeTimer();
 
-  // ViewContent — once per distinct variant selected, not on every re-render.
+  // ViewContent / view_item — once per distinct variant selected, not on
+  // every re-render (StrictMode double-invokes effects in dev; this ref
+  // guard keeps a real re-mount or dev double-fire from double-counting).
   const viewedVariants = useRef<Set<string>>(new Set());
   useEffect(() => {
     if (viewedVariants.current.has(variant.id)) return;
     viewedVariants.current.add(variant.id);
+    const contentName = `DIY Hambakristalli komplekt · ${variant.label}`;
     trackMeta("ViewContent", {
       content_ids: [variant.id],
-      content_name: `DIY Hambakristalli komplekt · ${variant.label}`,
+      content_name: contentName,
       content_type: "product",
       value: variant.price,
       currency: CURRENCY,
+    });
+    trackGA4("view_item", {
+      currency: CURRENCY,
+      value: variant.price,
+      items: [{ item_id: variant.id, item_name: contentName, price: variant.price, quantity: 1 }],
     });
   }, [variant.id, variant.label, variant.price]);
   const [code, setCode] = useState("");

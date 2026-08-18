@@ -7,6 +7,7 @@ import { useCart } from "@/hooks/useCart";
 import { searchLockers, type Locker } from "@/lib/lockers";
 import { FREE_SHIPPING_GEM_THRESHOLD, discountPctForCode, isGemId, isGemOnlyOrder } from "@/lib/pricing";
 import { trackMeta, CURRENCY } from "@/lib/meta-pixel";
+import { trackGA4, getGaIds } from "@/lib/ga4";
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./checkout.css";
 
@@ -109,6 +110,19 @@ export default function CheckoutPage() {
     }
     setSubmitting(true);
     setPayError(false);
+
+    // begin_checkout fires here — the moment the buyer submits their info,
+    // not on page load (that's InitiateCheckout above) — then we read GA4's
+    // own client_id/session_id so the webhook's later server-side purchase
+    // hit (Stripe Checkout has no equivalent redirect here, but SCA/3-D
+    // Secure can still take the buyer off-site) attributes to this session.
+    trackGA4("begin_checkout", {
+      currency: CURRENCY,
+      value: subtotal,
+      items: items.map((i) => ({ item_id: i.id, item_name: i.label, price: i.price, quantity: i.qty })),
+    });
+    const gaIds = await getGaIds();
+
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
@@ -123,6 +137,8 @@ export default function CheckoutPage() {
             form.delivery === "courier"
               ? { street: form.street, city: form.city, zip: form.zip }
               : null,
+          gaClientId: gaIds.clientId,
+          gaSessionId: gaIds.sessionId,
         }),
       });
       if (!res.ok) throw new Error();

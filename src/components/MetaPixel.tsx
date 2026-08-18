@@ -1,6 +1,7 @@
 "use client";
 
 import Script from "next/script";
+import { usePathname } from "next/navigation";
 import { useCookieConsent } from "@/hooks/useCookieConsent";
 
 const PIXEL_ID = "3246042772233645";
@@ -9,11 +10,14 @@ const PIXEL_ID = "3246042772233645";
  * Only loads fbevents.js once the cookie banner has been accepted. No
  * <noscript> fallback pixel — that's plain HTML and would fire unconditionally,
  * bypassing the consent gate entirely for no-JS visitors.
+ * Also skipped on /dashboard — the internal orders admin shouldn't feed
+ * PageView hits into the ad account's conversion/audience data.
  */
 export default function MetaPixel() {
   const consented = useCookieConsent();
+  const pathname = usePathname();
 
-  if (!consented) return null;
+  if (!consented || pathname?.startsWith("/dashboard")) return null;
 
   return (
     <Script id="meta-pixel" strategy="afterInteractive">
