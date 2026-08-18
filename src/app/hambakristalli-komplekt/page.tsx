@@ -57,7 +57,7 @@ const BOX_ITEMS = [
 const STEPS = [
   { n: "01", title: "Vali", desc: "Vali oma komplekt.", src: "/howto/vali.jpg" },
   { n: "02", title: "Kleebi", desc: "Kleebi kristallid hambale.", src: "/howto/paigalda.jpg" },
-  { n: "03", title: "Sära", desc: "Naudi salongiväärilist sära.", src: "/howto/tulemus.jpg" },
+  { n: "03", title: "Valmis!", desc: "Ja valmis! Kristall paigas", src: "/howto/tulemus.jpg" },
 ];
 
 const FAQS = [
