@@ -15,7 +15,7 @@ export default function Product() {
     <section className="bb-product">
       <div className="bb-product__img-wrap">
         <Image
-          src="/product package.jpg"
+          src="/product package v3.png"
           alt="beBeauty DIY komplekt"
           fill
           sizes="(max-width: 768px) 100vw, 55vw"

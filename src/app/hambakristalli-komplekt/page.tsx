@@ -27,7 +27,7 @@ const VARIANTS = [
 
 // Product gallery — main image first, then alternate shots (click to swap)
 const GALLERY_IMAGES = [
-  "/product package.jpg",
+  "/product package v3.png",
   "/home/gallery/4.png",
   "/home/gallery/3.png",
   "/home/gallery/5.png",
