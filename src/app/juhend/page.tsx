@@ -1,9 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
+import ImageLightbox from "@/components/ImageLightbox";
 import { useCallback, useEffect, useState } from "react";
 import "./juhend.css";
+
+type NeedItem = { icon?: string; img?: string; label: string };
 
 type Step = {
   n: string;
@@ -11,7 +15,7 @@ type Step = {
   title: string;
   actions: string[];
   tip?: string;
-  needs: { icon: string; label: string }[];
+  needs: NeedItem[];
 };
 
 const STEPS: Step[] = [
@@ -19,31 +23,41 @@ const STEPS: Step[] = [
     n: "01",
     category: "Ettevalmistus",
     title: "Puhasta ja ettevalmista pind",
-    actions: ["Puhasta hammas põhjalikult", "Kuivata hammas täielikult"],
+    actions: ["Paigalda põsehoidja", "Kuivata hammas täielikult"],
     tip: "Järgmise sammu jaoks peab hammas olema täiesti kuiv.",
-    needs: [{ icon: "🪥", label: "Hambahari" }, { icon: "🧻", label: "Vatirull" }],
+    needs: [
+      { icon: "🪥", label: "Hambahari" },
+      { img: "/tools/vatirull.png", label: "Vatirull" },
+      { img: "/tools/põsehoidja.png", label: "Põsehoidja" },
+    ],
   },
   {
     n: "02",
     category: "Etch",
     title: "Valmista pind kinnituseks",
-    actions: ["Kanna väike kogus Etch geeli hambale", "Oota 30 sekundit"],
+    actions: ["Kanna väike kogus Etch geeli hambale (sinakas pudel)", "Oota 30 sekundit"],
     tip: "Ära kasuta liiga palju geeli.",
-    needs: [{ icon: "💧", label: "Etch geel" }, { icon: "🖌️", label: "Aplikaator" }],
+    needs: [
+      { img: "/tools/etch.png", label: "Etch geel" },
+      { img: "/tools/mikrotikk.png", label: "Mikrotikk" },
+    ],
   },
   {
     n: "03",
     category: "Puhastus",
     title: "Eemalda Etch geel ja kuivata",
     actions: ["Eemalda Etch geel hambalt vatirulliga", "Kuivata hammas uuesti"],
-    needs: [{ icon: "🧻", label: "Vatirull" }],
+    needs: [{ img: "/tools/vatirull.png", label: "Vatirull" }],
   },
   {
     n: "04",
     category: "Paigaldus",
     title: "Lisa liim",
-    actions: ["Pane väike kogus liimi hambale", "Kasuta selleks tikku"],
-    needs: [{ icon: "🧴", label: "Liim" }, { icon: "🪵", label: "Tikk" }],
+    actions: ["Pane väike kogus liimi hambale (valge pudel)", "Kasuta selleks mikrotikku"],
+    needs: [
+      { img: "/tools/liim.png", label: "Liim" },
+      { img: "/tools/mikrotikk.png", label: "Mikrotikk" },
+    ],
   },
   {
     n: "05",
@@ -51,14 +65,17 @@ const STEPS: Step[] = [
     title: "Aseta kristall",
     actions: ["Pane kristall liimi peale", "Vajuta õrnalt kristallile"],
     tip: "Ära liiguta kristalli pärast asetust.",
-    needs: [{ icon: "💎", label: "Kristall" }, { icon: "🖌️", label: "Aplikaator" }],
+    needs: [
+      { icon: "💎", label: "Kristall" },
+      { img: "/tools/aplikaator.png", label: "Aplikaator" },
+    ],
   },
   {
     n: "06",
     category: "Kinnitamine",
     title: "UV-kõvastamine",
-    actions: ["Kõvasta 4 × 20 sekundit UV-lambiga"],
-    needs: [{ icon: "🔦", label: "UV-lamp" }],
+    actions: ["Kõvasta 3 × 45 sekundit UV-lambiga"],
+    needs: [{ img: "/tools/uv.png", label: "UV-lamp" }],
   },
 ];
 
@@ -82,6 +99,7 @@ function IconCheck() {
 export default function GuidePage() {
   // 0 = intro · 1..TOTAL = steps · TOTAL+1 = done
   const [step, setStep] = useState(0);
+  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
 
   const next = useCallback(() => setStep((s) => Math.min(TOTAL + 1, s + 1)), []);
   const prev = useCallback(() => setStep((s) => Math.max(0, s - 1)), []);
@@ -168,11 +186,25 @@ export default function GuidePage() {
               <div className="bb-guide__needs">
                 <span className="bb-guide__needs-label">Vaja läheb</span>
                 <div className="bb-guide__chips">
-                  {current.needs.map((item) => (
-                    <span key={item.label} className="bb-guide__chip">
-                      <span aria-hidden="true">{item.icon}</span> {item.label}
-                    </span>
-                  ))}
+                  {current.needs.map((item) =>
+                    item.img ? (
+                      <button
+                        key={item.label}
+                        type="button"
+                        className="bb-guide__chip bb-guide__chip--img"
+                        onClick={() => setLightbox({ src: item.img!, alt: item.label })}
+                      >
+                        <span className="bb-guide__chip-thumb">
+                          <Image src={item.img} alt="" width={44} height={44} />
+                        </span>
+                        {item.label}
+                      </button>
+                    ) : (
+                      <span key={item.label} className="bb-guide__chip">
+                        <span aria-hidden="true">{item.icon}</span> {item.label}
+                      </span>
+                    ),
+                  )}
                 </div>
               </div>
             </div>
@@ -214,6 +246,10 @@ export default function GuidePage() {
           </div>
         )}
       </div>
+
+      {lightbox && (
+        <ImageLightbox src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox(null)} />
+      )}
     </main>
   );
 }

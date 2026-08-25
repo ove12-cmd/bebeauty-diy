@@ -237,6 +237,34 @@
   color: var(--bb-ink);
 }
 
+.bb-guide__chip--img {
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.bb-guide__chip--img:hover,
+.bb-guide__chip--img:focus-visible {
+  background: #ece9e1;
+  border-color: #ddd9d0;
+}
+
+.bb-guide__chip-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #fff;
+  flex-shrink: 0;
+}
+.bb-guide__chip-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 /* ── Nav ── */
 .bb-guide__nav {
   display: flex;
