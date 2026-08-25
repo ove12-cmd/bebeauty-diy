@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
 import ImageLightbox from "@/components/ImageLightbox";
@@ -26,7 +25,6 @@ const STEPS: Step[] = [
     actions: ["Paigalda põsehoidja", "Kuivata hammas täielikult"],
     tip: "Järgmise sammu jaoks peab hammas olema täiesti kuiv.",
     needs: [
-      { icon: "🪥", label: "Hambahari" },
       { img: "/tools/vatirull.png", label: "Vatirull" },
       { img: "/tools/põsehoidja.png", label: "Põsehoidja" },
     ],
@@ -92,6 +90,16 @@ function IconCheck() {
   return (
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+function IconImage() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <circle cx="9" cy="9" r="1.5" fill="currentColor" stroke="none" />
+      <path d="M21 15l-5-5-9 9" />
     </svg>
   );
 }
@@ -194,8 +202,8 @@ export default function GuidePage() {
                         className="bb-guide__chip bb-guide__chip--img"
                         onClick={() => setLightbox({ src: item.img!, alt: item.label })}
                       >
-                        <span className="bb-guide__chip-thumb">
-                          <Image src={item.img} alt="" width={44} height={44} />
+                        <span className="bb-guide__chip-thumb" aria-hidden="true">
+                          <IconImage />
                         </span>
                         {item.label}
                       </button>
