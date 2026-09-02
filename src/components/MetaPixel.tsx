@@ -2,7 +2,9 @@
 
 import Script from "next/script";
 import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
 import { useCookieConsent } from "@/hooks/useCookieConsent";
+import { trackMeta } from "@/lib/meta-pixel";
 
 const PIXEL_ID = "3246042772233645";
 
@@ -16,6 +18,21 @@ const PIXEL_ID = "3246042772233645";
 export default function MetaPixel() {
   const consented = useCookieConsent();
   const pathname = usePathname();
+
+  // next/script runs the snippet below exactly once, so its inline PageView
+  // only covers the route the pixel loaded on. Without this, a client-side
+  // navigation is invisible to Meta and URL-based retargeting audiences only
+  // ever see landing pages.
+  const loadedOn = useRef<string | null>(null);
+  useEffect(() => {
+    if (!consented || !pathname || pathname.startsWith("/dashboard")) return;
+    if (loadedOn.current === null) {
+      loadedOn.current = pathname; // the inline snippet already counted this one
+      return;
+    }
+    if (loadedOn.current === pathname) return;
+    trackMeta("PageView");
+  }, [consented, pathname]);
 
   if (!consented || pathname?.startsWith("/dashboard")) return null;
 

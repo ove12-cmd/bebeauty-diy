@@ -74,6 +74,7 @@ export default function CheckoutPage() {
     initiateCheckoutFired.current = true;
     trackMeta("InitiateCheckout", {
       content_ids: items.map((i) => i.id),
+      content_type: "product",
       value: subtotal,
       num_items: count,
       currency: CURRENCY,
