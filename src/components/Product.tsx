@@ -3,10 +3,10 @@ import Button from "@/components/ui/Button";
 
 const FEATURES = [
   "Valmis 10 minutiga",
-  "Salongikvaliteet",
+  "Swarovski kristallid — samad, mida kasutavad salongid",
   "Lihtne kodus paigaldada",
   "Ei vaja erioskusi",
-  "Turvaline paigaldus",
+  "Ohutu — ei kahjusta hambaemaili",
   "Selged ja täpsed juhised",
 ];
 

@@ -21,7 +21,7 @@ const SHOW_EXTRA_GEMS = true;
 
 const VARIANTS = [
   { id: "s17", label: "1.7mm", desc: "Väiksem, peenem kristall", price: 35, original: 45 },
-  { id: "s20", label: "2.0mm", desc: "Kõige populaarsem valik", price: 35, original: 45 },
+  { id: "s20", label: "2.0mm", desc: "Meie soovitus", price: 35, original: 45 },
   { id: "s23", label: "2.3mm", desc: "Suurem, silmapaistvam efekt", price: 35, original: 45 },
 ];
 
@@ -57,7 +57,7 @@ const BOX_ITEMS = [
 const STEPS = [
   { n: "01", title: "Vali", desc: "Vali oma komplekt.", src: "/howto/vali.jpg" },
   { n: "02", title: "Kleebi", desc: "Kleebi kristallid hambale.", src: "/howto/paigalda.jpg" },
-  { n: "03", title: "Valmis!", desc: "Ja valmis! Kristall paigas", src: "/howto/tulemus.jpg" },
+  { n: "03", title: "Valmis!", desc: "Kristall paigas", src: "/howto/tulemus.jpg" },
 ];
 
 const FAQS = [
@@ -111,7 +111,7 @@ function FAQ() {
 
 const TRUST = [
   { icon: "🦷", label: "Hambasõbralik" },
-  { icon: "💎", label: "Euroopa kristallid" },
+  { icon: "🇪🇺", label: "Euroopa kristallid" },
   { icon: "↩", label: "30p tagastus" },
   { icon: "🔒", label: "Turvaline makse" },
 ];
@@ -465,8 +465,17 @@ export default function ShopPage() {
             </div>
             <Button className="bb-shop__cta" onClick={addToCart}><IconCart />Lisa korvi</Button>
           </div>
+          <p className="bb-shop__compare">80–150€ salongis → <strong>35€ kodus</strong>.</p>
           <div className="bb-urgency__shipping">📦 Telli täna enne kell 14.00 – saadame <strong>järgmisel tööpäeval teele</strong>.</div>
 
+          <div className="bb-trust">
+            {TRUST.map((t, i) => (
+              <div key={i} className="bb-trust__item">
+                <span className="bb-trust__icon" aria-hidden="true">{t.icon}</span>
+                <span className="bb-trust__label">{t.label}</span>
+              </div>
+            ))}
+          </div>
 
           <p className="bb-shop__lead">Kõik vajalik ühes komplektis.</p>
           <p className="bb-shop__desc">Paigalda hambakristallid mugavalt kodus. Komplekt sisaldab kvaliteetseid Swarovski kristalle ning kõiki vajalikke töövahendeid kiireks ja lihtsaks paigalduseks.</p>

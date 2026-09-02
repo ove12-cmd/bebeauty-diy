@@ -320,6 +320,26 @@
   font-variant-numeric: tabular-nums;
 }
 
+.bb-shop__compare {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bb-ink);
+  background: #fff8ec;
+  border: 1px solid #ffe4a0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.bb-shop__compare strong {
+  color: var(--bb-gold);
+  font-weight: var(--bb-fw-display);
+}
+
 .bb-urgency__shipping {
   display: inline-flex;
   align-items: center;
@@ -455,7 +475,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
-  margin-top: 4px;
+  margin: 4px 0 24px;
 }
 
 .bb-trust__item {
