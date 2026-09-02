@@ -25,12 +25,30 @@ function sha256(value: string): string {
   return createHash("sha256").update(value).digest("hex");
 }
 
+// Meta only matches a hashed phone number when it's E.164 digits — country
+// code included, no "+". Estonian buyers type the local form ("5123 4567"),
+// which hashes to something Meta can never match against a profile, so the
+// country code has to go on before hashing.
+function normalizePhone(raw: string): string {
+  let digits = raw.replace(/\D/g, "");
+  if (digits.startsWith("00")) digits = digits.slice(2);
+  if (digits.startsWith("372")) return digits;
+  // Estonian subscriber numbers are 7-8 digits; anything longer already
+  // carries some country code, so leave it alone rather than guessing.
+  if (digits.length === 7 || digits.length === 8) return "372" + digits;
+  return digits;
+}
+
 // Fires the server-side half of the Purchase event. event_id matches the
 // eventID the browser used (paymentIntent.id), so Meta dedups the two into
 // a single conversion instead of double-counting. No-ops (with a warning)
 // if META_CAPI_TOKEN isn't set — same "degrade gracefully" pattern as the
 // order-email helper.
-async function sendMetaPurchaseCapi(pi: Stripe.PaymentIntent, reference: string): Promise<void> {
+async function sendMetaPurchaseCapi(
+  pi: Stripe.PaymentIntent,
+  reference: string,
+  eventTime: number,
+): Promise<void> {
   const token = process.env.META_CAPI_TOKEN;
   if (!token) {
     console.warn("[webhook] META_CAPI_TOKEN missing — skipping Meta CAPI Purchase for", reference);
@@ -38,42 +56,59 @@ async function sendMetaPurchaseCapi(pi: Stripe.PaymentIntent, reference: string)
   }
 
   const md = pi.metadata ?? {};
-  const value = (pi.amount_received ?? pi.amount ?? 0) / 100;
+  // Mirrors the GA4 helper below: read the currency off the PaymentIntent and
+  // convert through the shared helper, so a zero-decimal currency can never
+  // be reported to Meta inflated 100x.
+  const currency = (pi.currency ?? "eur").toUpperCase();
+  const value = stripeAmountToMajorUnits(pi.amount_received ?? pi.amount ?? 0, currency);
   const contentIds = md.contentIds ? md.contentIds.split(",").filter(Boolean) : [];
   const email = (pi.receipt_email ?? md.customerEmail ?? "").trim().toLowerCase();
-  const phoneDigits = (md.customerPhone ?? "").replace(/\D/g, "");
+  const phoneDigits = normalizePhone(md.customerPhone ?? "");
 
   const userData: Record<string, string> = {};
-  if (email) userData.em = sha256(email);
+  if (email) {
+    userData.em = sha256(email);
+    // Meta weights external_id heavily for match quality, and email is the
+    // only durable per-customer identifier this store has.
+    userData.external_id = sha256(email);
+  }
   if (phoneDigits) userData.ph = sha256(phoneDigits);
   if (md.clientIp) userData.client_ip_address = md.clientIp;
   if (md.clientUa) userData.client_user_agent = md.clientUa;
   if (md.fbp) userData.fbp = md.fbp;
   if (md.fbc) userData.fbc = md.fbc;
 
+  const metaEvent: Record<string, unknown> = {
+    event_name: "Purchase",
+    // The moment the card was actually charged — pi.created is when checkout
+    // *began*, which drifts by minutes on a 3-D Secure flow and misdates the
+    // conversion Meta attributes.
+    event_time: eventTime,
+    event_id: pi.id,
+    action_source: "website",
+    user_data: userData,
+    custom_data: {
+      value,
+      currency,
+      content_ids: contentIds,
+      content_type: "product",
+      order_id: reference || pi.id,
+    },
+  };
+  if (md.eventSourceUrl) metaEvent.event_source_url = md.eventSourceUrl;
+
+  const payload: Record<string, unknown> = { data: [metaEvent] };
+  // Diverts the event to Events Manager → Test Events for verification.
+  // Leaving this set in production stops purchases reaching live reporting.
+  const testCode = process.env.META_TEST_EVENT_CODE;
+  if (testCode) payload.test_event_code = testCode;
+
   const res = await fetch(
     `https://graph.facebook.com/${META_API_VERSION}/${META_PIXEL_ID}/events?access_token=${token}`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        data: [
-          {
-            event_name: "Purchase",
-            event_time: pi.created,
-            event_id: pi.id,
-            action_source: "website",
-            user_data: userData,
-            custom_data: {
-              value,
-              currency: "EUR",
-              content_ids: contentIds,
-              content_type: "product",
-              order_id: reference || pi.id,
-            },
-          },
-        ],
-      }),
+      body: JSON.stringify(payload),
     },
   );
 
@@ -205,7 +240,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    await sendMetaPurchaseCapi(pi, md.reference || pi.id);
+    await sendMetaPurchaseCapi(pi, md.reference || pi.id, event.created);
   } catch (err) {
     console.error("[webhook] Meta CAPI step failed:", err);
     // Still 200 — same reasoning as the email step above.

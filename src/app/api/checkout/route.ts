@@ -62,6 +62,9 @@ export async function POST(req: NextRequest) {
   const clientUa = (req.headers.get("user-agent") || "").slice(0, 250);
   const fbp = req.cookies.get("_fbp")?.value || "";
   const fbc = req.cookies.get("_fbc")?.value || "";
+  // Meta expects event_source_url on website events; without it the Purchase
+  // is harder to attribute back to the ad that produced it.
+  const eventSourceUrl = (req.headers.get("referer") || "").slice(0, 490);
 
   try {
     const intent = await stripe().paymentIntents.create({
@@ -86,6 +89,7 @@ export async function POST(req: NextRequest) {
         clientUa,
         fbp,
         fbc,
+        eventSourceUrl,
         // GA4 ids for the webhook's server-side purchase hit. No separate
         // ga_items field — itemsJson + contentIds above already carry name/
         // qty/price per line, and the webhook rebuilds GA4's items[] from
