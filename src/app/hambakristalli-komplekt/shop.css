@@ -321,9 +321,7 @@
 }
 
 .bb-shop__compare {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  display: block;
   font-size: 13px;
   font-weight: 600;
   color: var(--bb-ink);
@@ -341,9 +339,7 @@
 }
 
 .bb-urgency__shipping {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  display: block;
   font-size: 13px;
   font-weight: 600;
   color: var(--bb-ink);
@@ -473,7 +469,7 @@
 /* Trust badges */
 .bb-trust {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   margin: 4px 0 24px;
 }
@@ -892,9 +888,6 @@
 
   /* Stats */
   .bb-stats-bar { grid-template-columns: 1fr; }
-
-  /* Trust */
-  .bb-trust { grid-template-columns: repeat(2, 1fr); }
 
   /* Section paddings — base rule first so --dark/--cream's side padding
      (equal specificity) isn't overridden by cascade order. */

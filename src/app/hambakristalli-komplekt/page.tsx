@@ -112,7 +112,6 @@ function FAQ() {
 const TRUST = [
   { icon: "🦷", label: "Hambasõbralik" },
   { icon: "🇪🇺", label: "Euroopa kristallid" },
-  { icon: "↩", label: "30p tagastus" },
   { icon: "🔒", label: "Turvaline makse" },
 ];
 
@@ -466,7 +465,7 @@ export default function ShopPage() {
             <Button className="bb-shop__cta" onClick={addToCart}><IconCart />Lisa korvi</Button>
           </div>
           <p className="bb-shop__compare">80–150€ salongis → <strong>35€ kodus</strong>.</p>
-          <div className="bb-urgency__shipping">📦 Telli täna enne kell 14.00 – saadame <strong>järgmisel tööpäeval teele</strong>.</div>
+          <div className="bb-urgency__shipping">📦 Telli täna enne kell 14.00 – saadame <strong>järgmisel päeval teele</strong>.</div>
 
           <div className="bb-trust">
             {TRUST.map((t, i) => (
