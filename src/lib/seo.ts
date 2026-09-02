@@ -24,7 +24,7 @@ export function productSchema({ price, currency = "EUR" }: { price: number; curr
     name: "DIY Hambakristalli komplekt",
     description:
       "Kõik vajalik ühes komplektis, et paigaldada hambakristalle ise kodus. Swarovski kristallid, tugev sära ja hea püsivus.",
-    image: [`${BASE_URL}/product%20package.jpg`, `${BASE_URL}/home/gallery/4.png`],
+    image: [`${BASE_URL}/product%20package%20v3.png`, `${BASE_URL}/home/gallery/4.png`],
     brand: { "@type": "Brand", name: "beBeauty DIY" },
     offers: {
       "@type": "Offer",
@@ -32,11 +32,6 @@ export function productSchema({ price, currency = "EUR" }: { price: number; curr
       price: String(price),
       availability: "https://schema.org/InStock",
       url: `${BASE_URL}/hambakristalli-komplekt`,
-    },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: "2400",
     },
   };
 }

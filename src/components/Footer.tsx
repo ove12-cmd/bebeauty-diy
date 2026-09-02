@@ -58,7 +58,6 @@ export default function Footer() {
           <span className="bb-footer__pay-badge">G Pay</span>
           <span className="bb-footer__pay-badge">VISA</span>
           <span className="bb-footer__pay-badge">Mastercard</span>
-          <span className="bb-footer__pay-badge">Klarna</span>
         </div>
         <span className="bb-footer__made">♡ Disainitud Eestis · Made with care</span>
       </div>
