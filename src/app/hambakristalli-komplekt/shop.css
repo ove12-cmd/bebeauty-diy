@@ -287,27 +287,6 @@
 }
 
 /* Urgency elements */
-.bb-urgency__viewers {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--bb-ink-2);
-  margin-bottom: 16px;
-}
-
-.bb-urgency__viewers-num {
-  display: inline-block;
-  background: var(--bb-gold);
-  color: #fff;
-  font-weight: var(--bb-fw-display);
-  font-size: 12px;
-  padding: 1px 7px;
-  border-radius: 6px;
-  letter-spacing: -0.01em;
-}
-
 .bb-urgency__bar {
   display: flex;
   align-items: center;
@@ -339,13 +318,6 @@
   color: var(--bb-ink);
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
-}
-
-.bb-urgency__stock {
-  font-size: 12px;
-  font-weight: 700;
-  color: #c0392b;
-  letter-spacing: -0.01em;
 }
 
 .bb-urgency__shipping {
@@ -771,8 +743,26 @@
   font-size: 14px;
   font-weight: 500;
   color: var(--bb-ink-2);
-  margin: -20px 0 28px;
+  margin: -20px 0 10px;
   letter-spacing: -0.01em;
+}
+
+.bb-shop__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bb-ink-2);
+  text-decoration: none;
+  margin-bottom: 20px;
+  transition: color 0.15s ease;
+}
+.bb-shop__rating:hover { color: var(--bb-ink); }
+.bb-shop__rating-stars {
+  color: var(--bb-gold-2);
+  letter-spacing: 1px;
+  font-size: 13px;
 }
 
 .bb-shop__lead {

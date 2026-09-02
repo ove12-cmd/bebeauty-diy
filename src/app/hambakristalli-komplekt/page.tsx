@@ -283,24 +283,6 @@ export default function ShopPage() {
       setCodeApplied(false);
     }
   }
-  const [viewers, setViewers] = useState<number | null>(null);
-
-  useEffect(() => {
-    setViewers(7);
-    function scheduleNext(current: number) {
-      const delay = Math.floor(Math.random() * (240000 - 30000) + 30000);
-      return setTimeout(() => {
-        const change = Math.floor(Math.random() * 3) + 1;
-        const direction = Math.random() > 0.5 ? 1 : -1;
-        const next = Math.min(25, Math.max(4, current + change * direction));
-        setViewers(next);
-        scheduleNext(next);
-      }, delay);
-    }
-    const t = scheduleNext(7);
-    return () => clearTimeout(t);
-  }, []);;
-
   return (
     <main className="bb-shop">
       <JsonLd data={productSchema({ price: variant.price })} />
@@ -339,9 +321,12 @@ export default function ShopPage() {
         </div>
 
         <div className="bb-shop__panel">
-          <div className="bb-urgency__viewers">🔥 <span className="bb-urgency__viewers-num">{viewers ?? "–"}</span> inimest vaatab seda toodet praegu</div>
           <h1 className="bb-shop__name">DIY Hambakristalli<br />komplekt.</h1>
           <p className="bb-shop__sub">Swarovski kristallid · Valmistatud Euroopas</p>
+          <a href="#arvustused" className="bb-shop__rating">
+            <span className="bb-shop__rating-stars" aria-hidden="true">★★★★★</span>
+            5.0 · 44 arvustust
+          </a>
 
           <div className="bb-shop__variants">
             {VARIANTS.map(v => (
@@ -439,7 +424,6 @@ export default function ShopPage() {
               </span>
               {codeTimer && <span className="bb-urgency__timer-clock">{codeTimer}</span>}
             </div>
-            <div className="bb-urgency__stock">⚠ Ainult 3 komplekti laos</div>
           </div>
 
           {/* Discount code */}

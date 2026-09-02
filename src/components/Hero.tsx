@@ -5,7 +5,7 @@ import Button from "@/components/ui/Button";
 import SiteNav from "@/components/SiteNav";
 
 /* ── Image Placeholder Slot ── */
-function ImageSlot({ label, variant = "default", src, alt }: { label: string; variant?: "default" | "lav"; src?: string; alt?: string }) {
+function ImageSlot({ label, variant = "default", src, alt, priority = false }: { label: string; variant?: "default" | "lav"; src?: string; alt?: string; priority?: boolean }) {
   return (
     <div className="bb-slot">
       <div className={`bb-slot__pill ${variant === "lav" ? "bb-slot__pill--lav" : ""}`}>
@@ -17,7 +17,7 @@ function ImageSlot({ label, variant = "default", src, alt }: { label: string; va
           src={src}
           alt={alt ?? label}
           fill
-          priority
+          priority={priority}
           sizes="(max-width: 768px) 100vw, 60vw"
           style={{ objectFit: "cover", borderRadius: 26 }}
         />
@@ -48,7 +48,7 @@ export default function Hero() {
       {/* SHOWCASE */}
       <div className="bb-showcase">
         <div className="bb-showcase__main">
-          <ImageSlot label="Tulemus" src="/home/hero.jpg" alt="Särav naeratus hambakristalliga" />
+          <ImageSlot label="Tulemus" src="/home/hero.jpg" alt="Särav naeratus hambakristalliga" priority />
         </div>
         <div className="bb-showcase__side">
           <ImageSlot
