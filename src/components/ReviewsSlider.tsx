@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useRef, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 import ImageLightbox from "@/components/ImageLightbox";
 import ReviewSubmitPopup from "@/components/ReviewSubmitPopup";
 import Stars from "@/components/ui/Stars";
@@ -46,6 +46,10 @@ export default function ReviewsSlider({
   const [page, setPage] = useState(1);
   const [sortId, setSortId] = useState(SORTS[0].id);
   const gridRef = useRef<HTMLDivElement>(null);
+  // The select's id must be unique per instance: the home page and the
+  // product page each render this section, and a hardcoded id would break
+  // the label association the moment two ever share a page.
+  const sortFieldId = useId();
 
   const sorted = useMemo(() => {
     const compare = SORTS.find((s) => s.id === sortId)?.compare;
@@ -76,11 +80,11 @@ export default function ReviewsSlider({
           </span>
 
           <span className="flex items-center gap-1.5">
-            <label htmlFor="reviews-sort" className="text-xs text-[var(--bb-ink-3)]">
+            <label htmlFor={sortFieldId} className="text-xs text-[var(--bb-ink-3)]">
               Järjesta
             </label>
             <select
-              id="reviews-sort"
+              id={sortFieldId}
               value={sortId}
               onChange={(e) => {
                 setSortId(e.target.value);
