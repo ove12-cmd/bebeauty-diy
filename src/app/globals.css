@@ -19,6 +19,22 @@
   --bb-chip-bg:     #f3f1eb;
   --bb-chip-border: #e8e6e0;
 
+  /* Warm neutral surface scale — quiet, paper-like panels and their rules */
+  --bb-paper-warm:  #faf8f3;
+  --bb-line:        #e5dfd0;
+  --bb-line-soft:   #eae5d8;
+  --bb-ink-3:       #8a8375;
+
+  /* Deeper gold for small text that must stay legible on warm surfaces,
+     plus the gold-tinted highlight fill used for selected options */
+  --bb-gold-deep:   #a8801f;
+  --bb-gold-tint:   #fdf8ea;
+  --bb-gold-line:   #e3d5a8;
+
+  /* Positive/confirmation tint — dispatch promises, success notes */
+  --bb-ok-bg:       #e8f3ed;
+  --bb-ok-ink:      #1d6b4f;
+
   /* Type scale — shared display heading tokens */
   --bb-fw-display:       800;
   --bb-tracking-display: -0.04em;

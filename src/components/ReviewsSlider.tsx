@@ -4,20 +4,12 @@ import Image from "next/image";
 import { useState } from "react";
 import ImageLightbox from "@/components/ImageLightbox";
 import ReviewSubmitPopup from "@/components/ReviewSubmitPopup";
+import { DEFAULT_REVIEWS, type Review } from "@/lib/reviews";
 
-export type Review = { name: string; text: string; date: string; img: string; pos: string };
-
-// Exported so pages can show an honest "★5.0 · N arvustust" summary near
-// the buy decision, computed from these same reviews rather than a made-up
-// number — see hambakristalli-komplekt/page.tsx.
-export const DEFAULT_REVIEWS: Review[] = [
-  { name: "Hanna-Liis", text: "Täpselt selline tulemus, nagu lootsin. Paigaldamine oli lihtne ja kristall püsis üllatavalt hästi. 10 minutit ja valmis.", date: "märts 2025", img: "/testimonials/testimonial-1.jpg", pos: "center 25%" },
-  { name: "Jelizaveta", text: "Olin alguses skeptiline, aga tulemus jäi tõesti ilus. Sain paigaldamisega esimese korraga hakkama.", date: "aprill 2025", img: "/testimonials/testimonial-2.jpg", pos: "center 35%" },
-  { name: "K", text: "Väga kvaliteetne komplekt. Kõik vajalik oli kaasas ja tulemus jäi täpselt selline, nagu soovisin. 2.0 mm oli ideaalne valik – täpselt piisavalt märgatav.", date: "mai 2025", img: "/testimonials/testimonial-3.jpg", pos: "center 62%" },
-  { name: "Karina Sokolova", text: "Tellisin endale sünnipäevakingituseks ja ei kahetse hetkegi. Juhend oli selge, tulemus jäi ilus juba esimesest korrast.", date: "2 kuud tagasi", img: "/testimonials/testimonial-4.jpg", pos: "center" },
-  { name: "Anete R.", text: "Kartsin, et seda on keeruline paigaldada, aga oli palju lihtsam kui arvasin. Paigalduskomplektis oli kõik vajalik olemas ja tõesti nii lihtne oli. Soovitasin juba mitmele sõbrannale.", date: "2 nädalat tagasi", img: "/results/result-2.jpg", pos: "center" },
-  { name: "Reelika S.", text: "Mul oli juba enne salongis hambale kristall paigaldatud. Aga see komplekt on palju mugavam ja nii lihtne oli paigaldada. Võtsin 2.3mm suuruse ja tulemus on täpselt nii silmatorkav kui lootsin. Kolmas nädal juba peal ja ikka läikivad.", date: "3 kuud tagasi", img: "/results/result-3.jpg", pos: "center" },
-];
+// Review data and the Review type live in lib/reviews.ts. Re-exported here
+// so existing importers keep working unchanged.
+export type { Review };
+export { DEFAULT_REVIEWS };
 
 // Google's own default-avatar palette — cycled by position so each
 // reviewer gets a distinct, stable color.

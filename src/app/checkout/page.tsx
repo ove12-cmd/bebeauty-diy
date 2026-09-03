@@ -2,8 +2,12 @@
 
 import Link from "next/link";
 import Button from "@/components/ui/Button";
-import PaymentMethods from "@/components/ui/PaymentMethods";
 import CheckoutPayment from "@/components/CheckoutPayment";
+import CheckoutSteps from "@/components/checkout/CheckoutSteps";
+import CheckoutTrustFooter from "@/components/checkout/CheckoutTrustFooter";
+import OrderDetailsRecap from "@/components/checkout/OrderDetailsRecap";
+import { COMPANY } from "@/lib/company";
+import { CHECKOUT_REVIEW } from "@/lib/reviews";
 import { useCart } from "@/hooks/useCart";
 import { searchLockers, type Locker } from "@/lib/lockers";
 import { FREE_SHIPPING_GEM_THRESHOLD, discountPctForCode, isGemId, isGemOnlyOrder } from "@/lib/pricing";
@@ -98,6 +102,11 @@ export default function CheckoutPage() {
 
   const results = useMemo(() => searchLockers(lockers, query), [lockers, query]);
 
+  // Which step the buyer is actually on, derived from real progress rather
+  // than tracked separately: contact details filled moves them to Tarne, and
+  // a client secret means the PaymentIntent exists and they're on Makse.
+  const step: 1 | 2 | 3 = clientSecret ? 3 : form.name && form.email && form.phone ? 2 : 1;
+
   const delivery = DELIVERY.find((d) => d.id === form.delivery)!;
   // Extra gems never get the discount code — only kit lines are discountable.
   const discountableSubtotal = items.filter((i) => !isGemId(i.id)).reduce((sum, i) => sum + i.price * i.qty, 0);
@@ -171,26 +180,69 @@ export default function CheckoutPage() {
   return (
     <main className="bb-checkout">
       <div className="bb-checkout__inner">
-        <Link href="/hambakristalli-komplekt" className="bb-checkout__back">← Tagasi poodi</Link>
+        <div className="mb-4 flex items-center justify-between gap-3 border-b border-[var(--bb-line)] pb-3">
+          <Link
+            href="/hambakristalli-komplekt"
+            className="text-sm font-medium tracking-[-0.2px] text-[var(--bb-ink)] no-underline"
+          >
+            {COMPANY.name}
+          </Link>
+          <span className="inline-flex items-center gap-1 text-[11px] text-[var(--bb-ink-3)]">
+            <svg
+              aria-hidden="true"
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="11" width="18" height="10" rx="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            Turvaline ostukeskkond
+          </span>
+        </div>
+
+        <CheckoutSteps current={step} />
         <h1 className="bb-checkout__title">Vormista tellimus</h1>
 
-        <div className="bb-checkout__grid">
+        <div className={`bb-checkout__grid${clientSecret ? " is-paying" : ""}`}>
           {clientSecret ? (
             <div className="bb-checkout__form">
-              <button type="button" className="bb-checkout__back" onClick={() => setClientSecret(null)}>← Muuda andmeid</button>
               <h2 className="bb-checkout__section-title">Maksmine</h2>
-              <p className="bb-checkout__pay-hint">Sisesta oma kaardiandmed. Makse on turvaline ja krüpteeritud.</p>
-              <PaymentMethods
-                layout="spread"
-                note="SSL-krüpteeritud makse"
-                className="-mt-2 mb-4"
-              />
+              <p className="mb-3.5 flex items-start gap-1.5 text-[11px] leading-snug text-[var(--bb-ink-2)]">
+                <svg
+                  aria-hidden="true"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="mt-px shrink-0 text-[var(--bb-ink-3)]"
+                >
+                  <rect x="3" y="11" width="18" height="10" rx="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                Makseid töötleb Stripe. Me ei näe ega salvesta su kaardiandmeid.
+              </p>
               <CheckoutPayment
                 clientSecret={clientSecret}
                 amountLabel={eur(total)}
                 reference={reference}
                 paymentIntentId={paymentIntentId}
               />
+              <p className="mt-2 text-center text-[11px] leading-relaxed text-[var(--bb-ink-2)]">
+                Saadame kauba välja järgmisel tööpäeval ·{" "}
+                <Link href="/tingimused" className="text-[var(--bb-gold-deep)] underline hover:no-underline">
+                  müügitingimused
+                </Link>
+              </p>
             </div>
           ) : (
           <form className="bb-checkout__form" onSubmit={handleSubmit}>
@@ -297,6 +349,17 @@ export default function CheckoutPage() {
               </>
             )}
 
+            <div className="mb-4 flex items-center gap-2 rounded-lg bg-[var(--bb-ok-bg)] px-3 py-2.5 text-[11px] leading-snug text-[var(--bb-ok-ink)]">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+                <path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z" />
+                <circle cx="6.5" cy="18" r="1.8" />
+                <circle cx="17.5" cy="18" r="1.8" />
+              </svg>
+              <span>
+                Telli enne kell <span className="font-medium">14.00</span> — saadame järgmisel päeval teele.
+              </span>
+            </div>
+
             {payError && (
               <p className="bb-checkout__locker-err">Makse jäi pooleli. Palun proovi uuesti.</p>
             )}
@@ -311,9 +374,21 @@ export default function CheckoutPage() {
             <h2 className="bb-checkout__section-title">Sinu tellimus</h2>
             <div className="bb-checkout__lines">
               {items.map((i) => (
-                <div key={i.id} className="bb-checkout__line">
-                  <span>{i.label} <span className="bb-checkout__qty">× {i.qty}</span></span>
-                  <span>{eur(i.price * i.qty)}</span>
+                <div key={i.id} className="flex items-start gap-2.5 py-1.5">
+                  <span
+                    aria-hidden="true"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[var(--bb-chip-bg)] text-[var(--bb-gold-deep)]"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 3 2 9.5 12 21 22 9.5 12 3Z" />
+                      <path d="M2 9.5h20M12 3v18" />
+                    </svg>
+                  </span>
+                  <span className="min-w-0 flex-1 leading-snug">
+                    {i.label}
+                    <span className="bb-checkout__qty block">kogus {i.qty}</span>
+                  </span>
+                  <span className="whitespace-nowrap">{eur(i.price * i.qty)}</span>
                 </div>
               ))}
             </div>
@@ -327,8 +402,40 @@ export default function CheckoutPage() {
               <div className="bb-checkout__total-row"><span>Kohaletoimetamine</span><span>{delivery.price === 0 ? "Tasuta" : eur(delivery.price)}</span></div>
               <div className="bb-checkout__total-row bb-checkout__total-row--grand"><span>Kokku</span><span>{eur(total)}</span></div>
             </div>
+
+            {clientSecret ? (
+              // At the pay step the form is gone, so recap what they entered
+              // rather than a review — the open question is now "is this
+              // going to the right place?", not "is this product any good?".
+              <OrderDetailsRecap
+                name={form.name}
+                email={form.email}
+                phone={form.phone}
+                deliveryLabel={delivery.label}
+                deliveryTarget={
+                  form.delivery === "omniva"
+                    ? selectedLocker?.name ?? manualLocker.trim()
+                    : [form.street, form.city, form.zip].filter(Boolean).join(", ")
+                }
+                onEdit={() => setClientSecret(null)}
+              />
+            ) : (
+              <figure className="mt-2.5 rounded-xl bg-[var(--bb-paper)] p-3.5">
+                <div aria-hidden="true" className="mb-1.5 text-xs tracking-[0.15em] text-[var(--bb-gold)]">
+                  ★★★★★
+                </div>
+                <blockquote className="text-[11px] italic leading-relaxed text-[var(--bb-ink-2)]">
+                  {CHECKOUT_REVIEW.text}
+                </blockquote>
+                <figcaption className="mt-1.5 text-[10px] text-[var(--bb-ink-3)]">
+                  {CHECKOUT_REVIEW.name} · {CHECKOUT_REVIEW.date}
+                </figcaption>
+              </figure>
+            )}
           </aside>
         </div>
+
+        <CheckoutTrustFooter />
       </div>
     </main>
   );

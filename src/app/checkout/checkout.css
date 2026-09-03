@@ -106,15 +106,15 @@
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  border: 1.5px solid #e8e6e0;
+  border: 1.5px solid var(--bb-chip-border);
   border-radius: 14px;
-  background: #fff;
+  background: var(--bb-paper);
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s;
 }
 .bb-checkout__delivery-opt.is-active {
   border-color: var(--bb-gold);
-  background: #fffbf0;
+  background: var(--bb-gold-tint);
 }
 .bb-checkout__delivery-opt input { accent-color: var(--bb-gold); width: 16px; height: 16px; }
 .bb-checkout__delivery-label { font-family: var(--bb-font); font-size: 14px; font-weight: 600; color: var(--bb-ink); }
@@ -232,8 +232,8 @@
 
 /* Summary */
 .bb-checkout__summary {
-  background: #fff;
-  border: 1px solid #e8e6e0;
+  background: var(--bb-paper);
+  border: 1px solid var(--bb-line-soft);
   border-radius: 20px;
   padding: 24px;
   position: sticky;
@@ -328,6 +328,11 @@
 @media (max-width: 768px) {
   .bb-checkout__grid { grid-template-columns: 1fr; gap: 28px; }
   .bb-checkout__summary { position: static; order: -1; }
+  /* Showing the cart first helps while they're still filling the form, but at
+     the pay step it buries the card fields under the summary and the details
+     recap — on a phone that's a lot of scrolling to reach the one thing left
+     to do, so the payment column goes first. */
+  .bb-checkout__grid.is-paying .bb-checkout__summary { order: 0; }
 }
 
 @media (max-width: 480px) {
