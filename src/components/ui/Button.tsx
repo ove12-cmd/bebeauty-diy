@@ -8,7 +8,8 @@ type ButtonProps = {
   onClick?: () => void;
   /** Only applies when there is no href. */
   type?: "button" | "submit";
-  variant?: "gold";
+  /** `outline` is the quieter companion to a gold primary action. */
+  variant?: "gold" | "outline";
   /** Append the site's standard trailing → arrow. */
   arrow?: boolean;
   /** Context modifier classes (e.g. bb-cta__btn, bb-footer__card-btn). */

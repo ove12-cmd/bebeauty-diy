@@ -362,6 +362,18 @@ html, body {
   background: linear-gradient(180deg, #e6bf55, #c89c34);
 }
 
+/* Quieter companion to the gold primary — same shape and rhythm, no fill,
+   so a secondary action sits beside it without competing for the click. */
+.bb-btn--outline {
+  background: transparent;
+  color: var(--bb-ink);
+  box-shadow: 0 0 0 1.5px var(--bb-chip-border) inset;
+}
+.bb-btn--outline:hover {
+  background: var(--bb-chip-bg);
+  box-shadow: 0 0 0 1.5px var(--bb-gold) inset;
+}
+
 .bb-btn__arr { font-size: 17px; }
 
 .bb-btn:disabled {

@@ -49,7 +49,7 @@ export const DEFAULT_REVIEWS: Review[] = [
   { name: "Triin", date: "september 2025", rating: 4, photos: ["/reviews/single-2.webp"], text: "Hea toode, aga pakendil oli üks aplikaator natuke viltu. Toimis siiski.", reply: "Vabandame selle pärast, Triin. Andke järgmine kord kohe teada, saadame uue tasuta.", placeholder: true },
   { name: "Laura", date: "september 2025", rating: 5, text: "Ma olen kohutavalt kärsitu inimene ja isegi mina sain hakkama. See ütleb päris palju.", placeholder: true },
   { name: "Diana", date: "september 2025", rating: 5, text: "Väga ilus efekt, eriti Boreale kristall. Päikese käes lausa mängib.", placeholder: true },
-  { name: "Janeli", date: "september 2025", rating: 5, photos: ["/reviews/pair-3-a.webp", "/reviews/pair-3-b.webp"], text: "Soovitan. Kõik oli kaasas, midagi juurde osta ei pidanud.", placeholder: true },
+  { name: "Jana", date: "september 2025", rating: 5, photos: ["/reviews/pair-3-a.webp", "/reviews/pair-3-b.webp"], text: "Рекомендую. Всё было в комплекте, ничего дополнительно покупать не пришлось.", placeholder: true },
   { name: "Kaisa", date: "oktoober 2025", rating: 4, text: "Tulemus hea, aga tellisin 2.3 mm ja see on minu väikese hamba jaoks natuke suur. Minu enda valikuviga.", reply: "Aitäh, Kaisa. Lisasime tootelehele suuruste võrdluse, et valik oleks lihtsam.", placeholder: true },
   { name: "Mari-Liis", date: "oktoober 2025", rating: 5, text: "Kingiks ostetud, tütar oli õnnest väljas.", placeholder: true },
   { name: "Helena", date: "november 2025", rating: 5, text: "Hind ja kvaliteet on paigas. Tuleks veel rohkem värve.", placeholder: true },
@@ -74,6 +74,17 @@ export const DEFAULT_REVIEWS: Review[] = [
 ];
 
 export const REVIEW_COUNT = DEFAULT_REVIEWS.length;
+
+/**
+ * The three shortest 5-star reviews, for the compact strip under the stats
+ * bar. Picked by length rather than hand-listed names so it can't drift out
+ * of sync with the data — a strip needs quotes that fit on one or two lines.
+ */
+export const STRIP_REVIEWS = DEFAULT_REVIEWS
+  .filter((r) => r.rating === 5)
+  .slice()
+  .sort((a, b) => a.text.length - b.text.length)
+  .slice(0, 3);
 
 /**
  * Mean rating, derived from the reviews actually shown — never a figure typed

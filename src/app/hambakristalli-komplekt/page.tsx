@@ -8,11 +8,13 @@ import UrgencyPopup from "@/components/UrgencyPopup";
 import JsonLd from "@/components/JsonLd";
 import ImageLightbox from "@/components/ImageLightbox";
 import ReviewsSlider from "@/components/ReviewsSlider";
+import TestimonialStrip from "@/components/TestimonialStrip";
 import SiteNav from "@/components/SiteNav";
 import Button from "@/components/ui/Button";
 import PaymentMethods from "@/components/ui/PaymentMethods";
 import Stars from "@/components/ui/Stars";
 import { AVERAGE_RATING, REVIEW_COUNT, formatRating } from "@/lib/reviews";
+import { FAQ_CATEGORIES, FAQ_ITEMS } from "@/lib/faq";
 import { productSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
 import { discountPctForCode, isGeneratedMarketingCode, EXTRA_GEM_TYPES, GEM_PRICE } from "@/lib/pricing";
 import { trackMeta, CURRENCY } from "@/lib/meta-pixel";
@@ -63,14 +65,6 @@ const STEPS = [
   { n: "03", title: "Valmis!", desc: "Kristall paigas", src: "/howto/tulemus.jpg" },
 ];
 
-const FAQS = [
-  { q: "Kas see kahjustab hammast?", a: "Ei. Kristall kleepub hambaemaili pinnale ilma kahjustamata. Komplekti kasutatakse ohutult juhendi järgi ning kristall on igal ajal eemaldatav." },
-  { q: "Kui kaua kristall püsib?", a: "Keskmiselt 2–4 nädalat, sõltuvalt söömis- ja joomisharjumustest. Väldi esimese 24 tunni jooksul kuumi jooke ja kõva toitu." },
-  { q: "Mis suurust valida?", a: "1.7mm on peenem ja loomulikum, 2.0mm on populaarseim ning 2.3mm annab julge ja silmatorkava efekti. Kõik suurused sobivad algajatele." },
-  { q: "Kas saan ise eemaldada?", a: "Jah — eemaldamiseks kasuta komplektis olevat vahendit või hambaniiti. Eemalda õrnalt ilma hammast kahjustamata." },
-  { q: "Kui kiiresti pakk saabub?", a: "Eesti tarne 1–2 tööpäeva. Tasuta saatmine üle Eesti." },
-  { q: "Kas kristalle saab juurde tellida?", a: "Jah — saad valida ja lisada ekstra Swarovski kristalle otse siin lehel, enne ostukorvi lisamist." },
-];
 
 function IconCart() {
   return (
@@ -93,21 +87,87 @@ function IconChevron() {
 }
 
 function FAQ() {
-  const [open, setOpen] = useState<number | null>(null);
+  const [cat, setCat] = useState(0);
+  const [open, setOpen] = useState<string | null>(null);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const active = FAQ_CATEGORIES[cat];
+
+  // Roving-focus keyboard handling, which role="tab" implies: arrows move
+  // between tabs (wrapping), Home/End jump to the ends.
+  function handleTabKey(e: React.KeyboardEvent) {
+    const last = FAQ_CATEGORIES.length - 1;
+    let next = cat;
+    if (e.key === "ArrowRight") next = cat === last ? 0 : cat + 1;
+    else if (e.key === "ArrowLeft") next = cat === 0 ? last : cat - 1;
+    else if (e.key === "Home") next = 0;
+    else if (e.key === "End") next = last;
+    else return;
+    e.preventDefault();
+    setCat(next);
+    setOpen(null);
+    tabRefs.current[next]?.focus();
+  }
+
   return (
     <div className="bb-faq">
-      {FAQS.map((faq, i) => (
-        <div key={i} className={`bb-faq__item ${open === i ? "bb-faq__item--open" : ""}`}>
-          <button className="bb-faq__q" onClick={() => setOpen(open === i ? null : i)}>
-            <span className="bb-faq__num">{String(i + 1).padStart(2, "0")}</span>
-            <span className="bb-faq__text">{faq.q}</span>
-            <span className="bb-faq__icon">
-              <IconPlus />
-            </span>
+      <div
+        role="tablist"
+        aria-label="Korduma kippuvad küsimused"
+        className="mb-4 flex flex-wrap gap-1.5"
+      >
+        {FAQ_CATEGORIES.map((c, i) => (
+          <button
+            key={c.id}
+            ref={(el) => {
+              tabRefs.current[i] = el;
+            }}
+            role="tab"
+            id={`faq-tab-${c.id}`}
+            aria-controls={`faq-panel-${c.id}`}
+            aria-selected={i === cat}
+            tabIndex={i === cat ? 0 : -1}
+            onClick={() => {
+              setCat(i);
+              setOpen(null);
+            }}
+            onKeyDown={handleTabKey}
+            className={
+              i === cat
+                ? "rounded-full border border-[var(--bb-gold)] bg-[var(--bb-gold-tint)] px-4 py-2 text-[13px] font-semibold text-[var(--bb-gold-deep)]"
+                : "rounded-full border border-[var(--bb-chip-border)] px-4 py-2 text-[13px] font-semibold text-[var(--bb-ink-2)] hover:border-[var(--bb-gold-line)]"
+            }
+          >
+            {c.label}
           </button>
-          {open === i && <p className="bb-faq__a">{faq.a}</p>}
-        </div>
-      ))}
+        ))}
+      </div>
+
+      <div
+        role="tabpanel"
+        id={`faq-panel-${active.id}`}
+        aria-labelledby={`faq-tab-${active.id}`}
+      >
+        {active.items.map((faq, i) => {
+          const key = `${active.id}-${i}`;
+          const isOpen = open === key;
+          return (
+            <div key={key} className={`bb-faq__item ${isOpen ? "bb-faq__item--open" : ""}`}>
+              <button
+                className="bb-faq__q"
+                aria-expanded={isOpen}
+                onClick={() => setOpen(isOpen ? null : key)}
+              >
+                <span className="bb-faq__num">{String(i + 1).padStart(2, "0")}</span>
+                <span className="bb-faq__text">{faq.q}</span>
+                <span className="bb-faq__icon">
+                  <IconPlus />
+                </span>
+              </button>
+              {isOpen && <p className="bb-faq__a">{faq.a}</p>}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -219,7 +279,7 @@ export default function ShopPage() {
   const [qty, setQty] = useState(1);
   const [mainImg, setMainImg] = useState(0);
   const variant = VARIANTS.find(v => v.id === selected)!;
-  const { add } = useCart();
+  const { add, open: openCart } = useCart();
   const [gemQtys, setGemQtys] = useState<Record<string, number>>({});
   const [gemsOpen, setGemsOpen] = useState(true);
   const [gemLightbox, setGemLightbox] = useState<{ src: string; alt: string } | null>(null);
@@ -288,7 +348,7 @@ export default function ShopPage() {
   return (
     <main className="bb-shop">
       <JsonLd data={productSchema({ price: variant.price })} />
-      <JsonLd data={faqSchema(FAQS)} />
+      <JsonLd data={faqSchema(FAQ_ITEMS)} />
       <JsonLd data={breadcrumbSchema([{ name: "Avaleht", path: "/" }, { name: "Hambakristalli komplekt", path: "/hambakristalli-komplekt" }])} />
       <UrgencyPopup autoOpen={false} />
       <StickyBar price={priceStr(finalPrice)} original={priceStr(variant.original)} onAdd={addToCart} />
@@ -465,7 +525,10 @@ export default function ShopPage() {
                 {codeApplied && <span className="bb-discount__badge">-{appliedPct}%</span>}
               </div>
             </div>
-            <Button className="bb-shop__cta" onClick={addToCart}><IconCart />Lisa korvi</Button>
+            <div className="bb-shop__cta-group">
+              <Button className="bb-shop__cta" onClick={addToCart}><IconCart />Lisa korvi</Button>
+              <Button variant="outline" className="bb-shop__cta-secondary" onClick={openCart}>Vaata korvi</Button>
+            </div>
           </div>
           <PaymentMethods note="Turvaline makse" className="mt-3" />
           <div className="bb-urgency__shipping">📦 Telli täna enne kell 14.00 – saadame <strong>järgmisel päeval teele</strong>.</div>
@@ -501,6 +564,8 @@ export default function ShopPage() {
           </div>
         ))}
       </div>
+
+      <TestimonialStrip />
 
       {/* ── What's in the box ── */}
       <div className="bb-shop-section" id="komplekt">

@@ -751,12 +751,12 @@
   gap: 6px;
   font-size: 13px;
   font-weight: 600;
-  color: var(--bb-ink-2);
+  color: var(--bb-gold-deep);
   text-decoration: none;
   margin-bottom: 20px;
   transition: color 0.15s ease;
 }
-.bb-shop__rating:hover { color: var(--bb-ink); }
+.bb-shop__rating:hover { text-decoration: underline; }
 .bb-shop__rating-stars {
   color: var(--bb-gold-2);
   letter-spacing: 1px;
@@ -931,3 +931,13 @@
   opacity: 1;
 }
 
+
+/* Primary + secondary buy actions share a row, and stay side by side until
+   there genuinely isn't width for both. */
+.bb-shop__cta-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.bb-shop__cta-group .bb-shop__cta { flex: 1 1 auto; }
+.bb-shop__cta-secondary { flex: 0 1 auto; }
