@@ -129,4 +129,4 @@ export function reviewTimestamp(date: string, now: number = Date.now()): number 
 // by name, not index ā€” reordering the list must never silently swap the
 // checkout quote for a critical review.
 export const CHECKOUT_REVIEW =
-  DEFAULT_REVIEWS.find((r) => r.name === "Jelizaveta") ?? DEFAULT_REVIEWS[0];
+  DEFAULT_REVIEWS.find((r) => r.name === "Marii") ?? DEFAULT_REVIEWS[0];
