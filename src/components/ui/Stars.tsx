@@ -31,9 +31,12 @@ export default function Stars({ rating, size = "sm", label, className = "" }: Pr
     >
       {label ? <span className="sr-only">{label}</span> : null}
       <span aria-hidden="true" className="relative inline-block whitespace-nowrap">
-        <span className="text-[var(--bb-gold-line)]">{GLYPHS}</span>
+        {/* Both layers are blocks so the parent box matches the glyph box
+            exactly — as an inline span the base overflowed the parent's line
+            box and the absolute fill anchored 2px below it. */}
+        <span className="block text-[var(--bb-gold-line)]">{GLYPHS}</span>
         <span
-          className="absolute inset-y-0 left-0 overflow-hidden whitespace-nowrap text-[var(--bb-gold)]"
+          className="absolute top-0 left-0 block overflow-hidden whitespace-nowrap text-[var(--bb-gold)]"
           style={{ width: `${pct}%` }}
         >
           {GLYPHS}
