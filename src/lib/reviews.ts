@@ -29,9 +29,9 @@ export const DEFAULT_REVIEWS: Review[] = [
   { name: "K.", date: "mai 2025", rating: 5, text: "Komplekt on kvaliteetne, kõik oli karbis olemas. Võtsin 2.0 mm ja see oli hea valik, on näha aga ei ole üle pakutud.", img: "/testimonials/testimonial-3.jpg", pos: "center 62%", placeholder: true },
   { name: "Karina S.", date: "2 kuud tagasi", rating: 5, text: "Tellisin endale sünnipäevaks. Juhendit oli lihtne jälgida ja juba esimene katse tuli ilus.", img: "/testimonials/testimonial-4.jpg", pos: "center", placeholder: true },
   { name: "Anete R.", date: "2 nädalat tagasi", rating: 5, text: "Arvasin, et paigaldamine on suurem peavalu, aga ei olnud. Olen juba paarile sõbrannale soovitanud.", img: "/results/result-2.jpg", pos: "center", placeholder: true },
+  { name: "Liis", date: "juuni 2025", rating: 4, text: "Tulemus on ilus, aga mul kukkus esimene kristall kolmandal päeval ära. Teine katse õnnestus paremini, arvatavasti ei kuivatanud hammast piisavalt.", reply: "Aitäh tagasiside eest, Liis. Just nii, hammas peab enne liimimist täiesti kuiv olema. Kirjuta meile, kui soovid tasuta lisakristalli.", placeholder: true },
   { name: "Reelika S.", date: "3 kuud tagasi", rating: 5, text: "Mul on varem salongis kristall hambal olnud, aga see komplekt on mugavam. Võtsin 2.3 mm, kolmas nädal käib ja ikka läigib.", img: "/results/result-3.jpg", pos: "center", placeholder: true },
   { name: "Marii", date: "juuni 2025", rating: 5, text: "täiesti asi. kiire tarne, ilus tulemus, ei oskagi rohkem tahta", placeholder: true },
-  { name: "Liis", date: "juuni 2025", rating: 4, text: "Tulemus on ilus, aga mul kukkus esimene kristall kolmandal päeval ära. Teine katse õnnestus paremini, arvatavasti ei kuivatanud hammast piisavalt.", reply: "Aitäh tagasiside eest, Liis. Just nii, hammas peab enne liimimist täiesti kuiv olema. Kirjuta meile, kui soovid tasuta lisakristalli.", placeholder: true },
   { name: "Kertu", date: "juuli 2025", rating: 5, text: "Väga rahul! Lamp töötab kiirelt ja põsehoidja on tegelikult üllatavalt vajalik asi.", placeholder: true },
   { name: "Sandra", date: "juuli 2025", rating: 5, text: "Ostsin sõbrannaga kahepeale ja panime teineteisele. Oli lõbus õhtu ja mõlemal jäi ilus.", placeholder: true },
   { name: "Eva-Maria", date: "juuli 2025", rating: 5, text: "Salongis küsiti 90 eurot. Siin 35 ja tulemus on minu jaoks sama hea.", placeholder: true },
@@ -84,6 +84,46 @@ export function formatRating(rating: number): string {
   return rating.toFixed(1).replace(".", ",");
 }
 
+const ET_MONTHS = [
+  "jaanuar", "veebruar", "märts", "aprill", "mai", "juuni",
+  "juuli", "august", "september", "oktoober", "november", "detsember",
+];
+
+const RELATIVE_UNIT_DAYS: Record<string, number> = {
+  päev: 1, päeva: 1,
+  nädal: 7, nädalat: 7,
+  kuu: 30, kuud: 30,
+  aasta: 365, aastat: 365,
+};
+
+/**
+ * Turns a human review date into something sortable. The dates are written
+ * two ways — an absolute month ("märts 2025") or a relative age ("2 kuud
+ * tagasi") — so neither string comparison nor Date.parse works on them.
+ * Relative ages are resolved against now, which is what they mean.
+ * Returns 0 for anything unrecognised, sorting it last.
+ */
+export function reviewTimestamp(date: string, now: number = Date.now()): number {
+  const d = date.trim().toLowerCase();
+
+  const relative = d.match(/^(\d+)\s+(\S+)\s+tagasi$/);
+  if (relative) {
+    const days = RELATIVE_UNIT_DAYS[relative[2]];
+    if (days) return now - Number(relative[1]) * days * 86_400_000;
+  }
+
+  const absolute = d.match(/^(\S+)\s+(\d{4})$/);
+  if (absolute) {
+    const month = ET_MONTHS.indexOf(absolute[1]);
+    if (month >= 0) return Date.UTC(Number(absolute[2]), month, 1);
+  }
+
+  return 0;
+}
+
 // Quoted at checkout: short enough for the sidebar, and it answers the doubt
-// a buyer actually has at that moment ("will I manage this myself?").
-export const CHECKOUT_REVIEW = DEFAULT_REVIEWS[1];
+// a buyer actually has at that moment ("will I manage this myself?"). Matched
+// by name, not index ā€” reordering the list must never silently swap the
+// checkout quote for a critical review.
+export const CHECKOUT_REVIEW =
+  DEFAULT_REVIEWS.find((r) => r.name === "Jelizaveta") ?? DEFAULT_REVIEWS[0];
