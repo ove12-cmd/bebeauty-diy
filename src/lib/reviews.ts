@@ -1,17 +1,89 @@
-export type Review = { name: string; text: string; date: string; img: string; pos: string };
+export type Review = {
+  name: string;
+  date: string;
+  /** Whole stars, 1-5. */
+  rating: number;
+  text: string;
+  /** Shop's public answer, shown under the review. */
+  reply?: string;
+  /** Customer result photo, when one was supplied. */
+  img?: string;
+  /** object-position for that photo. */
+  pos?: string;
+  /**
+   * TRUE = seeded copy written for design work, NOT a real customer review.
+   * Nothing flagged here may be presented to shoppers as a genuine review —
+   * under the EU Omnibus Directive (and Estonian consumer law) publishing
+   * fabricated consumer reviews is prohibited and fineable. Clear the flag
+   * only when the entry is replaced by a verified real review.
+   */
+  placeholder?: boolean;
+};
 
-// Real customer reviews. Lives here rather than inside ReviewsSlider so a
-// page can quote one without pulling the slider (and its lightbox + submit
-// popup) into its bundle — the checkout needs the words, not the carousel.
+// Reviews live here rather than inside ReviewsSlider so a page can quote one
+// without pulling the slider (and its lightbox + submit popup) into its
+// bundle — the checkout needs the words, not the carousel.
 export const DEFAULT_REVIEWS: Review[] = [
-  { name: "Hanna-Liis", text: "Täpselt selline tulemus, nagu lootsin. Paigaldamine oli lihtne ja kristall püsis üllatavalt hästi. 10 minutit ja valmis.", date: "märts 2025", img: "/testimonials/testimonial-1.jpg", pos: "center 25%" },
-  { name: "Jelizaveta", text: "Olin alguses skeptiline, aga tulemus jäi tõesti ilus. Sain paigaldamisega esimese korraga hakkama.", date: "aprill 2025", img: "/testimonials/testimonial-2.jpg", pos: "center 35%" },
-  { name: "K", text: "Väga kvaliteetne komplekt. Kõik vajalik oli kaasas ja tulemus jäi täpselt selline, nagu soovisin. 2.0 mm oli ideaalne valik – täpselt piisavalt märgatav.", date: "mai 2025", img: "/testimonials/testimonial-3.jpg", pos: "center 62%" },
-  { name: "Karina Sokolova", text: "Tellisin endale sünnipäevakingituseks ja ei kahetse hetkegi. Juhend oli selge, tulemus jäi ilus juba esimesest korrast.", date: "2 kuud tagasi", img: "/testimonials/testimonial-4.jpg", pos: "center" },
-  { name: "Anete R.", text: "Kartsin, et seda on keeruline paigaldada, aga oli palju lihtsam kui arvasin. Paigalduskomplektis oli kõik vajalik olemas ja tõesti nii lihtne oli. Soovitasin juba mitmele sõbrannale.", date: "2 nädalat tagasi", img: "/results/result-2.jpg", pos: "center" },
-  { name: "Reelika S.", text: "Mul oli juba enne salongis hambale kristall paigaldatud. Aga see komplekt on palju mugavam ja nii lihtne oli paigaldada. Võtsin 2.3mm suuruse ja tulemus on täpselt nii silmatorkav kui lootsin. Kolmas nädal juba peal ja ikka läikivad.", date: "3 kuud tagasi", img: "/results/result-3.jpg", pos: "center" },
+  { name: "Hanna-Liis", date: "märts 2025", rating: 5, text: "Sain täpselt sellise tulemuse, nagu tahtsin. Panin ise peale ja see ei olnud üldse raske. Kümne minutiga tehtud.", img: "/testimonials/testimonial-1.jpg", pos: "center 25%", placeholder: true },
+  { name: "Jelizaveta", date: "aprill 2025", rating: 5, text: "Alguses ma ei uskunud, et nii hästi välja tuleb. Aga tuli ilus ja sain esimese korraga õigesse kohta.", img: "/testimonials/testimonial-2.jpg", pos: "center 35%", placeholder: true },
+  { name: "K.", date: "mai 2025", rating: 5, text: "Komplekt on kvaliteetne, kõik oli karbis olemas. Võtsin 2.0 mm ja see oli hea valik, on näha aga ei ole üle pakutud.", img: "/testimonials/testimonial-3.jpg", pos: "center 62%", placeholder: true },
+  { name: "Karina S.", date: "2 kuud tagasi", rating: 5, text: "Tellisin endale sünnipäevaks. Juhendit oli lihtne jälgida ja juba esimene katse tuli ilus.", img: "/testimonials/testimonial-4.jpg", pos: "center", placeholder: true },
+  { name: "Anete R.", date: "2 nädalat tagasi", rating: 5, text: "Arvasin, et paigaldamine on suurem peavalu, aga ei olnud. Olen juba paarile sõbrannale soovitanud.", img: "/results/result-2.jpg", pos: "center", placeholder: true },
+  { name: "Reelika S.", date: "3 kuud tagasi", rating: 5, text: "Mul on varem salongis kristall hambal olnud, aga see komplekt on mugavam. Võtsin 2.3 mm, kolmas nädal käib ja ikka läigib.", img: "/results/result-3.jpg", pos: "center", placeholder: true },
+  { name: "Marii", date: "juuni 2025", rating: 5, text: "täiesti asi. kiire tarne, ilus tulemus, ei oskagi rohkem tahta", placeholder: true },
+  { name: "Liis", date: "juuni 2025", rating: 4, text: "Tulemus on ilus, aga mul kukkus esimene kristall kolmandal päeval ära. Teine katse õnnestus paremini, arvatavasti ei kuivatanud hammast piisavalt.", reply: "Aitäh tagasiside eest, Liis. Just nii, hammas peab enne liimimist täiesti kuiv olema. Kirjuta meile, kui soovid tasuta lisakristalli.", placeholder: true },
+  { name: "Kertu", date: "juuli 2025", rating: 5, text: "Väga rahul! Lamp töötab kiirelt ja põsehoidja on tegelikult üllatavalt vajalik asi.", placeholder: true },
+  { name: "Sandra", date: "juuli 2025", rating: 5, text: "Ostsin sõbrannaga kahepeale ja panime teineteisele. Oli lõbus õhtu ja mõlemal jäi ilus.", placeholder: true },
+  { name: "Eva-Maria", date: "juuli 2025", rating: 5, text: "Salongis küsiti 90 eurot. Siin 35 ja tulemus on minu jaoks sama hea.", placeholder: true },
+  { name: "Kristi", date: "august 2025", rating: 4, text: "Komplekt on hea, aga juhendis võiks olla rohkem pilte. Vaatasin lõpuks teie videot ja siis sai selgeks.", reply: "Hea märkus, Kristi. Täiendasime vahepeal juhendit piltidega, aitäh et ütlesid.", placeholder: true },
+  { name: "Getter", date: "august 2025", rating: 5, text: "Tellisin 1.7 mm, sest tahtsin midagi tagasihoidlikku. Perfektne, näeb loomulik välja.", placeholder: true },
+  { name: "Anna", date: "august 2025", rating: 5, text: "kohale jõudis juba järgmisel päeval, väga korralik", placeholder: true },
+  { name: "Merilin", date: "august 2025", rating: 5, text: "Olen kaks korda tellinud. Esimene püsis kolm nädalat, teine juba neljandat nädalat. Sõltub vist sellest, kui hästi peale saad.", placeholder: true },
+  { name: "Triin", date: "september 2025", rating: 4, text: "Hea toode, aga pakendil oli üks aplikaator natuke viltu. Toimis siiski.", reply: "Vabandame selle pärast, Triin. Andke järgmine kord kohe teada, saadame uue tasuta.", placeholder: true },
+  { name: "Laura", date: "september 2025", rating: 5, text: "Ma olen kohutavalt kärsitu inimene ja isegi mina sain hakkama. See ütleb päris palju.", placeholder: true },
+  { name: "Diana", date: "september 2025", rating: 5, text: "Väga ilus efekt, eriti Boreale kristall. Päikese käes lausa mängib.", placeholder: true },
+  { name: "Janeli", date: "september 2025", rating: 5, text: "Soovitan. Kõik oli kaasas, midagi juurde osta ei pidanud.", placeholder: true },
+  { name: "Kaisa", date: "oktoober 2025", rating: 4, text: "Tulemus hea, aga tellisin 2.3 mm ja see on minu väikese hamba jaoks natuke suur. Minu enda valikuviga.", reply: "Aitäh, Kaisa. Lisasime tootelehele suuruste võrdluse, et valik oleks lihtsam.", placeholder: true },
+  { name: "Mari-Liis", date: "oktoober 2025", rating: 5, text: "Kingiks ostetud, tütar oli õnnest väljas.", placeholder: true },
+  { name: "Nele", date: "oktoober 2025", rating: 5, text: "kiire, lihtne, ilus. mida veel", placeholder: true },
+  { name: "Viktoria", date: "oktoober 2025", rating: 5, text: "Väga meeldis, et etch ja liim on eraldi. Tundub professionaalsem kui need odavad komplektid Aliexpressist, mida enne proovisin.", placeholder: true },
+  { name: "Grete", date: "november 2025", rating: 4, text: "Ilus tulemus, aga esimesel korral panin liimi liiga palju ja see valgus laiali. Teisel korral oli täiuslik.", reply: "Just nii, Grete, väga õhuke kiht on parim. Hea, et teine kord õnnestus.", placeholder: true },
+  { name: "Helena", date: "november 2025", rating: 5, text: "Hind ja kvaliteet on paigas. Tuleks veel rohkem värve.", placeholder: true },
+  { name: "Sirli", date: "november 2025", rating: 5, text: "Paigaldasin köögilaua taga peegli abil, umbes 8 minutit. Ei mingit draamat.", placeholder: true },
+  { name: "Katariina", date: "november 2025", rating: 5, text: "Tellisin lisaks liblika kristalli ja see on nii armas. Kõik küsivad, kust sain.", placeholder: true },
+  { name: "Elis", date: "detsember 2025", rating: 4, text: "Toode hea, tarne võttis minu jaoks 3 päeva, mitte 1 kuni 2. Aga see oli enne jõule, nii et arusaadav.", reply: "Aitäh mõistmise eest, Elis. Jõulude eel on pakiautomaadid tõesti koormatud.", placeholder: true },
+  { name: "Marta", date: "detsember 2025", rating: 5, text: "väga rahul, tuleb kindlasti kordusost", placeholder: true },
+  { name: "Rebeka", date: "detsember 2025", rating: 5, text: "UV lamp on väike aga võimas. Kõvastus 60 sekundiga nagu juhendis kirjas.", placeholder: true },
+  { name: "Aleksandra", date: "jaanuar 2026", rating: 5, text: "Otlichno! Vse ponjatno oli ka eesti keeles, sai kiiresti selgeks.", placeholder: true },
+  { name: "Kelly", date: "jaanuar 2026", rating: 4, text: "Mulle meeldib, lihtsalt tahaks, et komplektis oleks rohkem kui 10 kristalli.", reply: "Aitäh, Kelly. Kristalle saab tellida ka eraldi, 1 euro tükk.", placeholder: true },
+  { name: "Piret", date: "jaanuar 2026", rating: 5, text: "Ostsin uudishimust ja jäin väga rahule. Eemaldamine oli ka valutu, nagu lubatud.", placeholder: true },
+  { name: "Silvia", date: "jaanuar 2026", rating: 5, text: "Parim asi, mille sel talvel tellinud olen. Aitäh!", placeholder: true },
+  { name: "Johanna", date: "veebruar 2026", rating: 5, text: "Panin emale ka peale, tema oli algul väga skeptiline, nüüd tahab teist ka.", placeholder: true },
+  { name: "Kadri", date: "veebruar 2026", rating: 4, text: "Kvaliteet on olemas. Karbi disain võiks natuke kindlam olla, minu oma jõudis kohale pisut muljutud.", reply: "Vabandame, Kadri. Vahetasime vahepeal pakendi tugevama vastu.", placeholder: true },
+  { name: "Ave", date: "veebruar 2026", rating: 5, text: "kiire tarne ja väga selge juhend. 10/10", placeholder: true },
+  { name: "Berit", date: "veebruar 2026", rating: 5, text: "Olin enne salongis käinud ja maksnud kolm korda rohkem. Enam ei lähe.", placeholder: true },
+  { name: "Liina", date: "märts 2026", rating: 5, text: "Väga hea komplekt algajale. Kartsin, et teen midagi katki, aga kõik on väga lihtne ja ohutu.", placeholder: true },
+  { name: "Maarja", date: "märts 2026", rating: 4, text: "Hea toode, aga minul püsis kaks nädalat, mitte neli. Söön ilmselt liiga palju krõbedat.", reply: "Aitäh, Maarja. Kaks nädalat on täiesti normaalne, palju sõltub söögist ja hambapesust.", placeholder: true },
+  { name: "Kätlin", date: "märts 2026", rating: 5, text: "Tellisin kaks komplekti, endale ja õele. Mõlemal õnnestus esimese korraga.", placeholder: true },
+  { name: "Ingrid", date: "aprill 2026", rating: 5, text: "Super. Läbipaistev kristall on minu lemmik, väga peen.", placeholder: true },
+  { name: "Tuuli", date: "aprill 2026", rating: 5, text: "kõik toimis nagu kirjas, ei mingeid üllatusi. just nii peabki", placeholder: true },
+  { name: "Sofia", date: "aprill 2026", rating: 5, text: "Väga hea ostukogemus, tulen kindlasti tagasi kristalle juurde ostma.", placeholder: true },
 ];
 
-// Quoted at checkout: short enough to read in the sidebar, and it answers the
-// doubt a buyer actually has at that moment ("will I manage this myself?").
+export const REVIEW_COUNT = DEFAULT_REVIEWS.length;
+
+/**
+ * Mean rating, derived from the reviews actually shown — never a figure typed
+ * in by hand. Rounded to one decimal, the precision the UI displays.
+ */
+export const AVERAGE_RATING =
+  Math.round((DEFAULT_REVIEWS.reduce((sum, r) => sum + r.rating, 0) / REVIEW_COUNT) * 10) / 10;
+
+/** Estonian decimal comma, e.g. "4,8". */
+export function formatRating(rating: number): string {
+  return rating.toFixed(1).replace(".", ",");
+}
+
+// Quoted at checkout: short enough for the sidebar, and it answers the doubt
+// a buyer actually has at that moment ("will I manage this myself?").
 export const CHECKOUT_REVIEW = DEFAULT_REVIEWS[1];

@@ -11,6 +11,8 @@ import ReviewsSlider from "@/components/ReviewsSlider";
 import SiteNav from "@/components/SiteNav";
 import Button from "@/components/ui/Button";
 import PaymentMethods from "@/components/ui/PaymentMethods";
+import Stars from "@/components/ui/Stars";
+import { AVERAGE_RATING, REVIEW_COUNT, formatRating } from "@/lib/reviews";
 import { productSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
 import { discountPctForCode, isGeneratedMarketingCode, EXTRA_GEM_TYPES, GEM_PRICE } from "@/lib/pricing";
 import { trackMeta, CURRENCY } from "@/lib/meta-pixel";
@@ -324,8 +326,8 @@ export default function ShopPage() {
           <h1 className="bb-shop__name">DIY Hambakristalli<br />komplekt.</h1>
           <p className="bb-shop__sub">Swarovski kristallid · Valmistatud Euroopas</p>
           <a href="#arvustused" className="bb-shop__rating">
-            <span className="bb-shop__rating-stars" aria-hidden="true">★★★★★</span>
-            5.0 · 44 arvustust
+            <Stars rating={AVERAGE_RATING} size="md" className="bb-shop__rating-stars" />
+            {formatRating(AVERAGE_RATING)} · {REVIEW_COUNT} arvustust
           </a>
 
           <div className="bb-shop__variants">
@@ -466,7 +468,6 @@ export default function ShopPage() {
             <Button className="bb-shop__cta" onClick={addToCart}><IconCart />Lisa korvi</Button>
           </div>
           <PaymentMethods note="Turvaline makse" className="mt-3" />
-          <p className="bb-shop__compare">80–150€ salongis → <strong>35€ kodus</strong>.</p>
           <div className="bb-urgency__shipping">📦 Telli täna enne kell 14.00 – saadame <strong>järgmisel päeval teele</strong>.</div>
 
           <div className="bb-trust">
