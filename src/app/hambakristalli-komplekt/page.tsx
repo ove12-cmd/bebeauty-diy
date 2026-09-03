@@ -516,18 +516,23 @@ export default function ShopPage() {
         </div>
       </div>
 
-      {/* ── Stats bar ── */}
-      <div className="bb-stats-bar">
-        {STATS.map((s, i) => (
-          <div key={i} className="bb-stats-bar__item">
-            <span className="bb-stats-bar__num">{s.num}</span>
-            <span className="bb-stats-bar__label">{s.label}</span>
-          </div>
-        ))}
-      </div>
+      {/* Reviews come before the stats on a phone — social proof earns more
+          attention there than the spec numbers — so the pair is wrapped and
+          reversed rather than rendered twice. */}
+      <div className="flex flex-col-reverse md:flex-col">
+        {/* ── Stats bar ── */}
+        <div className="bb-stats-bar">
+          {STATS.map((s, i) => (
+            <div key={i} className="bb-stats-bar__item">
+              <span className="bb-stats-bar__num">{s.num}</span>
+              <span className="bb-stats-bar__label">{s.label}</span>
+            </div>
+          ))}
+        </div>
 
-      {/* ── Reviews ── */}
-      <ReviewsSlider id="arvustused" heading="Arvustused" />
+        {/* ── Reviews ── */}
+        <ReviewsSlider id="arvustused" heading="Arvustused" />
+      </div>
 
       {/* ── What's in the box ── */}
       <div className="bb-shop-section" id="komplekt">

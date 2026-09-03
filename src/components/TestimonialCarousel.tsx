@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import ImageLightbox from "@/components/ImageLightbox";
 import Stars from "@/components/ui/Stars";
 import { FEATURED_REVIEWS } from "@/lib/reviews";
 
@@ -31,6 +32,7 @@ export default function TestimonialCarousel() {
   const [index, setIndex] = useState(0);
   const [userPaused, setUserPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -54,7 +56,8 @@ export default function TestimonialCarousel() {
     <section
       aria-roledescription="karussell"
       aria-label="Klientide arvustused"
-      className="bb-carousel w-full px-5 pt-4 pb-8 md:px-14 md:pt-0"
+      className="bb-carousel w-full px-5 pb-8 md:px-14"
+      style={{ marginTop: "-1.5rem" }}
     >
       <div className="rounded-2xl bg-[var(--bb-chip-bg)] p-4 md:p-5">
         <ul className="grid list-none grid-cols-1 gap-3 p-0 md:grid-cols-5">
@@ -76,18 +79,21 @@ export default function TestimonialCarousel() {
               {r.photos && r.photos.length > 0 && (
                 <div className="mt-2.5 flex gap-1.5">
                   {r.photos.slice(0, 2).map((src) => (
-                    <span
+                    <button
                       key={src}
-                      className="relative block h-12 w-12 overflow-hidden rounded-lg bg-[var(--bb-chip-bg)]"
+                      type="button"
+                      onClick={() => setLightbox({ src, alt: `${r.name} tulemus` })}
+                      aria-label={`Suurenda ${r.name} tulemuse foto`}
+                      className="relative block h-12 w-12 cursor-zoom-in overflow-hidden rounded-lg bg-[var(--bb-chip-bg)] transition-transform hover:-translate-y-0.5"
                     >
                       <Image
                         src={src}
-                        alt={`${r.name} tulemus`}
+                        alt=""
                         fill
                         sizes="48px"
                         style={{ objectFit: "cover", objectPosition: r.pos ?? "center" }}
                       />
-                    </span>
+                    </button>
                   ))}
                 </div>
               )}
@@ -183,6 +189,10 @@ export default function TestimonialCarousel() {
           )}
         </div>
       </div>
+
+      {lightbox && (
+        <ImageLightbox src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox(null)} />
+      )}
     </section>
   );
 }

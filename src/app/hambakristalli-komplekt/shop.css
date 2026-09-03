@@ -992,3 +992,13 @@
 .bb-shop__rating-cta {
   text-decoration: underline;
 }
+
+/* Every other section on this page relies on .bb-shop for its side gutters
+   (they use padding: 80px 0), but .bb-testi carries its own ā€” which left the
+   reviews visibly narrower than everything around them. Scoped to .bb-shop so
+   the home page, where the section is not inside a padded container, keeps
+   its own gutters. */
+.bb-shop .bb-testi {
+  padding-left: 0;
+  padding-right: 0;
+}
