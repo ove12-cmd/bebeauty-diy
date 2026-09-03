@@ -76,17 +76,6 @@ export const DEFAULT_REVIEWS: Review[] = [
 export const REVIEW_COUNT = DEFAULT_REVIEWS.length;
 
 /**
- * The three shortest 5-star reviews, for the compact strip under the stats
- * bar. Picked by length rather than hand-listed names so it can't drift out
- * of sync with the data — a strip needs quotes that fit on one or two lines.
- */
-export const STRIP_REVIEWS = DEFAULT_REVIEWS
-  .filter((r) => r.rating === 5)
-  .slice()
-  .sort((a, b) => a.text.length - b.text.length)
-  .slice(0, 3);
-
-/**
  * Mean rating, derived from the reviews actually shown — never a figure typed
  * in by hand. Rounded to one decimal, the precision the UI displays.
  */

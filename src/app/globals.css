@@ -337,6 +337,9 @@ html, body {
 .bb-btn {
   display: inline-flex;
   align-items: center;
+  /* Matters whenever a button is stretched rather than sized to its label —
+     a grid or flex column would otherwise leave the text hugging the left. */
+  justify-content: center;
   gap: 8px;
   font-family: var(--bb-font);
   font-weight: 600;

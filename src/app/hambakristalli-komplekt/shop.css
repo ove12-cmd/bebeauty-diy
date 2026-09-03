@@ -57,7 +57,9 @@
 
 .bb-box-row {
   display: grid;
-  grid-template-columns: 64px 1fr;
+  /* Third track holds the optional tool thumbnail; it collapses to nothing
+     on the rows that have no photo. */
+  grid-template-columns: 64px 1fr auto;
   align-items: center;
   gap: 20px;
   background: #f7f6f2;
@@ -851,7 +853,7 @@
 
   /* Box list */
   .bb-box-list { grid-template-columns: 1fr; }
-  .bb-box-row { grid-template-columns: 44px 1fr; padding: 18px 16px; }
+  .bb-box-row { grid-template-columns: 44px 1fr auto; padding: 18px 16px; }
   .bb-box-row__num { font-size: 24px; }
 
   /* Steps */
@@ -941,3 +943,46 @@
 }
 .bb-shop__cta-group .bb-shop__cta { flex: 1 1 auto; }
 .bb-shop__cta-secondary { flex: 0 1 auto; }
+
+/* On narrow screens the two buy actions split the row evenly instead of the
+   secondary one shrinking to its label ā€” a 50/50 pair reads as a choice. */
+@media (max-width: 700px) {
+  .bb-shop__cta-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* Claim the whole wrapped row: as a plain flex item the grid would size
+       to its content, so the 1fr columns would split the wrong width. */
+    flex: 1 1 100%;
+  }
+  .bb-shop__cta-group .bb-btn {
+    width: 100%;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+/* Tool thumbnail in the box list ā€” same shots as /juhend, click to enlarge. */
+.bb-box-row__thumb {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  padding: 6px;
+  border: 1px solid var(--bb-chip-border);
+  border-radius: 12px;
+  background: var(--bb-paper);
+  cursor: zoom-in;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.bb-box-row__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.bb-box-row__thumb:hover {
+  border-color: var(--bb-gold);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 700px) {
+  .bb-box-row__thumb { width: 56px; height: 56px; }
+}

@@ -8,7 +8,6 @@ import UrgencyPopup from "@/components/UrgencyPopup";
 import JsonLd from "@/components/JsonLd";
 import ImageLightbox from "@/components/ImageLightbox";
 import ReviewsSlider from "@/components/ReviewsSlider";
-import TestimonialStrip from "@/components/TestimonialStrip";
 import SiteNav from "@/components/SiteNav";
 import Button from "@/components/ui/Button";
 import PaymentMethods from "@/components/ui/PaymentMethods";
@@ -50,12 +49,15 @@ function priceStr(n: number) {
   return (n % 1 === 0 ? String(n) : n.toFixed(2).replace(".", ",")) + "€";
 }
 
-const BOX_ITEMS = [
-  { name: "UV LED-lamp", desc: "Kiireks ja ühtlaseks kõvastamiseks." },
-  { name: "Premium kristallid", desc: "10 Swarovski kristalli komplektis." },
-  { name: "Liim & Etch", desc: "Professionaalseks kinnitamiseks ja paremaks püsivuseks." },
-  { name: "Aplikaatorid", desc: "Kõik vajalik kristallide täpseks paigaldamiseks." },
-  { name: "Põsehoidja", desc: "Hoiab tööala mugavalt avatuna." },
+// `img` reuses the same tool shots as /juhend, so the thing you read about
+// here is the thing you see in the instructions. The last row is a claim
+// rather than an object, so it has no photo — the thumbnail is optional.
+const BOX_ITEMS: { name: string; desc: string; img?: string }[] = [
+  { name: "UV LED-lamp", desc: "Kiireks ja ühtlaseks kõvastamiseks.", img: "/tools/uv.png" },
+  { name: "Premium kristallid", desc: "10 Swarovski kristalli komplektis.", img: "/crystals/gem-ab.jpg" },
+  { name: "Liim & Etch", desc: "Professionaalseks kinnitamiseks ja paremaks püsivuseks.", img: "/tools/liim.png" },
+  { name: "Aplikaatorid", desc: "Kõik vajalik kristallide täpseks paigaldamiseks.", img: "/tools/aplikaator.png" },
+  { name: "Põsehoidja", desc: "Hoiab tööala mugavalt avatuna.", img: "/tools/põsehoidja.png" },
   { name: "Valmis kasutamiseks", desc: "Ava karp ja alusta kohe." },
 ];
 
@@ -146,6 +148,9 @@ function FAQ() {
         role="tabpanel"
         id={`faq-panel-${active.id}`}
         aria-labelledby={`faq-tab-${active.id}`}
+        // .bb-faq's own gap only reaches the tablist and this panel, so the
+        // items inside it need their own row spacing.
+        className="flex flex-col gap-3"
       >
         {active.items.map((faq, i) => {
           const key = `${active.id}-${i}`;
@@ -282,7 +287,7 @@ export default function ShopPage() {
   const { add, open: openCart } = useCart();
   const [gemQtys, setGemQtys] = useState<Record<string, number>>({});
   const [gemsOpen, setGemsOpen] = useState(true);
-  const [gemLightbox, setGemLightbox] = useState<{ src: string; alt: string } | null>(null);
+  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
   const totalGems = Object.values(gemQtys).reduce((sum, n) => sum + n, 0);
   const gemsCost = totalGems * GEM_PRICE;
   function bumpGemQty(id: string, delta: number) {
@@ -434,7 +439,7 @@ export default function ShopPage() {
                       type="button"
                       className="bb-extra-gems__thumb"
                       aria-label={`Suurenda ${g.label}`}
-                      onClick={() => setGemLightbox({ src: g.img, alt: g.label })}
+                      onClick={() => setLightbox({ src: g.img, alt: g.label })}
                     >
                       <Image src={g.img} alt={g.label} width={36} height={36} style={{ objectFit: "contain" }} />
                     </button>
@@ -565,7 +570,8 @@ export default function ShopPage() {
         ))}
       </div>
 
-      <TestimonialStrip />
+      {/* ── Reviews ── */}
+      <ReviewsSlider id="arvustused" heading="Arvustused" />
 
       {/* ── What's in the box ── */}
       <div className="bb-shop-section" id="komplekt">
@@ -580,6 +586,16 @@ export default function ShopPage() {
                 <span className="bb-box-row__name">{item.name}</span>
                 <span className="bb-box-row__desc">{item.desc}</span>
               </div>
+              {item.img && (
+                <button
+                  type="button"
+                  className="bb-box-row__thumb"
+                  aria-label={`Vaata suuremalt: ${item.name}`}
+                  onClick={() => setLightbox({ src: item.img!, alt: item.name })}
+                >
+                  <Image src={item.img} alt="" width={72} height={72} />
+                </button>
+              )}
             </div>
           ))}
         </div>
@@ -644,17 +660,14 @@ export default function ShopPage() {
         </div>
       </div>
 
-      {/* ── Reviews ── */}
-      <ReviewsSlider id="arvustused" heading="Arvustused" />
-
       {/* ── FAQ ── */}
       <div className="bb-shop-section">
         <h2 className="bb-shop-section__title bb-faq__title">Korduma kippuvad küsimused</h2>
         <FAQ />
       </div>
 
-      {gemLightbox && (
-        <ImageLightbox src={gemLightbox.src} alt={gemLightbox.alt} onClose={() => setGemLightbox(null)} />
+      {lightbox && (
+        <ImageLightbox src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox(null)} />
       )}
     </main>
   );
