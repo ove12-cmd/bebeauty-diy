@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import Stars from "@/components/ui/Stars";
 import { FEATURED_REVIEWS } from "@/lib/reviews";
@@ -62,32 +63,56 @@ export default function TestimonialCarousel() {
     <section
       aria-roledescription="karussell"
       aria-label="Klientide arvustused"
-      className="mx-auto w-full max-w-[1100px] px-5 py-8"
+      className="mx-auto w-full max-w-[1100px] px-5 pt-4 pb-8"
       onMouseEnter={() => (holding.current = true)}
       onMouseLeave={() => (holding.current = false)}
       onFocusCapture={() => (holding.current = true)}
       onBlurCapture={() => (holding.current = false)}
     >
-      <ul className="grid list-none grid-cols-1 gap-3 p-0 md:grid-cols-3">
-        {window_.map((r, k) => (
-          <li
-            key={`${index}-${r.name}`}
-            className={`rounded-2xl border border-[var(--bb-chip-border)] bg-[var(--bb-paper)] p-5 ${
-              k === 0 ? "" : "hidden md:block"
-            }`}
-          >
-            <Stars rating={r.rating} label={`Hinnang ${r.rating} / 5`} className="mb-1.5" />
-            <blockquote className="text-[14px] leading-relaxed text-[var(--bb-ink)]">
-              {r.text}
-            </blockquote>
-            <p className="mt-2 text-[11px] text-[var(--bb-ink-3)]">
-              {r.name} · {r.date}
-            </p>
-          </li>
-        ))}
-      </ul>
+      <div className="rounded-2xl bg-[var(--bb-chip-bg)] p-4 md:p-5">
+        <ul className="grid list-none grid-cols-1 gap-3 p-0 md:grid-cols-3">
+          {window_.map((r, k) => (
+            <li
+              // Re-keying on index remounts the card, which replays the
+              // entry animation without any transition bookkeeping.
+              key={`${index}-${r.name}`}
+              className={`bb-slide-in rounded-xl border border-[var(--bb-chip-border)] bg-[var(--bb-paper)] p-4 ${
+                k === 0 ? "" : "hidden md:block"
+              }`}
+              style={{ animationDelay: `${k * 70}ms` }}
+            >
+              <Stars rating={r.rating} label={`Hinnang ${r.rating} / 5`} className="mb-1.5" />
+              <blockquote className="text-[14px] leading-relaxed text-[var(--bb-ink)]">
+                {r.text}
+              </blockquote>
 
-      <div className="mt-4 flex items-center justify-center gap-3">
+              {r.photos && r.photos.length > 0 && (
+                <div className="mt-2.5 flex gap-1.5">
+                  {r.photos.slice(0, 2).map((src) => (
+                    <span
+                      key={src}
+                      className="relative block h-14 w-14 overflow-hidden rounded-lg bg-[var(--bb-chip-bg)]"
+                    >
+                      <Image
+                        src={src}
+                        alt={`${r.name} tulemus`}
+                        fill
+                        sizes="56px"
+                        style={{ objectFit: "cover", objectPosition: r.pos ?? "center" }}
+                      />
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <p className="mt-2 text-[11px] text-[var(--bb-ink-3)]">
+                {r.name} · {r.date}
+              </p>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-4 flex items-center justify-center gap-3">
         <div className="flex items-center gap-1.5">
           {reviews.map((r, i) => (
             <button
@@ -112,8 +137,9 @@ export default function TestimonialCarousel() {
             className="text-[11px] text-[var(--bb-ink-3)] underline hover:no-underline"
           >
             {autoRunning ? "Peata" : "Käivita"}
-          </button>
-        )}
+            </button>
+          )}
+        </div>
       </div>
     </section>
   );

@@ -11,11 +11,12 @@ export default function TrustBadge({ className = "" }: { className?: string }) {
   return (
     <a
       href="/hambakristalli-komplekt#arvustused"
-      className={`inline-flex items-center gap-2 rounded-full border border-[var(--bb-chip-border)] bg-[var(--bb-chip-bg)] px-3 py-1.5 text-[12.5px] font-semibold text-[var(--bb-ink-2)] no-underline transition-colors hover:border-[var(--bb-gold)] ${className}`}
+      className={`inline-flex max-w-full flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-2xl sm:rounded-full border border-[var(--bb-chip-border)] bg-[var(--bb-chip-bg)] px-3 py-1.5 text-[12.5px] font-semibold text-[var(--bb-ink-2)] no-underline transition-colors hover:border-[var(--bb-gold)] ${className}`}
     >
       <Stars rating={AVERAGE_RATING} label={`Keskmine hinnang ${formatRating(AVERAGE_RATING)} viiest`} />
       <span>
-        {formatRating(AVERAGE_RATING)} · {REVIEW_COUNT} arvustust
+        {formatRating(AVERAGE_RATING)} · {REVIEW_COUNT} arvustust{" "}
+        <span className="text-[var(--bb-gold-deep)] underline">(vaata)</span>
       </span>
       <span aria-hidden="true" className="text-[var(--bb-chip-border)]">
         |

@@ -10,7 +10,7 @@ export const COMPANY = {
    * shoppers, so it must track reality — update it as sales grow, and don't
    * round it up past what the order records support.
    */
-  kitsSoldLabel: "600+ komplekti Eestis",
+  kitsSoldLabel: "600+ komplekti müüdud",
   // `network` drives the icon and is separate from `id`, because the shop
   // runs two different Facebook presences — keying the icon off the id alone
   // couldn't express that.

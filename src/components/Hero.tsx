@@ -36,8 +36,8 @@ export default function Hero() {
 
       <SiteNav active="pood" />
 
-      <div className="flex justify-center">
-        <TrustBadge className="mb-4" />
+      <div className="bb-hero__badge flex justify-center px-4">
+        <TrustBadge className="mb-5" />
       </div>
 
       {/* HEADLINE */}
