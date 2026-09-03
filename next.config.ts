@@ -34,14 +34,19 @@ const securityHeaders = [
       // GA4 sends its collect hit to a regional subdomain (e.g. region1.google-analytics.com),
       // not the bare www host — must wildcard it or every hit gets silently CSP-blocked.
       "connect-src 'self' https://images.unsplash.com https://plus.unsplash.com https://api.stripe.com https://*.google-analytics.com https://analytics.google.com https://www.facebook.com https://connect.facebook.net https://*.clarity.ms",
-      // Stripe's embedded card fields render inside a same-origin-looking iframe it controls
-      "frame-src https://js.stripe.com https://hooks.stripe.com",
+      // Stripe's embedded card fields render inside a same-origin-looking iframe it
+      // controls. facebook.com is fbevents.js's iframe transport — it falls back to
+      // that when an event payload is too big for the image beacon's query string.
+      "frame-src https://js.stripe.com https://hooks.stripe.com https://www.facebook.com",
       // No plugins
       "object-src 'none'",
       // Base URI restricted to self
       "base-uri 'self'",
-      // Form submissions only to self
-      "form-action 'self'",
+      // Form submissions to self, plus facebook.com: fbevents.js POSTs a form to
+      // /tr/ for events whose parameters exceed the GET beacon's URL limit
+      // (Purchase carries content_ids + value + currency + order_id). Without
+      // this those events are CSP-blocked and never reach Meta.
+      "form-action 'self' https://www.facebook.com",
       // Frames: only self
       "frame-ancestors 'self'",
     ].join("; "),
