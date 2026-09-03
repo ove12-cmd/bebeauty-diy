@@ -346,36 +346,6 @@
   width: 100%;
 }
 
-.bb-checkout__trust {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--bb-ink-2);
-  margin: -0.5rem 0 1rem;
-}
-.bb-checkout__trust-lock {
-  display: inline-flex;
-  color: var(--bb-ink-2);
-}
-.bb-checkout__trust-badges {
-  display: inline-flex;
-  gap: 6px;
-  margin-left: auto;
-}
-.bb-checkout__trust-badge {
-  font-size: 10.5px;
-  font-weight: 700;
-  color: var(--bb-ink-2);
-  background: #f3f1eb;
-  border: 1px solid #e8e6e0;
-  border-radius: 6px;
-  padding: 3px 8px;
-  letter-spacing: 0.02em;
-}
-
 /* ── Order summary on the confirmation page ── */
 .bb-checkout__confirm-summary {
   width: 100%;

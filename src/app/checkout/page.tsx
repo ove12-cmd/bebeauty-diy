@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Button from "@/components/ui/Button";
+import PaymentMethods from "@/components/ui/PaymentMethods";
 import CheckoutPayment from "@/components/CheckoutPayment";
 import { useCart } from "@/hooks/useCart";
 import { searchLockers, type Locker } from "@/lib/lockers";
@@ -179,18 +180,11 @@ export default function CheckoutPage() {
               <button type="button" className="bb-checkout__back" onClick={() => setClientSecret(null)}>← Muuda andmeid</button>
               <h2 className="bb-checkout__section-title">Maksmine</h2>
               <p className="bb-checkout__pay-hint">Sisesta oma kaardiandmed. Makse on turvaline ja krüpteeritud.</p>
-              <div className="bb-checkout__trust">
-                <span className="bb-checkout__trust-lock" aria-hidden="true">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="11" width="18" height="10" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                  </svg>
-                </span>
-                SSL-krüpteeritud makse
-                <span className="bb-checkout__trust-badges">
-                  <span className="bb-checkout__trust-badge">VISA</span>
-                  <span className="bb-checkout__trust-badge">Mastercard</span>
-                </span>
-              </div>
+              <PaymentMethods
+                layout="spread"
+                note="SSL-krüpteeritud makse"
+                className="-mt-2 mb-4"
+              />
               <CheckoutPayment
                 clientSecret={clientSecret}
                 amountLabel={eur(total)}

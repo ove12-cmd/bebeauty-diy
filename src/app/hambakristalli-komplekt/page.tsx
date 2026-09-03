@@ -10,6 +10,7 @@ import ImageLightbox from "@/components/ImageLightbox";
 import ReviewsSlider from "@/components/ReviewsSlider";
 import SiteNav from "@/components/SiteNav";
 import Button from "@/components/ui/Button";
+import PaymentMethods from "@/components/ui/PaymentMethods";
 import { productSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
 import { discountPctForCode, isGeneratedMarketingCode, EXTRA_GEM_TYPES, GEM_PRICE } from "@/lib/pricing";
 import { trackMeta, CURRENCY } from "@/lib/meta-pixel";
@@ -464,6 +465,7 @@ export default function ShopPage() {
             </div>
             <Button className="bb-shop__cta" onClick={addToCart}><IconCart />Lisa korvi</Button>
           </div>
+          <PaymentMethods note="Turvaline makse" className="mt-3" />
           <p className="bb-shop__compare">80–150€ salongis → <strong>35€ kodus</strong>.</p>
           <div className="bb-urgency__shipping">📦 Telli täna enne kell 14.00 – saadame <strong>järgmisel päeval teele</strong>.</div>
 

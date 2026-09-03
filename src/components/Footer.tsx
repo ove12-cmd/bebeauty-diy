@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Button from "@/components/ui/Button";
 import Logo from "@/components/ui/Logo";
+import PaymentMethods from "@/components/ui/PaymentMethods";
 import Link from "next/link";
 
 export default function Footer() {
@@ -53,12 +54,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="bb-footer__bottom">
         <span className="bb-footer__copy">© {new Date().getFullYear()} beBeauty DIY. Kõik õigused kaitstud.</span>
-        <div className="bb-footer__payments">
-          <span className="bb-footer__pay-badge">Apple Pay</span>
-          <span className="bb-footer__pay-badge">G Pay</span>
-          <span className="bb-footer__pay-badge">VISA</span>
-          <span className="bb-footer__pay-badge">Mastercard</span>
-        </div>
+        <PaymentMethods tone="inverse" />
         <span className="bb-footer__made">♡ Disainitud Eestis · Made with care</span>
       </div>
     </footer>
