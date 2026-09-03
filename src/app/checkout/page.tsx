@@ -420,7 +420,7 @@ export default function CheckoutPage() {
                 onEdit={() => setClientSecret(null)}
               />
             ) : (
-              <figure className="mt-2.5 rounded-xl bg-[var(--bb-paper)] p-3.5">
+              <figure className="mt-2.5 rounded-xl border border-[var(--bb-line)] bg-[var(--bb-paper)] p-3.5">
                 <div aria-hidden="true" className="mb-1.5 text-xs tracking-[0.15em] text-[var(--bb-gold)]">
                   ★★★★★
                 </div>

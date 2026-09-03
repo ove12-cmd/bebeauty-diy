@@ -24,7 +24,7 @@ export default function OrderDetailsRecap({
   onEdit,
 }: Props) {
   return (
-    <div className="mt-2.5 rounded-xl bg-[var(--bb-paper)] p-3.5">
+    <div className="mt-2.5 rounded-xl border border-[var(--bb-line)] bg-[var(--bb-paper)] p-3.5">
       <div className="mb-2.5 flex items-center justify-between gap-2">
         <span className="text-xs font-medium text-[var(--bb-ink)]">Sinu andmed</span>
         <button

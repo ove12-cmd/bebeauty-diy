@@ -1,9 +1,9 @@
 import Link from "next/link";
+import SocialIcon from "@/components/ui/SocialIcon";
 import { COMPANY } from "@/lib/company";
 
 const LINKS = [
   { href: "/tingimused", label: "Müügitingimused" },
-  { href: "/tarne", label: "Tagastamine" },
   { href: "/hambakristalli-komplekt#arvustused", label: "Korduma kippuvad küsimused" },
 ];
 
@@ -26,8 +26,9 @@ export default function CheckoutTrustFooter() {
               href={s.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline hover:no-underline"
+              className="inline-flex items-center gap-1 underline hover:no-underline"
             >
+              <SocialIcon id={s.id} />
               {s.label}
             </a>
           ))}
