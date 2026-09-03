@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import Button from "@/components/ui/Button";
+import SocialIcon from "@/components/ui/SocialIcon";
+import { COMPANY } from "@/lib/company";
 import { useState } from "react";
 
 export default function ContactPage() {
@@ -26,10 +28,16 @@ export default function ContactPage() {
             <span className="bb-contact__icon">📧</span>
             <a href="mailto:iluinfo1@gmail.com">iluinfo1@gmail.com</a>
           </div>
-          <div className="bb-contact__item">
-            <span className="bb-contact__icon">📱</span>
-            <a href="https://instagram.com/bebeauty.diy" target="_blank" rel="noopener noreferrer">@bebeauty.diy</a>
-          </div>
+          {COMPANY.socials.map((s) => (
+            <div key={s.id} className="bb-contact__item">
+              <span className="bb-contact__icon">
+                <SocialIcon network={s.network} size={16} />
+              </span>
+              <a href={s.url} target="_blank" rel="noopener noreferrer">
+                {s.label}
+              </a>
+            </div>
+          ))}
           <div className="bb-contact__item">
             <span className="bb-contact__icon">⏱</span>
             <span>Vastame üldjuhul 24h jooksul</span>

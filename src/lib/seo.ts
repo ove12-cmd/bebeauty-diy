@@ -1,4 +1,5 @@
 // Structured-data (JSON-LD) builders. Keep all schema shapes here.
+import { COMPANY } from "@/lib/company";
 export const BASE_URL = "https://bebeauty-diy.ee";
 
 export const organizationSchema = {
@@ -7,7 +8,9 @@ export const organizationSchema = {
   name: "beBeauty DIY",
   url: BASE_URL,
   logo: `${BASE_URL}/icon.svg`,
-  sameAs: ["https://instagram.com/bebeauty.diy", "https://tiktok.com"],
+  // Derived from COMPANY.socials so the schema can never claim a profile
+  // the shop does not actually have.
+  sameAs: COMPANY.socials.map((s) => s.url),
 };
 
 export const websiteSchema = {
