@@ -68,7 +68,29 @@ function PayForm({
       window.location.href = successUrl;
       return;
     }
-    // Otherwise Stripe handled a redirect (e.g. 3-D Secure) via return_url.
+
+    // No paymentIntent and no error means Stripe is navigating away for a
+    // redirect step (e.g. 3-D Secure) via return_url — keep the button
+    // disabled while that happens.
+    if (!paymentIntent) return;
+
+    if (paymentIntent.status === "processing") {
+      // The card cleared but settles asynchronously. No Purchase snapshot
+      // here — the Stripe webhook fires that once the funds actually land.
+      clear();
+      window.location.href = `${successUrl}&status=pending`;
+      return;
+    }
+
+    // Anything else (notably requires_payment_method after a failed
+    // confirmation) has to surface, or the buyer is stuck on "Maksan…" with
+    // no error and no way forward.
+    setError(
+      paymentIntent.status === "requires_payment_method"
+        ? "Makset ei õnnestunud kinnitada. Palun proovi uuesti või kasuta teist makseviisi."
+        : "Makse jäi pooleli. Palun proovi uuesti.",
+    );
+    setBusy(false);
   }
 
   return (
