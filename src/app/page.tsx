@@ -7,6 +7,7 @@ import Product from "@/components/Product";
 import Results from "@/components/Results";
 import ReviewsSlider from "@/components/ReviewsSlider";
 import ScrollReveal from "@/components/ScrollReveal";
+import TestimonialCarousel from "@/components/TestimonialCarousel";
 import SizeQuiz from "@/components/SizeQuiz";
 import UrgencyPopup from "@/components/UrgencyPopup";
 // import VideoSection from "@/components/VideoSection"; // hidden for now
@@ -36,6 +37,7 @@ export default function Home() {
     <>
       <main>
         <Hero />
+        <TestimonialCarousel />
         <ScrollReveal><Results /></ScrollReveal>
         <ScrollReveal delay={50}><Product /></ScrollReveal>
         <ScrollReveal delay={50}><WhyBeBeauty /></ScrollReveal>

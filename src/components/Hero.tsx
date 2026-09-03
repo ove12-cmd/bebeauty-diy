@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Button from "@/components/ui/Button";
 import SiteNav from "@/components/SiteNav";
+import TrustBadge from "@/components/ui/TrustBadge";
 
 /* ── Image Placeholder Slot ── */
 function ImageSlot({ label, variant = "default", src, alt, priority = false }: { label: string; variant?: "default" | "lav"; src?: string; alt?: string; priority?: boolean }) {
@@ -34,6 +35,8 @@ export default function Hero() {
     <section className="bb-hero">
 
       <SiteNav active="pood" />
+
+      <TrustBadge className="mb-4" />
 
       {/* HEADLINE */}
       <h1 className="bb-bigtype">
