@@ -101,21 +101,30 @@ export default function ReviewsSlider({
       <div ref={gridRef} className="bb-testi__grid">
         {visible.map((r, i) => (
           <div key={`${r.name}-${start + i}`} className="bb-testi__card">
-            {r.img && (
-              <button
-                type="button"
-                className="bb-testi__photo"
-                aria-label={`Suurenda ${r.name} tulemuse foto`}
-                onClick={() => setLightbox({ src: r.img!, alt: `${r.name} tulemus` })}
-              >
-                <Image
-                  src={r.img}
-                  alt={`${r.name} tulemus`}
-                  width={72}
-                  height={72}
-                  style={{ objectFit: "cover", objectPosition: r.pos ?? "center" }}
-                />
-              </button>
+            {r.photos && r.photos.length > 0 && (
+              <div className="flex flex-wrap gap-1.5">
+                {r.photos.map((src, n) => (
+                  <button
+                    key={src}
+                    type="button"
+                    className="bb-testi__photo"
+                    aria-label={
+                      r.photos!.length > 1
+                        ? `Suurenda ${r.name} tulemuse foto ${n + 1}/${r.photos!.length}`
+                        : `Suurenda ${r.name} tulemuse foto`
+                    }
+                    onClick={() => setLightbox({ src, alt: `${r.name} tulemus` })}
+                  >
+                    <Image
+                      src={src}
+                      alt={`${r.name} tulemus`}
+                      width={72}
+                      height={72}
+                      style={{ objectFit: "cover", objectPosition: r.pos ?? "center" }}
+                    />
+                  </button>
+                ))}
+              </div>
             )}
 
             <Stars rating={r.rating} label={`Hinnang ${r.rating} / 5`} />
