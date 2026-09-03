@@ -68,11 +68,12 @@ export const DEFAULT_REVIEWS: Review[] = [
 export const REVIEW_COUNT = DEFAULT_REVIEWS.length;
 
 /**
- * Three 5-star reviews for the home page carousel, taken in curated order so
- * the pick follows the same hand-ordered list as everything else rather than
- * a second list that could drift.
+ * 5-star reviews for the home page carousel, taken in curated order so the
+ * pick follows the same hand-ordered list as everything else rather than a
+ * second list that could drift. Nine, because the carousel shows three at a
+ * time on desktop ā€” with only three there would be nothing to rotate.
  */
-export const FEATURED_REVIEWS = DEFAULT_REVIEWS.filter((r) => r.rating === 5).slice(0, 3);
+export const FEATURED_REVIEWS = DEFAULT_REVIEWS.filter((r) => r.rating === 5).slice(0, 9);
 
 /**
  * Mean rating, derived from the reviews actually shown — never a figure typed
