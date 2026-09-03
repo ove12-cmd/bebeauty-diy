@@ -28,7 +28,7 @@ export default function CheckoutTrustFooter() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 underline hover:no-underline"
             >
-              <SocialIcon id={s.id} />
+              <SocialIcon network={s.network} />
               {s.label}
             </a>
           ))}
