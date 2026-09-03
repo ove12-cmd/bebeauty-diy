@@ -36,7 +36,7 @@ export default function Hero() {
 
       <SiteNav active="pood" />
 
-      <div className="bb-hero__badge flex justify-center px-4">
+      <div className="bb-hero__badge flex justify-center px-4 pt-8">
         <TrustBadge className="mb-5" />
       </div>
 
@@ -69,7 +69,7 @@ export default function Hero() {
             </div>
             <div className="bb-cta-card__buy">
               <span className="bb-cta-card__price">Hind: 35€</span>
-              <Button href="/hambakristalli-komplekt" arrow>
+              <Button href="/hambakristalli-komplekt">
                 Osta komplekt
               </Button>
             </div>

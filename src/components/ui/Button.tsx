@@ -10,8 +10,6 @@ type ButtonProps = {
   type?: "button" | "submit";
   /** `outline` is the quieter companion to a gold primary action. */
   variant?: "gold" | "outline";
-  /** Append the site's standard trailing → arrow. */
-  arrow?: boolean;
   /** Context modifier classes (e.g. bb-cta__btn, bb-footer__card-btn). */
   className?: string;
   ariaLabel?: string;
@@ -25,18 +23,12 @@ export default function Button({
   onClick,
   type = "button",
   variant = "gold",
-  arrow = false,
   className = "",
   ariaLabel,
   disabled = false,
 }: ButtonProps) {
   const cls = ["bb-btn", `bb-btn--${variant}`, className].filter(Boolean).join(" ");
-  const inner = (
-    <>
-      {children}
-      {arrow && <span className="bb-btn__arr">→</span>}
-    </>
-  );
+  const inner = children;
 
   if (href) {
     return (

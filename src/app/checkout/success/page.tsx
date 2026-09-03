@@ -131,7 +131,7 @@ function SuccessInner() {
           </aside>
         )}
 
-        <Button href="/" arrow>Tagasi avalehele</Button>
+        <Button href="/">Tagasi avalehele</Button>
       </div>
     </main>
   );

@@ -171,7 +171,7 @@ export default function CheckoutPage() {
         <div className="bb-checkout__inner bb-checkout__empty">
           <h1 className="bb-checkout__title">Ostukorv on tühi</h1>
           <p>Lisa tooteid ostukorvi, et tellimus vormistada.</p>
-          <Button href="/hambakristalli-komplekt" arrow>Vaata tooteid</Button>
+          <Button href="/hambakristalli-komplekt">Vaata tooteid</Button>
         </div>
       </main>
     );
@@ -363,7 +363,7 @@ export default function CheckoutPage() {
             {payError && (
               <p className="bb-checkout__locker-err">Makse jäi pooleli. Palun proovi uuesti.</p>
             )}
-            <Button type="submit" arrow className="bb-checkout__submit" disabled={submitting}>
+            <Button type="submit" className="bb-checkout__submit" disabled={submitting}>
               {submitting ? "Palun oota…" : "Jätka maksmiseni"}
             </Button>
             <p className="bb-checkout__fine">Esitades tellimuse nõustud meie tingimustega. Järgmises sammus sisestad kaardiandmed.</p>

@@ -97,7 +97,7 @@ function PayForm({
     <form onSubmit={handlePay} className="bb-checkout__pay">
       <PaymentElement options={{ layout: "tabs" }} />
       {error && <p className="bb-checkout__locker-err">{error}</p>}
-      <Button type="submit" arrow className="bb-checkout__submit" disabled={busy || !stripe}>
+      <Button type="submit" className="bb-checkout__submit" disabled={busy || !stripe}>
         {busy ? "Maksan…" : `Maksa ${amountLabel}`}
       </Button>
     </form>

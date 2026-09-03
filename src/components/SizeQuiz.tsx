@@ -88,7 +88,7 @@ export default function SizeQuiz() {
             <p className="bb-quiz__result-size">{result?.size}</p>
             <p className="bb-quiz__result-desc">{result?.desc}</p>
             <div className="bb-quiz__result-actions">
-              <Button href={`/hambakristalli-komplekt?variant=${result?.id}`} arrow>
+              <Button href={`/hambakristalli-komplekt?variant=${result?.id}`}>
                 Osta {result?.size} komplekt
               </Button>
               <button className="bb-quiz__restart" onClick={reset}>Proovi uuesti</button>

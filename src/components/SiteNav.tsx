@@ -65,7 +65,7 @@ export default function SiteNav({ active = "pood" }: { active?: string }) {
         </div>
 
         <div className="bb-nav__right">
-          <Button href="/hambakristalli-komplekt" className="bb-nav__cta" arrow>
+          <Button href="/hambakristalli-komplekt" className="bb-nav__cta">
             Osta komplekt
           </Button>
           <button className="bb-icon-btn bb-nav__cart" aria-label="Ostukorv" onClick={openCart}>
@@ -96,7 +96,7 @@ export default function SiteNav({ active = "pood" }: { active?: string }) {
               {l.label}
             </a>
           ))}
-          <Button href="/hambakristalli-komplekt" className="bb-nav__mobile-cta" arrow onClick={() => setMenuOpen(false)}>
+          <Button href="/hambakristalli-komplekt" className="bb-nav__mobile-cta" onClick={() => setMenuOpen(false)}>
             Osta komplekt
           </Button>
         </div>

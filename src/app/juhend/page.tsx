@@ -140,7 +140,7 @@ export default function GuidePage() {
               <span className="bb-guide__meta-dot">·</span>
               <span>~10 minutit</span>
             </div>
-            <Button className="bb-guide__start" onClick={next} arrow>
+            <Button className="bb-guide__start" onClick={next}>
               Alusta
             </Button>
           </div>
@@ -219,7 +219,7 @@ export default function GuidePage() {
 
             <div className="bb-guide__nav">
               <button className="bb-guide__nav-btn" onClick={prev}>← Eelmine</button>
-              <Button className="bb-guide__nav-next" onClick={next} arrow>
+              <Button className="bb-guide__nav-next" onClick={next}>
                 {step === TOTAL ? "Valmis" : "Järgmine"}
               </Button>
             </div>
@@ -246,7 +246,7 @@ export default function GuidePage() {
             </div>
 
             <div className="bb-guide__done-actions">
-              <Button href="/hambakristalli-komplekt" arrow>
+              <Button href="/hambakristalli-komplekt">
                 Osta komplekt
               </Button>
               <button className="bb-guide__restart" onClick={() => setStep(0)}>Alusta uuesti</button>

@@ -14,7 +14,7 @@ export default function FloatingCTA() {
 
   return (
     <div className={`bb-floating-cta ${visible ? "bb-floating-cta--visible" : ""}`}>
-      <Button href="/hambakristalli-komplekt" className="bb-floating-cta__btn" arrow>
+      <Button href="/hambakristalli-komplekt" className="bb-floating-cta__btn">
         Osta komplekt
       </Button>
     </div>

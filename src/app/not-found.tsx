@@ -9,7 +9,7 @@ export default function NotFound() {
         <h1 className="bb-notfound__title">Lehte ei leitud</h1>
         <p className="bb-notfound__sub">See leht on kadunud — nagu kristall, mis maha kukkus. 💎</p>
         <div className="bb-notfound__actions">
-          <Button href="/" arrow>
+          <Button href="/">
             Tagasi avalehele
           </Button>
           <Link href="/hambakristalli-komplekt" className="bb-notfound__shop">

@@ -391,6 +391,29 @@ html, body {
   }
 }
 
+/* Fill inside the active pagination bullet. This animation IS the carousel's
+   clock — its animationend advances the slide — so pausing it here pauses the
+   rotation too, which keeps bar and slide in step by construction. */
+@keyframes bb-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.bb-carousel__progress {
+  animation: bb-progress 5s linear forwards;
+}
+
+/* Hover and keyboard focus hold the rotation without stopping it for good;
+   doing it in CSS avoids re-rendering the whole carousel on pointer move. */
+.bb-carousel:hover .bb-carousel__progress,
+.bb-carousel:focus-within .bb-carousel__progress {
+  animation-play-state: paused;
+}
+
 .bb-btn--outline {
   background: transparent;
   color: var(--bb-ink);
@@ -400,8 +423,6 @@ html, body {
   background: var(--bb-chip-bg);
   box-shadow: 0 0 0 1.5px var(--bb-gold) inset;
 }
-
-.bb-btn__arr { font-size: 17px; }
 
 .bb-btn:disabled {
   opacity: 0.5;

@@ -85,7 +85,7 @@ export default function ContactPage() {
                 required
               />
             </div>
-            <Button type="submit" className="bb-contact__submit" arrow>
+            <Button type="submit" className="bb-contact__submit">
               Saada sõnum
             </Button>
           </form>
