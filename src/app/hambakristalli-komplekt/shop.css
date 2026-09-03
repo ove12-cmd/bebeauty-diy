@@ -986,3 +986,9 @@
 @media (max-width: 700px) {
   .bb-box-row__thumb { width: 56px; height: 56px; }
 }
+
+/* Matches the home page trust badge: the count itself carries the cue that
+   the rating links through to the reviews. */
+.bb-shop__rating-cta {
+  text-decoration: underline;
+}

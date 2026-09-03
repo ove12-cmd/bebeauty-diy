@@ -2,7 +2,6 @@
 
 import "./shop.css";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import UrgencyPopup from "@/components/UrgencyPopup";
 import JsonLd from "@/components/JsonLd";
@@ -15,7 +14,7 @@ import Stars from "@/components/ui/Stars";
 import { AVERAGE_RATING, REVIEW_COUNT, formatRating } from "@/lib/reviews";
 import { FAQ_CATEGORIES, FAQ_ITEMS } from "@/lib/faq";
 import { productSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
-import { discountPctForCode, isGeneratedMarketingCode, EXTRA_GEM_TYPES, GEM_PRICE } from "@/lib/pricing";
+import { discountPctForCode, EXTRA_GEM_TYPES, GEM_PRICE } from "@/lib/pricing";
 import { trackMeta, CURRENCY } from "@/lib/meta-pixel";
 import { trackGA4 } from "@/lib/ga4";
 import { useCart } from "@/hooks/useCart";
@@ -228,11 +227,27 @@ function StickyNav() {
 function StickyBar({ price, original, onAdd }: { price: string; original: string; onAdd: () => void }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
-    const gallery = document.getElementById("shop-gallery");
-    if (!gallery) return;
-    const obs = new IntersectionObserver(([e]) => setVisible(!e.isIntersecting), { threshold: 0.1 });
-    obs.observe(gallery);
-    return () => obs.disconnect();
+    // The bar shows once the lead line has scrolled off the top of the
+    // viewport. A scroll listener rather than IntersectionObserver: an
+    // observer needs a root with height to report against, and the margin
+    // that would restrict it to the top edge collapses the root to zero
+    // height — nothing can intersect that, so the callback fires once at
+    // setup and never again.
+    //
+    // The anchor is looked up per check rather than captured once: a
+    // reference held from mount measures all zeros if that node is ever
+    // replaced, which reads as "top: 0" and silently pins the bar hidden.
+    const check = () => {
+      const anchor = document.getElementById("shop-lead");
+      setVisible(!!anchor && anchor.getBoundingClientRect().top < 0);
+    };
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
   }, []);
   return (
     <div className={`bb-sticky-bar ${visible ? "bb-sticky-bar--visible" : ""}`}>
@@ -244,39 +259,6 @@ function StickyBar({ price, original, onAdd }: { price: string; original: string
       </div>
     </div>
   );
-}
-
-function useCodeTimer() {
-  const [secsLeft, setSecsLeft] = useState<number | null>(null);
-  useEffect(() => {
-    function sync() {
-      if (!isGeneratedMarketingCode(localStorage.getItem("bbGeneratedCode"))) {
-        setSecsLeft(null);
-        return;
-      }
-      const expiry = Number(localStorage.getItem("bbCodeExpiry") || 0);
-      const remaining = expiry ? Math.round((expiry - Date.now()) / 1000) : 0;
-      // Truly expired — hide the ticker (the "Genereeri sooduskood" CTA
-      // takes over below). Do NOT auto-extend: that silently resurrects the
-      // ticker forever on every future visit for anyone who ever generated
-      // a code once, with no further action on their part.
-      setSecsLeft(remaining > 0 ? remaining : null);
-    }
-    sync();
-    const t = setInterval(sync, 1000);
-    const handler = () => sync();
-    window.addEventListener("bb:codeGenerated", handler);
-    window.addEventListener("bb:discountChanged", handler);
-    return () => {
-      clearInterval(t);
-      window.removeEventListener("bb:codeGenerated", handler);
-      window.removeEventListener("bb:discountChanged", handler);
-    };
-  }, []);
-  if (secsLeft === null) return null;
-  const m = String(Math.floor(secsLeft / 60)).padStart(2, "0");
-  const s = String(secsLeft % 60).padStart(2, "0");
-  return `${m}:${s}`;
 }
 
 export default function ShopPage() {
@@ -303,7 +285,6 @@ export default function ShopPage() {
     });
     setGemQtys({});
   };
-  const codeTimer = useCodeTimer();
 
   // ViewContent / view_item — once per distinct variant selected, not on
   // every re-render (StrictMode double-invokes effects in dev; this ref
@@ -392,7 +373,8 @@ export default function ShopPage() {
           <p className="bb-shop__sub">Swarovski kristallid · Valmistatud Euroopas</p>
           <a href="#arvustused" className="bb-shop__rating">
             <Stars rating={AVERAGE_RATING} size="md" className="bb-shop__rating-stars" />
-            {formatRating(AVERAGE_RATING)} · {REVIEW_COUNT} arvustust
+            {formatRating(AVERAGE_RATING)} · {REVIEW_COUNT} arvustust{" "}
+            <span className="bb-shop__rating-cta">(vaata)</span>
           </a>
 
           <div className="bb-shop__variants">
@@ -464,34 +446,8 @@ export default function ShopPage() {
                   </div>
                 </div>
               ))}
-              {gemsOpen && (
-                <Link href="/kristallid" className="bb-extra-gems__link">
-                  Osta kristalle eraldi, ilma komplekti tellimata →
-                </Link>
-              )}
             </div>
           )}
-
-          <div className="bb-urgency__bar">
-            <div className="bb-urgency__timer">
-              <span className="bb-urgency__timer-label">
-                {codeTimer ? (
-                  <>Sooduskood kehtib veel — saad <strong>−10%</strong> allahindlust</>
-                ) : (
-                  <>
-                    <button
-                      className="bb-urgency__gen-trigger"
-                      onClick={() => window.dispatchEvent(new CustomEvent("bb:openPopup"))}
-                    >
-                      Genereeri sooduskood
-                    </button>
-                    {" "}— saad <strong>−10%</strong> allahindlust
-                  </>
-                )}
-              </span>
-              {codeTimer && <span className="bb-urgency__timer-clock">{codeTimer}</span>}
-            </div>
-          </div>
 
           {/* Discount code */}
           <div className="bb-discount">
@@ -547,7 +503,7 @@ export default function ShopPage() {
             ))}
           </div>
 
-          <p className="bb-shop__lead">Kõik vajalik ühes komplektis.</p>
+          <p id="shop-lead" className="bb-shop__lead">Kõik vajalik ühes komplektis.</p>
           <p className="bb-shop__desc">Paigalda hambakristallid mugavalt kodus. Komplekt sisaldab kvaliteetseid Swarovski kristalle ning kõiki vajalikke töövahendeid kiireks ja lihtsaks paigalduseks.</p>
           <ul className="bb-shop__features">
             <li>Premium Swarovski kristallid</li>
