@@ -1628,16 +1628,13 @@ html, body {
 
 @media (max-width: 1024px) {
   .bb-lightbox-overlay {
-    padding: 0;
-    background: #000000;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.9);
   }
 
   .bb-lightbox {
     max-width: 100vw;
     max-height: 100vh;
-    width: 100vw;
-    height: 100vh;
-    border-radius: 0;
   }
 }
 
