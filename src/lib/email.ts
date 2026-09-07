@@ -42,10 +42,10 @@ export async function sendOrderEmails(order: OrderEmailData): Promise<void> {
     .join("");
 
   const detailRows = [
-    order.customerName && `<p><strong>Klient:</strong> ${esc(order.customerName)}</p>`,
-    order.customerEmail && `<p><strong>E-post:</strong> ${esc(order.customerEmail)}</p>`,
-    order.customerPhone && `<p><strong>Telefon:</strong> ${esc(order.customerPhone)}</p>`,
-    order.delivery && `<p><strong>Kohaletoimetamine:</strong> ${esc(order.delivery)}</p>`,
+    order.customerName && `<p><strong>Customer:</strong> ${esc(order.customerName)}</p>`,
+    order.customerEmail && `<p><strong>Email:</strong> ${esc(order.customerEmail)}</p>`,
+    order.customerPhone && `<p><strong>Phone:</strong> ${esc(order.customerPhone)}</p>`,
+    order.delivery && `<p><strong>Delivery:</strong> ${esc(order.delivery)}</p>`,
   ]
     .filter(Boolean)
     .join("");
@@ -56,11 +56,11 @@ export async function sendOrderEmails(order: OrderEmailData): Promise<void> {
   // tracking in Resend.
   if (ownerTo && ownerTo.length > 0) {
     const ownerHtml = `
-      <h2>Uus makstud tellimus</h2>
-      <p><strong>Number:</strong> ${esc(order.reference)}</p>
-      <p><strong>Summa:</strong> ${total}</p>
+      <h2>New paid order</h2>
+      <p><strong>Order number:</strong> ${esc(order.reference)}</p>
+      <p><strong>Total:</strong> ${total}</p>
       ${detailRows}
-      ${itemsHtml ? `<p><strong>Tooted:</strong></p><ul>${itemsHtml}</ul>` : ""}
+      ${itemsHtml ? `<p><strong>Items:</strong></p><ul>${itemsHtml}</ul>` : ""}
     `;
     await Promise.allSettled(
       ownerTo.map((to) =>
@@ -68,7 +68,7 @@ export async function sendOrderEmails(order: OrderEmailData): Promise<void> {
           .send({
             from,
             to,
-            subject: `🟢 Uus tellimus ${order.reference} — ${total}`,
+            subject: `🟢 New order ${order.reference} — ${total}`,
             html: ownerHtml,
           })
           .catch((err) => {
@@ -84,14 +84,14 @@ export async function sendOrderEmails(order: OrderEmailData): Promise<void> {
       await resend.emails.send({
         from,
         to: order.customerEmail,
-        subject: `Tellimuse kinnitus — ${order.reference}`,
+        subject: `Order confirmation — ${order.reference}`,
         html: `
-          <h2>Aitäh tellimuse eest! ✨</h2>
-          <p>Sinu tellimus <strong>${esc(order.reference)}</strong> on kinnitatud ja makse laekunud.</p>
-          <p><strong>Summa:</strong> ${total}</p>
-          ${order.delivery ? `<p><strong>Kohaletoimetamine:</strong> ${esc(order.delivery)}</p>` : ""}
-          ${itemsHtml ? `<p><strong>Tellitud:</strong></p><ul>${itemsHtml}</ul>` : ""}
-          <p>Paneme paki peagi teele. Küsimuste korral vasta sellele kirjale.</p>
+          <h2>Thank you for your order! ✨</h2>
+          <p>Your order <strong>${esc(order.reference)}</strong> has been confirmed and payment received.</p>
+          <p><strong>Total:</strong> ${total}</p>
+          ${order.delivery ? `<p><strong>Delivery:</strong> ${esc(order.delivery)}</p>` : ""}
+          ${itemsHtml ? `<p><strong>Ordered:</strong></p><ul>${itemsHtml}</ul>` : ""}
+          <p>We'll get your package on its way soon. If you have any questions, just reply to this email.</p>
           <p>— beBeauty DIY</p>
         `,
       });
@@ -109,7 +109,7 @@ export type ReviewSubmission = {
 };
 
 // Owner-only notification for a review a visitor submitted through the
-// "Lisa enda tagasiside" popup — nothing is published automatically, this
+// "Submit your review" popup — nothing is published automatically, this
 // just lands in the inbox for manual review before it's added to the site.
 export async function sendReviewSubmissionEmail(review: ReviewSubmission): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
@@ -127,10 +127,10 @@ export async function sendReviewSubmissionEmail(review: ReviewSubmission): Promi
   const resend = new Resend(apiKey);
   const stars = "★".repeat(review.rating) + "☆".repeat(5 - review.rating);
   const html = `
-    <h2>Uus arvustus veebilehelt</h2>
-    <p><strong>Nimi:</strong> ${esc(review.name)}</p>
-    <p><strong>Hinnang:</strong> ${stars}</p>
-    <p><strong>Tekst:</strong></p>
+    <h2>New review from the website</h2>
+    <p><strong>Name:</strong> ${esc(review.name)}</p>
+    <p><strong>Rating:</strong> ${stars}</p>
+    <p><strong>Text:</strong></p>
     <p>${esc(review.text).replace(/\n/g, "<br>")}</p>
   `;
 
@@ -139,7 +139,7 @@ export async function sendReviewSubmissionEmail(review: ReviewSubmission): Promi
   await Promise.allSettled(
     ownerTo.map((to) =>
       resend.emails
-        .send({ from, to, subject: `📝 Uus arvustus — ${review.name}`, html, attachments })
+        .send({ from, to, subject: `📝 New review — ${review.name}`, html, attachments })
         .catch((err) => {
           console.error(`[email] review notification to ${to} failed:`, err);
         }),

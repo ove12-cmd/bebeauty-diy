@@ -5,27 +5,27 @@ import { useState } from "react";
 
 const STEPS = [
   {
-    q: "Millist efekti soovid?",
+    q: "What effect do you want?",
     options: [
-      { label: "Loomulik", sub: "Peenem, vaevumärgatav", value: "natural" },
-      { label: "Tasakaalus", sub: "Kõige populaarsem valik igapäevaseks kandmiseks.", value: "balanced" },
-      { label: "Julge", sub: "Silmapaistev ja pilkupüüdev tulemus.", value: "bold" },
+      { label: "Natural", sub: "Subtler, barely noticeable", value: "natural" },
+      { label: "Balanced", sub: "The most popular choice for everyday wear.", value: "balanced" },
+      { label: "Bold", sub: "A striking, eye-catching result.", value: "bold" },
     ],
   },
   {
-    q: "Kui sageli kannad aksessuaare?",
+    q: "How often do you wear accessories?",
     options: [
-      { label: "Iga päev", sub: "Sinu stiili igapäevane osa.", value: "daily" },
-      { label: "Mõnikord", sub: "Peod, üritused ja erilised hetked.", value: "sometimes" },
-      { label: "Harva", sub: "Eelistad minimalistlikku välimust.", value: "rarely" },
+      { label: "Every day", sub: "An everyday part of your style.", value: "daily" },
+      { label: "Sometimes", sub: "Parties, events, and special moments.", value: "sometimes" },
+      { label: "Rarely", sub: "You prefer a minimalist look.", value: "rarely" },
     ],
   },
 ];
 
 const RESULT: Record<string, { size: string; id: string; desc: string }> = {
-  natural:  { size: "1.7 mm", id: "s17", desc: "Ideaalne valik loomuliku ja elegantse tulemuse saavutamiseks. Sobib suurepäraselt igapäevaseks kandmiseks ning on kõige populaarsem suurus alustamiseks." },
-  balanced: { size: "2.0 mm", id: "s20", desc: "Täiuslik tasakaal loomuliku ja silmapaistva välimuse vahel. Ideaalne, kui soovid märgatavat, kuid elegantset tulemust." },
-  bold:     { size: "2.3 mm", id: "s23", desc: "Silmapaistev valik, mis lisab naeratusele maksimaalselt sära. Ideaalne, kui soovid julget ja pilkupüüdvat tulemust." },
+  natural:  { size: "1.7 mm", id: "s17", desc: "The ideal choice for a natural, elegant result. Great for everyday wear, and the most popular size to start with." },
+  balanced: { size: "2.0 mm", id: "s20", desc: "The perfect balance between natural and eye-catching. Ideal if you want a noticeable yet elegant result." },
+  bold:     { size: "2.3 mm", id: "s23", desc: "A striking choice that adds maximum sparkle to your smile. Ideal if you want a bold, eye-catching result." },
 };
 
 export default function SizeQuiz() {
@@ -56,13 +56,13 @@ export default function SizeQuiz() {
   return (
     <section className="bb-quiz">
       <div className="bb-quiz__inner">
-        <p className="bb-quiz__label">Leia endale sobiv hambakristall</p>
-        <h2 className="bb-quiz__title">Vasta kahele lühikesele küsimusele<br />ja soovitame sulle kõige sobivama suuruse.</h2>
+        <p className="bb-quiz__label">Find your perfect tooth gem</p>
+        <h2 className="bb-quiz__title">Answer two quick questions<br />and we&apos;ll recommend the size that suits you best.</h2>
 
         {!done ? (
           <div className="bb-quiz__card">
             <div className="bb-quiz__steps">
-              <span className="bb-quiz__steps-label">Küsimus {step + 1}/{STEPS.length}</span>
+              <span className="bb-quiz__steps-label">Question {step + 1}/{STEPS.length}</span>
               <div className="bb-quiz__steps-track">
                 {STEPS.map((_, i) => (
                   <span
@@ -84,14 +84,14 @@ export default function SizeQuiz() {
           </div>
         ) : (
           <div className="bb-quiz__result">
-            <p className="bb-quiz__result-label">Sinu soovitus</p>
+            <p className="bb-quiz__result-label">Your recommendation</p>
             <p className="bb-quiz__result-size">{result?.size}</p>
             <p className="bb-quiz__result-desc">{result?.desc}</p>
             <div className="bb-quiz__result-actions">
-              <Button href={`/hambakristalli-komplekt?variant=${result?.id}`}>
-                Osta {result?.size} komplekt
+              <Button href={`/tooth-gem-kit?variant=${result?.id}`}>
+                Shop the {result?.size} kit
               </Button>
-              <button className="bb-quiz__restart" onClick={reset}>Proovi uuesti</button>
+              <button className="bb-quiz__restart" onClick={reset}>Try again</button>
             </div>
           </div>
         )}

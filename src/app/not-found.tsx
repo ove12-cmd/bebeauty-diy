@@ -6,14 +6,14 @@ export default function NotFound() {
     <div className="bb-notfound">
       <div className="bb-notfound__inner">
         <span className="bb-notfound__num">404</span>
-        <h1 className="bb-notfound__title">Lehte ei leitud</h1>
-        <p className="bb-notfound__sub">See leht on kadunud — nagu kristall, mis maha kukkus. 💎</p>
+        <h1 className="bb-notfound__title">Page not found</h1>
+        <p className="bb-notfound__sub">This page is gone — like a crystal that fell off. 💎</p>
         <div className="bb-notfound__actions">
           <Button href="/">
-            Tagasi avalehele
+            Back to homepage
           </Button>
-          <Link href="/hambakristalli-komplekt" className="bb-notfound__shop">
-            Vaata tooteid
+          <Link href="/tooth-gem-kit" className="bb-notfound__shop">
+            Shop products
           </Link>
         </div>
       </div>

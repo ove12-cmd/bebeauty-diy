@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Bricolage_Grotesque, Kalam } from "next/font/google";
+import { Bricolage_Grotesque, Instrument_Sans } from "next/font/google";
 import JsonLd from "@/components/JsonLd";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
@@ -18,33 +18,33 @@ const bricolage = Bricolage_Grotesque({
   weight: "variable",
 });
 
-const kalam = Kalam({
-  variable: "--font-kalam",
+const instrument = Instrument_Sans({
+  variable: "--font-instrument",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: "variable",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://bebeauty-diy.ee"),
   title: {
-    default: "DIY Hambakristalli Komplekt | beBeauty DIY",
+    default: "DIY Tooth Gem Kit | beBeauty DIY",
     template: "%s | beBeauty DIY",
   },
-  description: "Paigalda hambakristallid kodus 10 minutiga. Swarovski kristallid, UV lamp ja kõik vajalik komplektis. Tasuta tarne.",
-  keywords: ["hambakristall", "tooth gem", "DIY", "hambakristalli komplekt", "hambaehistus", "Eesti"],
+  description: "Apply tooth gems at home in 10 minutes. Swarovski crystals, UV lamp, and everything you need in one kit. Free shipping.",
+  keywords: ["tooth gem", "tooth gem kit", "DIY", "tooth gem crystal", "tooth jewelry"],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
-    locale: "et_EE",
+    locale: "en_US",
     url: "https://bebeauty-diy.ee",
     siteName: "beBeauty DIY",
-    title: "DIY Hambakristalli Komplekt | beBeauty DIY",
-    description: "Paigalda hambakristallid kodus 10 minutiga. Swarovski kristallid, UV lamp ja kõik vajalik komplektis. Tasuta tarne.",
+    title: "DIY Tooth Gem Kit | beBeauty DIY",
+    description: "Apply tooth gems at home in 10 minutes. Swarovski crystals, UV lamp, and everything you need in one kit. Free shipping.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "DIY Hambakristalli Komplekt | beBeauty DIY",
-    description: "Paigalda hambakristallid kodus 10 minutiga. Swarovski kristallid, UV lamp ja kõik vajalik.",
+    title: "DIY Tooth Gem Kit | beBeauty DIY",
+    description: "Apply tooth gems at home in 10 minutes. Swarovski crystals, UV lamp, and everything you need.",
   },
   other: {
     "facebook-domain-verification": "fccyql35zxod7nlarq920tscqb37ev",
@@ -57,7 +57,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="et" data-scroll-behavior="smooth" className={`${bricolage.variable} ${kalam.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${bricolage.variable} ${instrument.variable}`}>
       <body className="min-h-full">
         <JsonLd data={organizationSchema} />
         <JsonLd data={websiteSchema} />

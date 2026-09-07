@@ -42,39 +42,39 @@ export default function Hero() {
 
       {/* HEADLINE */}
       <h1 className="bb-bigtype">
-        Salongi tulemus,<br />
-        kodus <em className="bb-bigtype__em">10 minutiga</em>
+        Salon results,<br />
+        at home in <em className="bb-bigtype__em">10 minutes</em>
       </h1>
 
       <p className="bb-subline">
-        Paigalda ise professionaalse tulemusega hambakristallid – ilma salongita.
+        Apply salon-quality tooth gems yourself – no salon required.
       </p>
 
       {/* SHOWCASE */}
       <div className="bb-showcase">
         <div className="bb-showcase__main">
-          <ImageSlot label="Tulemus" src="/home/hero.jpg" alt="Särav naeratus hambakristalliga" priority />
+          <ImageSlot label="Result" src="/home/hero.jpg" alt="Bright smile with a tooth gem" priority />
         </div>
         <div className="bb-showcase__side">
           <ImageSlot
-            label="Komplekt"
+            label="Kit"
             variant="lav"
             src="/home/product.png"
-            alt="beBeauty DIY hambakristalli komplekt"
+            alt="beBeauty DIY tooth gem kit"
           />
           <div className="bb-cta-card">
             <div className="bb-cta-card__heading">
-              Kõik ühes väikeses komplektis.
-              <b>Paigalda kodus, ilma salongita.</b>
+              Everything in one small kit.
+              <b>Apply at home, no salon needed.</b>
             </div>
             <div className="bb-cta-card__buy">
-              <span className="bb-cta-card__price">Hind: 35€</span>
-              <Button href="/hambakristalli-komplekt">
-                Osta komplekt
+              <span className="bb-cta-card__price">Price: 35€</span>
+              <Button href="/tooth-gem-kit">
+                Shop the kit
               </Button>
             </div>
             <div className="bb-cta-card__rating">
-              <span className="bb-cta-card__meta">Telli täna – komplekt on peagi sinu lähimas pakiautomaadis.</span>
+              <span className="bb-cta-card__meta">Order today – your kit will soon be at your nearest parcel locker.</span>
             </div>
           </div>
         </div>

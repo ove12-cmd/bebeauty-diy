@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Vormista tellimus",
+  title: "Checkout",
   robots: { index: false, follow: false },
 };
 

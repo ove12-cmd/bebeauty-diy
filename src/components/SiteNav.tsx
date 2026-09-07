@@ -33,11 +33,11 @@ function IconClose() {
 }
 
 const LINKS = [
-  { key: "pood", href: "/", label: "Pood" },
-  { key: "komplektid", href: "/hambakristalli-komplekt", label: "Komplektid" },
-  { key: "kuidas", href: "/#kuidas", label: "Kuidas see töötab" },
-  { key: "juhend", href: "/juhend", label: "Juhend" },
-  { key: "galerii", href: "/#galerii", label: "Galerii" },
+  { key: "pood", href: "/", label: "Shop" },
+  { key: "komplektid", href: "/tooth-gem-kit", label: "Kits" },
+  { key: "kuidas", href: "/#kuidas", label: "How it works" },
+  { key: "juhend", href: "/guide", label: "Guide" },
+  { key: "galerii", href: "/#galerii", label: "Gallery" },
 ];
 
 export default function SiteNav({ active = "pood" }: { active?: string }) {
@@ -65,17 +65,17 @@ export default function SiteNav({ active = "pood" }: { active?: string }) {
         </div>
 
         <div className="bb-nav__right">
-          <Button href="/hambakristalli-komplekt" className="bb-nav__cta">
-            Osta komplekt
+          <Button href="/tooth-gem-kit" className="bb-nav__cta">
+            Shop the kit
           </Button>
-          <button className="bb-icon-btn bb-nav__cart" aria-label="Ostukorv" onClick={openCart}>
+          <button className="bb-icon-btn bb-nav__cart" aria-label="Cart" onClick={openCart}>
             <IconCart />
             {cartCount > 0 && <span className="bb-nav__cart-badge">{cartCount}</span>}
           </button>
           {/* Hamburger — shown only when links collapse */}
           <button
             className="bb-icon-btn bb-nav__hamburger"
-            aria-label="Menüü"
+            aria-label="Menu"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             {menuOpen ? <IconClose /> : <IconMenu />}
@@ -96,8 +96,8 @@ export default function SiteNav({ active = "pood" }: { active?: string }) {
               {l.label}
             </a>
           ))}
-          <Button href="/hambakristalli-komplekt" className="bb-nav__mobile-cta" onClick={() => setMenuOpen(false)}>
-            Osta komplekt
+          <Button href="/tooth-gem-kit" className="bb-nav__mobile-cta" onClick={() => setMenuOpen(false)}>
+            Shop the kit
           </Button>
         </div>
       )}

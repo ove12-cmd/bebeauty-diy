@@ -74,7 +74,7 @@ export default function UrgencyPopup({ autoOpen = true }: { autoOpen?: boolean }
     const newCode = generateCode();
     const expiry = Date.now() + 15 * 60 * 1000;
     // Only store the *generated* code + its timer. The discount is not
-    // "applied" until the user enters it and clicks Rakenda on the product
+    // "applied" until the user enters it and clicks Apply on the product
     // page (which sets bbDiscountCode) — generating alone must not discount
     // the cart or checkout.
     localStorage.setItem("bbGeneratedCode", newCode);
@@ -117,37 +117,37 @@ export default function UrgencyPopup({ autoOpen = true }: { autoOpen?: boolean }
   return (
     <div className="bb-popup-overlay" onClick={() => setVisible(false)}>
       <div className="bb-popup" onClick={e => e.stopPropagation()}>
-        <button className="bb-popup__close" onClick={() => setVisible(false)} aria-label="Sulge">✕</button>
+        <button className="bb-popup__close" onClick={() => setVisible(false)} aria-label="Close">✕</button>
 
         <div className="bb-popup__img">
           {popupImg}
         </div>
 
         <div className="bb-popup__body">
-          <p className="bb-popup__eyebrow">Eripakkumine</p>
-          <h2 className="bb-popup__title">Saa esimeselt tellimuselt <em className="bb-popup__title-em">10% soodustust</em></h2>
-          <p className="bb-popup__sub">Genereeri oma isiklik sooduskood ja kasuta seda ostu vormistamisel.</p>
+          <p className="bb-popup__eyebrow">Special offer</p>
+          <h2 className="bb-popup__title">Get <em className="bb-popup__title-em">10% off</em> your first order</h2>
+          <p className="bb-popup__sub">Generate your own personal discount code and use it at checkout.</p>
 
           {!code || expired ? (
             <Button className="bb-popup__cta" onClick={handleGenerate}>
-              {expired ? "Genereeri uus sooduskood" : "Genereeri sooduskood"}
+              {expired ? "Generate a new code" : "Generate discount code"}
             </Button>
           ) : (
             <div className="bb-popup__success">
-              <p className="bb-popup__psst">Psst — see on ainult sinule. 🤫</p>
+              <p className="bb-popup__psst">Psst — this one's just for you. 🤫</p>
               <div className="bb-popup__code-wrap">
                 <span className="bb-popup__code">{code}</span>
                 <button className="bb-popup__copy" onClick={copyCode}>
-                  {copied ? "✓ Kopeeritud" : "Kopeeri"}
+                  {copied ? "✓ Copied" : "Copy"}
                 </button>
               </div>
               {secsLeft !== null && secsLeft > 0 && (
                 <p className="bb-popup__timer-line">
-                  Kehtib veel <span className="bb-popup__timer-val">{formatTime(secsLeft)}</span>
+                  Valid for another <span className="bb-popup__timer-val">{formatTime(secsLeft)}</span>
                 </p>
               )}
-              <Button href="/hambakristalli-komplekt" className="bb-popup__cta" onClick={() => setVisible(false)}>
-                Kasuta koodi →
+              <Button href="/tooth-gem-kit" className="bb-popup__cta" onClick={() => setVisible(false)}>
+                Use code →
               </Button>
             </div>
           )}

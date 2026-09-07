@@ -23,9 +23,9 @@ import { useCart } from "@/hooks/useCart";
 const SHOW_EXTRA_GEMS = true;
 
 const VARIANTS = [
-  { id: "s17", label: "1.7mm", desc: "Väiksem, peenem kristall", price: 35, original: 45 },
-  { id: "s20", label: "2.0mm", desc: "Meie soovitus", price: 35, original: 45 },
-  { id: "s23", label: "2.3mm", desc: "Suurem, silmapaistvam efekt", price: 35, original: 45 },
+  { id: "s17", label: "1.7mm", desc: "Smaller, more delicate crystal", price: 35, original: 45 },
+  { id: "s20", label: "2.0mm", desc: "Our recommendation", price: 35, original: 45 },
+  { id: "s23", label: "2.3mm", desc: "Larger, more striking effect", price: 35, original: 45 },
 ];
 
 // Product gallery — main image first, then alternate shots (click to swap)
@@ -48,22 +48,22 @@ function priceStr(n: number) {
   return (n % 1 === 0 ? String(n) : n.toFixed(2).replace(".", ",")) + "€";
 }
 
-// `img` reuses the same tool shots as /juhend, so the thing you read about
+// `img` reuses the same tool shots as /guide, so the thing you read about
 // here is the thing you see in the instructions. The last row is a claim
 // rather than an object, so it has no photo — the thumbnail is optional.
 const BOX_ITEMS: { name: string; desc: string; img?: string }[] = [
-  { name: "UV LED-lamp", desc: "Kiireks ja ühtlaseks kõvastamiseks.", img: "/tools/uv.png" },
-  { name: "Premium kristallid", desc: "10 Swarovski kristalli komplektis.", img: "/crystals/gem-ab.jpg" },
-  { name: "Liim & Etch", desc: "Professionaalseks kinnitamiseks ja paremaks püsivuseks.", img: "/tools/liim.png" },
-  { name: "Aplikaatorid", desc: "Kõik vajalik kristallide täpseks paigaldamiseks.", img: "/tools/aplikaator.png" },
-  { name: "Põsehoidja", desc: "Hoiab tööala mugavalt avatuna.", img: "/tools/põsehoidja.png" },
-  { name: "Valmis kasutamiseks", desc: "Ava karp ja alusta kohe." },
+  { name: "UV LED Lamp", desc: "For fast, even curing.", img: "/tools/uv.png" },
+  { name: "Premium Crystals", desc: "10 Swarovski crystals included.", img: "/crystals/gem-ab.jpg" },
+  { name: "Glue & Etch", desc: "For professional bonding and longer-lasting hold.", img: "/tools/liim.png" },
+  { name: "Applicators", desc: "Everything you need for precise crystal placement.", img: "/tools/aplikaator.png" },
+  { name: "Cheek Retractor", desc: "Keeps your working area comfortably open.", img: "/tools/põsehoidja.png" },
+  { name: "Ready to Use", desc: "Open the box and get started right away." },
 ];
 
 const STEPS = [
-  { n: "01", title: "Vali", desc: "Vali oma komplekt.", src: "/howto/vali.jpg" },
-  { n: "02", title: "Kleebi", desc: "Kleebi kristallid hambale.", src: "/howto/paigalda.jpg" },
-  { n: "03", title: "Valmis!", desc: "Kristall paigas", src: "/howto/tulemus.jpg" },
+  { n: "01", title: "Choose", desc: "Pick your kit.", src: "/howto/vali.jpg" },
+  { n: "02", title: "Apply", desc: "Apply the crystals to your tooth.", src: "/howto/paigalda.jpg" },
+  { n: "03", title: "Done!", desc: "Crystal in place", src: "/howto/tulemus.jpg" },
 ];
 
 
@@ -113,7 +113,7 @@ function FAQ() {
     <div className="bb-faq">
       <div
         role="tablist"
-        aria-label="Korduma kippuvad küsimused"
+        aria-label="Frequently asked questions"
         className="mb-4 flex flex-wrap gap-1.5"
       >
         {FAQ_CATEGORIES.map((c, i) => (
@@ -177,32 +177,32 @@ function FAQ() {
 }
 
 const TRUST = [
-  { icon: "🦷", label: "Hambasõbralik" },
-  { icon: "🇪🇺", label: "Euroopa kristallid" },
-  { icon: "🔒", label: "Turvaline makse" },
+  { icon: "🦷", label: "Tooth-friendly" },
+  { icon: "🇪🇺", label: "European crystals" },
+  { icon: "🔒", label: "Secure payment" },
 ];
 
 const STATS = [
-  { num: "10 min", label: "Paigaldusaeg" },
-  { num: "10", label: "Premium kristalli komplektis" },
-  { num: "1–2p", label: "Tarne Eestis" },
-  { num: "2–4 nädalat", label: "Keskmine püsivus" },
+  { num: "10 min", label: "Application time" },
+  { num: "10", label: "Premium crystals included" },
+  { num: "1–2d", label: "Delivery in Estonia" },
+  { num: "2–4 weeks", label: "Average hold" },
 ];
 
 const SIZE_GUIDE = [
-  { size: "1.7mm", dot: 10, label: "Peenem, loomulik" },
-  { size: "2.0mm", dot: 13, label: "Populaarseim" },
-  { size: "2.3mm", dot: 16, label: "Julge efekt" },
+  { size: "1.7mm", dot: 10, label: "Subtler, natural" },
+  { size: "2.0mm", dot: 13, label: "Most popular" },
+  { size: "2.3mm", dot: 16, label: "Bold effect" },
 ];
 
 /* ── Sticky nav ── */
 function StickyNav() {
   const [active, setActive] = useState("kirjeldus");
   const TABS = [
-    { id: "kirjeldus", label: "Kirjeldus" },
-    { id: "komplekt", label: "Komplekt" },
-    { id: "paigaldus", label: "Paigaldus" },
-    { id: "arvustused", label: "Arvustused" },
+    { id: "kirjeldus", label: "Description" },
+    { id: "komplekt", label: "Kit" },
+    { id: "paigaldus", label: "Application" },
+    { id: "reviews", label: "Reviews" },
   ];
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -251,11 +251,11 @@ function StickyBar({ price, original, onAdd }: { price: string; original: string
   }, []);
   return (
     <div className={`bb-sticky-bar ${visible ? "bb-sticky-bar--visible" : ""}`}>
-      <span className="bb-sticky-bar__name">DIY Hambakristalli komplekt</span>
+      <span className="bb-sticky-bar__name">DIY Tooth Gem Kit</span>
       <div className="bb-sticky-bar__right">
         <span className="bb-sticky-bar__price">{price}</span>
         <span className="bb-sticky-bar__original">{original}</span>
-        <Button className="bb-sticky-bar__cta" onClick={onAdd}><IconCart />Lisa korvi</Button>
+        <Button className="bb-sticky-bar__cta" onClick={onAdd}><IconCart />Add to cart</Button>
       </div>
     </div>
   );
@@ -335,7 +335,7 @@ export default function ShopPage() {
     <main className="bb-shop">
       <JsonLd data={productSchema({ price: variant.price })} />
       <JsonLd data={faqSchema(FAQ_ITEMS)} />
-      <JsonLd data={breadcrumbSchema([{ name: "Avaleht", path: "/" }, { name: "Hambakristalli komplekt", path: "/hambakristalli-komplekt" }])} />
+      <JsonLd data={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Tooth Gem Kit", path: "/tooth-gem-kit" }])} />
       <UrgencyPopup autoOpen={false} />
       <StickyBar price={priceStr(finalPrice)} original={priceStr(variant.original)} onAdd={addToCart} />
       <SiteNav active="komplektid" />
@@ -346,7 +346,7 @@ export default function ShopPage() {
           <div className="bb-shop__img bb-shop__img--main">
             <Image
               src={GALLERY_IMAGES[mainImg]}
-              alt="DIY Hambakristalli komplekt"
+              alt="DIY Tooth Gem Kit"
               fill
               priority
               sizes="(max-width: 768px) 100vw, 55vw"
@@ -360,7 +360,7 @@ export default function ShopPage() {
                 type="button"
                 className={`bb-shop__img bb-shop__img--thumb ${mainImg === i ? "bb-shop__thumb--active" : ""}`}
                 onClick={() => setMainImg(i)}
-                aria-label={`Vaata pilti ${i + 1}`}
+                aria-label={`View image ${i + 1}`}
               >
                 <Image src={src} alt="" fill sizes="140px" style={{ objectFit: "cover" }} />
               </button>
@@ -369,12 +369,12 @@ export default function ShopPage() {
         </div>
 
         <div className="bb-shop__panel">
-          <h1 className="bb-shop__name">DIY Hambakristalli<br />komplekt.</h1>
-          <p className="bb-shop__sub">Swarovski kristallid · Valmistatud Euroopas</p>
-          <a href="#arvustused" className="bb-shop__rating">
+          <h1 className="bb-shop__name">DIY Tooth Gem<br />Kit.</h1>
+          <p className="bb-shop__sub">Swarovski crystals · Made in Europe</p>
+          <a href="#reviews" className="bb-shop__rating">
             <Stars rating={AVERAGE_RATING} size="md" className="bb-shop__rating-stars" />
-            {formatRating(AVERAGE_RATING)} · {REVIEW_COUNT} arvustust{" "}
-            <span className="bb-shop__rating-cta">(vaata)</span>
+            {formatRating(AVERAGE_RATING)} · {REVIEW_COUNT} reviews{" "}
+            <span className="bb-shop__rating-cta">(see)</span>
           </a>
 
           <div className="bb-shop__variants">
@@ -390,8 +390,8 @@ export default function ShopPage() {
 
           {/* Included crystals */}
           <div className="bb-included">
-            <span className="bb-included__label">Komplektis</span>
-            <span className="bb-included__value">10× standard Swarovski kristalli</span>
+            <span className="bb-included__label">Included</span>
+            <span className="bb-included__value">10× standard Swarovski crystals</span>
           </div>
 
           {/* Extra gems — hidden for now, not deleted */}
@@ -404,11 +404,11 @@ export default function ShopPage() {
                 aria-expanded={gemsOpen}
               >
                 <span className="bb-extra-gems__title">
-                  Lisa ekstra kristalle
-                  <span className="bb-extra-gems__badge">Populaarne</span>
+                  Add extra crystals
+                  <span className="bb-extra-gems__badge">Popular</span>
                 </span>
                 <span className="bb-extra-gems__head-right">
-                  <span className="bb-extra-gems__rate">{priceStr(GEM_PRICE)}/tk</span>
+                  <span className="bb-extra-gems__rate">{priceStr(GEM_PRICE)}/each</span>
                   <span className={`bb-extra-gems__arrow ${gemsOpen ? "bb-extra-gems__arrow--open" : ""}`}>
                     <IconChevron />
                   </span>
@@ -420,7 +420,7 @@ export default function ShopPage() {
                     <button
                       type="button"
                       className="bb-extra-gems__thumb"
-                      aria-label={`Suurenda ${g.label}`}
+                      aria-label={`Enlarge ${g.label}`}
                       onClick={() => setLightbox({ src: g.img, alt: g.label })}
                     >
                       <Image src={g.img} alt={g.label} width={36} height={36} style={{ objectFit: "contain" }} />
@@ -431,7 +431,7 @@ export default function ShopPage() {
                     <button
                       className="bb-qty__btn"
                       onClick={() => bumpGemQty(g.id, -1)}
-                      aria-label={`Vähenda ${g.label}`}
+                      aria-label={`Decrease ${g.label}`}
                     >
                       <IconMinus />
                     </button>
@@ -439,7 +439,7 @@ export default function ShopPage() {
                     <button
                       className="bb-qty__btn"
                       onClick={() => bumpGemQty(g.id, 1)}
-                      aria-label={`Suurenda ${g.label}`}
+                      aria-label={`Increase ${g.label}`}
                     >
                       <IconPlus />
                     </button>
@@ -455,20 +455,20 @@ export default function ShopPage() {
               <input
                 className="bb-discount__input"
                 type="text"
-                placeholder="Sooduskood"
+                placeholder="Discount code"
                 value={code}
                 onChange={e => { setCode(e.target.value); setCodeError(false); }}
                 onKeyDown={e => e.key === "Enter" && applyCode()}
               />
-              <button className="bb-discount__btn" onClick={applyCode}>Rakenda</button>
+              <button className="bb-discount__btn" onClick={applyCode}>Apply</button>
             </div>
-            {codeApplied && <p className="bb-discount__ok">✓ Kood rakendatud — {appliedPct}% soodustus!</p>}
-            {codeError && <p className="bb-discount__err">Vigane kood. Proovi uuesti.</p>}
+            {codeApplied && <p className="bb-discount__ok">✓ Code applied — {appliedPct}% off!</p>}
+            {codeError && <p className="bb-discount__err">Invalid code. Please try again.</p>}
           </div>
 
           {totalGems > 0 && (
             <div className="bb-extra-gems__summary">
-              <span>Ekstra kristallid ({totalGems}×)</span>
+              <span>Extra crystals ({totalGems}×)</span>
               <span>{priceStr(gemsCost)}</span>
             </div>
           )}
@@ -476,9 +476,9 @@ export default function ShopPage() {
           <div className="bb-shop__buy">
             <div className="bb-shop__buy-left">
               <div className="bb-qty__ctrl">
-                <button className="bb-qty__btn" onClick={() => setQty(q => Math.max(1, q - 1))} aria-label="Vähenda"><IconMinus /></button>
+                <button className="bb-qty__btn" onClick={() => setQty(q => Math.max(1, q - 1))} aria-label="Decrease"><IconMinus /></button>
                 <span className="bb-qty__num">{qty}</span>
-                <button className="bb-qty__btn" onClick={() => setQty(q => Math.min(10, q + 1))} aria-label="Suurenda"><IconPlus /></button>
+                <button className="bb-qty__btn" onClick={() => setQty(q => Math.min(10, q + 1))} aria-label="Increase"><IconPlus /></button>
               </div>
               <div className="bb-shop__prices">
                 <span className="bb-shop__price">{priceStr(finalPrice)}</span>
@@ -487,12 +487,12 @@ export default function ShopPage() {
               </div>
             </div>
             <div className="bb-shop__cta-group">
-              <Button className="bb-shop__cta" onClick={addToCart}><IconCart />Lisa korvi</Button>
-              <Button variant="outline" className="bb-shop__cta-secondary" onClick={openCart}>Vaata korvi</Button>
+              <Button className="bb-shop__cta" onClick={addToCart}><IconCart />Add to cart</Button>
+              <Button variant="outline" className="bb-shop__cta-secondary" onClick={openCart}>View cart</Button>
             </div>
           </div>
-          <PaymentMethods note="Turvaline makse" className="mt-3" />
-          <div className="bb-urgency__shipping">📦 Telli täna enne kell 14.00 – saadame <strong>järgmisel päeval teele</strong>.</div>
+          <PaymentMethods note="Secure payment" className="mt-3" />
+          <div className="bb-urgency__shipping">📦 Order today before 2:00 PM – we&apos;ll <strong>ship it out the next day</strong>.</div>
 
           <div className="bb-trust">
             {TRUST.map((t, i) => (
@@ -503,15 +503,15 @@ export default function ShopPage() {
             ))}
           </div>
 
-          <p id="shop-lead" className="bb-shop__lead">Kõik vajalik ühes komplektis.</p>
-          <p className="bb-shop__desc">Paigalda hambakristallid mugavalt kodus. Komplekt sisaldab kvaliteetseid Swarovski kristalle ning kõiki vajalikke töövahendeid kiireks ja lihtsaks paigalduseks.</p>
+          <p id="shop-lead" className="bb-shop__lead">Everything you need in one kit.</p>
+          <p className="bb-shop__desc">Apply tooth gems comfortably at home. The kit includes quality Swarovski crystals and all the tools you need for a quick, easy application.</p>
           <ul className="bb-shop__features">
-            <li>Premium Swarovski kristallid</li>
-            <li>Püsib kuni 2–4 nädalat</li>
-            <li>Paigaldus umbes 10 minutiga</li>
-            <li>Sobib ka algajale</li>
-            <li>Ohutu kasutamisel vastavalt juhendile</li>
-            <li>Tasuta kohaletoimetamine pakiautomaati</li>
+            <li>Premium Swarovski crystals</li>
+            <li>Lasts up to 2–4 weeks</li>
+            <li>Applied in about 10 minutes</li>
+            <li>Beginner-friendly</li>
+            <li>Safe when used according to the instructions</li>
+            <li>Free delivery to a parcel locker</li>
           </ul>
         </div>
       </div>
@@ -531,14 +531,14 @@ export default function ShopPage() {
         </div>
 
         {/* ── Reviews ── */}
-        <ReviewsSlider id="arvustused" heading="Arvustused" />
+        <ReviewsSlider id="reviews" heading="Reviews" />
       </div>
 
       {/* ── What's in the box ── */}
       <div className="bb-shop-section" id="komplekt">
-        <p className="bb-box-label">Kõik ühes komplektis</p>
-        <h2 className="bb-shop-section__title">Mida karbist leiad</h2>
-        <p className="bb-box-subtitle">Kõik, mida vajad särava tulemuse loomiseks — kvaliteetne, testitud ja hambasõbralik.</p>
+        <p className="bb-box-label">Everything in one kit</p>
+        <h2 className="bb-shop-section__title">What&apos;s in the box</h2>
+        <p className="bb-box-subtitle">Everything you need for a sparkling result — quality-tested and tooth-friendly.</p>
         <div className="bb-box-list">
           {BOX_ITEMS.map((item, i) => (
             <div key={i} className="bb-box-row">
@@ -551,7 +551,7 @@ export default function ShopPage() {
                 <button
                   type="button"
                   className="bb-box-row__thumb"
-                  aria-label={`Vaata suuremalt: ${item.name}`}
+                  aria-label={`View larger: ${item.name}`}
                   onClick={() => setLightbox({ src: item.img!, alt: item.name })}
                 >
                   <Image src={item.img} alt="" width={72} height={72} />
@@ -565,9 +565,9 @@ export default function ShopPage() {
       {/* ── How to apply ── */}
       <div className="bb-shop-section bb-shop-section--dark" id="paigaldus">
         <div className="bb-shop-steps__head">
-          <h2 className="bb-shop-section__title bb-shop-section__title--light">Kuidas paigaldada</h2>
-          <Button href="/juhend" className="bb-shop-steps__guide-btn">
-            Vaata juhendit
+          <h2 className="bb-shop-section__title bb-shop-section__title--light">How to apply</h2>
+          <Button href="/guide" className="bb-shop-steps__guide-btn">
+            View the guide
           </Button>
         </div>
         <div className="bb-shop-steps">
@@ -592,7 +592,7 @@ export default function ShopPage() {
 
       {/* ── Before / After gallery ── */}
       <div className="bb-shop-section">
-        <h2 className="bb-shop-section__title">Tulemused</h2>
+        <h2 className="bb-shop-section__title">Results</h2>
         <div className="bb-shop-ba">
           {RESULTS.map((item, i) => (
             <div key={i} className="bb-shop-ba__card">
@@ -610,7 +610,7 @@ export default function ShopPage() {
               ) : (
                 <Image
                   src={item.src}
-                  alt="Tulemus"
+                  alt="Result"
                   fill
                   sizes="(max-width: 768px) 50vw, 25vw"
                   style={{ objectFit: "cover" }}
@@ -623,7 +623,7 @@ export default function ShopPage() {
 
       {/* ── FAQ ── */}
       <div className="bb-shop-section">
-        <h2 className="bb-shop-section__title bb-faq__title">Korduma kippuvad küsimused</h2>
+        <h2 className="bb-shop-section__title bb-faq__title">Frequently asked questions</h2>
         <FAQ />
       </div>
 

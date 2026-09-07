@@ -2,7 +2,7 @@ type Props = {
   name: string;
   email: string;
   phone: string;
-  /** e.g. "Omniva pakiautomaat" */
+  /** e.g. "Omniva parcel locker" */
   deliveryLabel: string;
   /** The chosen locker or street address. */
   deliveryTarget: string;
@@ -26,13 +26,13 @@ export default function OrderDetailsRecap({
   return (
     <div className="mt-2.5 rounded-xl border border-[var(--bb-line)] bg-[var(--bb-paper)] p-3.5">
       <div className="mb-2.5 flex items-center justify-between gap-2">
-        <span className="text-xs font-medium text-[var(--bb-ink)]">Sinu andmed</span>
+        <span className="text-xs font-medium text-[var(--bb-ink)]">Your details</span>
         <button
           type="button"
           onClick={onEdit}
           className="text-[11px] text-[var(--bb-gold-deep)] underline hover:no-underline"
         >
-          Muuda
+          Edit
         </button>
       </div>
 

@@ -40,7 +40,7 @@ function PayForm({
     });
 
     if (error) {
-      setError(error.message ?? "Makse ebaõnnestus. Palun proovi uuesti.");
+      setError(error.message ?? "Payment failed. Please try again.");
       setBusy(false);
       return;
     }
@@ -83,12 +83,12 @@ function PayForm({
     }
 
     // Anything else (notably requires_payment_method after a failed
-    // confirmation) has to surface, or the buyer is stuck on "Maksan…" with
+    // confirmation) has to surface, or the buyer is stuck on "Paying…" with
     // no error and no way forward.
     setError(
       paymentIntent.status === "requires_payment_method"
-        ? "Makset ei õnnestunud kinnitada. Palun proovi uuesti või kasuta teist makseviisi."
-        : "Makse jäi pooleli. Palun proovi uuesti.",
+        ? "We couldn't confirm the payment. Please try again or use a different payment method."
+        : "The payment didn't go through. Please try again.",
     );
     setBusy(false);
   }
@@ -98,7 +98,7 @@ function PayForm({
       <PaymentElement options={{ layout: "tabs" }} />
       {error && <p className="bb-checkout__locker-err">{error}</p>}
       <Button type="submit" className="bb-checkout__submit" disabled={busy || !stripe}>
-        {busy ? "Maksan…" : `Maksa ${amountLabel}`}
+        {busy ? "Paying…" : `Pay ${amountLabel}`}
       </Button>
     </form>
   );
@@ -120,7 +120,7 @@ export default function CheckoutPayment({
       stripe={stripePromise}
       options={{
         clientSecret,
-        locale: "et",
+        locale: "en",
         // Stripe renders the Payment Element in its own iframe, so it can't
         // see our self-hosted next/font file — it must load the font itself.
         fonts: [

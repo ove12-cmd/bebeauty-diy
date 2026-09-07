@@ -24,9 +24,9 @@ export function productSchema({ price, currency = "EUR" }: { price: number; curr
   return {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: "DIY Hambakristalli komplekt",
+    name: "DIY Tooth Gem Kit",
     description:
-      "Kõik vajalik ühes komplektis, et paigaldada hambakristalle ise kodus. Swarovski kristallid, tugev sära ja hea püsivus.",
+      "Everything you need in one kit to apply tooth gems yourself at home. Swarovski crystals, strong sparkle, and lasting hold.",
     image: [`${BASE_URL}/product%20package%20v3.png`, `${BASE_URL}/home/gallery/4.png`],
     brand: { "@type": "Brand", name: "beBeauty DIY" },
     offers: {
@@ -34,7 +34,7 @@ export function productSchema({ price, currency = "EUR" }: { price: number; curr
       priceCurrency: currency,
       price: String(price),
       availability: "https://schema.org/InStock",
-      url: `${BASE_URL}/hambakristalli-komplekt`,
+      url: `${BASE_URL}/tooth-gem-kit`,
     },
   };
 }

@@ -70,7 +70,7 @@ export default function PaymentMethods({
         </span>
       )}
       <ul
-        aria-label="Aktsepteeritud makseviisid"
+        aria-label="Accepted payment methods"
         className={`flex list-none flex-wrap items-center gap-1.5 p-0 ${
           layout === "spread" ? "ms-auto" : ""
         }`}

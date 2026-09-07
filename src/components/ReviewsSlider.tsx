@@ -25,17 +25,17 @@ const PAGE_SIZE = 6;
 const SORTS: { id: string; label: string; compare?: (a: Review, b: Review) => number }[] = [
   // No comparator: the hand-picked order, which deliberately puts a replied-to
   // 4-star review on the first page.
-  { id: "curated", label: "Soovitatud" },
-  { id: "newest", label: "Uuemad enne", compare: (a, b) => reviewTimestamp(b.date) - reviewTimestamp(a.date) },
-  { id: "oldest", label: "Vanemad enne", compare: (a, b) => reviewTimestamp(a.date) - reviewTimestamp(b.date) },
-  { id: "highest", label: "Kõrgeim hinnang", compare: (a, b) => b.rating - a.rating },
-  { id: "lowest", label: "Madalaim hinnang", compare: (a, b) => a.rating - b.rating },
-  { id: "answered", label: "Vastatud enne", compare: (a, b) => Number(!!b.reply) - Number(!!a.reply) },
+  { id: "curated", label: "Recommended" },
+  { id: "newest", label: "Newest first", compare: (a, b) => reviewTimestamp(b.date) - reviewTimestamp(a.date) },
+  { id: "oldest", label: "Oldest first", compare: (a, b) => reviewTimestamp(a.date) - reviewTimestamp(b.date) },
+  { id: "highest", label: "Highest rating", compare: (a, b) => b.rating - a.rating },
+  { id: "lowest", label: "Lowest rating", compare: (a, b) => a.rating - b.rating },
+  { id: "answered", label: "Answered first", compare: (a, b) => Number(!!b.reply) - Number(!!a.reply) },
 ];
 
 export default function ReviewsSlider({
   reviews = DEFAULT_REVIEWS,
-  heading = "Mida kliendid ütlevad",
+  heading = "What customers say",
   id,
 }: {
   reviews?: Review[];
@@ -76,12 +76,12 @@ export default function ReviewsSlider({
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <span className="flex items-center gap-1.5 text-xs text-[var(--bb-ink-3)]">
             <Stars rating={AVERAGE_RATING} />
-            {formatRating(AVERAGE_RATING)} · {sorted.length} arvustust
+            {formatRating(AVERAGE_RATING)} · {sorted.length} reviews
           </span>
 
           <span className="flex items-center gap-1.5">
             <label htmlFor={sortFieldId} className="text-xs text-[var(--bb-ink-3)]">
-              Järjesta
+              Sort by
             </label>
             <select
               id={sortFieldId}
@@ -114,14 +114,14 @@ export default function ReviewsSlider({
                     className="bb-testi__photo"
                     aria-label={
                       r.photos!.length > 1
-                        ? `Suurenda ${r.name} tulemuse foto ${n + 1}/${r.photos!.length}`
-                        : `Suurenda ${r.name} tulemuse foto`
+                        ? `Enlarge ${r.name}'s result photo ${n + 1}/${r.photos!.length}`
+                        : `Enlarge ${r.name}'s result photo`
                     }
-                    onClick={() => setLightbox({ src, alt: `${r.name} tulemus` })}
+                    onClick={() => setLightbox({ src, alt: `${r.name}'s result` })}
                   >
                     <Image
                       src={src}
-                      alt={`${r.name} tulemus`}
+                      alt={`${r.name}'s result`}
                       width={72}
                       height={72}
                       style={{ objectFit: "cover", objectPosition: r.pos ?? "center" }}
@@ -131,7 +131,7 @@ export default function ReviewsSlider({
               </div>
             )}
 
-            <Stars rating={r.rating} label={`Hinnang ${r.rating} / 5`} />
+            <Stars rating={r.rating} label={`Rating ${r.rating} / 5`} />
             <p className="bb-testi__text">{r.text}</p>
             <span className="bb-testi__date">
               {r.name} · {r.date}
@@ -149,7 +149,7 @@ export default function ReviewsSlider({
       {pageCount > 1 && (
         <>
           <nav
-            aria-label="Arvustuste lehed"
+            aria-label="Review pages"
             className="mt-5 flex flex-wrap items-center justify-center gap-1.5"
           >
             <button
@@ -158,7 +158,7 @@ export default function ReviewsSlider({
               disabled={page === 1}
               className="rounded-lg border border-[var(--bb-chip-border)] px-2.5 py-1.5 text-xs text-[var(--bb-ink-2)] disabled:opacity-40"
             >
-              ‹ Eelmine
+              ‹ Previous
             </button>
 
             {Array.from({ length: pageCount }, (_, i) => i + 1).map((p) => (
@@ -167,7 +167,7 @@ export default function ReviewsSlider({
                 type="button"
                 onClick={() => goTo(p)}
                 aria-current={p === page ? "page" : undefined}
-                aria-label={`Leht ${p}`}
+                aria-label={`Page ${p}`}
                 className={
                   p === page
                     ? "min-w-8 rounded-lg border border-[var(--bb-gold)] bg-[var(--bb-gold-tint)] px-2.5 py-1.5 text-xs font-semibold text-[var(--bb-gold-deep)]"
@@ -184,12 +184,12 @@ export default function ReviewsSlider({
               disabled={page === pageCount}
               className="rounded-lg border border-[var(--bb-chip-border)] px-2.5 py-1.5 text-xs text-[var(--bb-ink-2)] disabled:opacity-40"
             >
-              Järgmine ›
+              Next ›
             </button>
           </nav>
 
           <p aria-live="polite" className="sr-only">
-            Leht {page} / {pageCount}
+            Page {page} / {pageCount}
           </p>
         </>
       )}

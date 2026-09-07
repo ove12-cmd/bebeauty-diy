@@ -23,13 +23,13 @@ export default function FinalCTA() {
       <div className="bb-cta__overlay" aria-hidden="true" />
 
       {/* Content */}
-      <h2 className="bb-cta__title">{"Valmis väikseks glow-up'iks?"}</h2>
+      <h2 className="bb-cta__title">{"Ready for a little glow-up?"}</h2>
       <p className="bb-cta__sub">
-        Lisa oma naeratusele särav detail vaid mõne minutiga.<br />
-        Telli täna – komplekt on peagi sinu lähimas pakiautomaadis.
+        Add a sparkling detail to your smile in just a few minutes.<br />
+        Order today – your kit will soon be at your nearest parcel locker.
       </p>
-      <Button href="/hambakristalli-komplekt" className="bb-cta__btn">
-        Osta komplekt
+      <Button href="/tooth-gem-kit" className="bb-cta__btn">
+        Shop the kit
       </Button>
     </section>
   );

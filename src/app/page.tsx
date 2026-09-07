@@ -13,22 +13,22 @@ import UrgencyPopup from "@/components/UrgencyPopup";
 // import VideoSection from "@/components/VideoSection"; // hidden for now
 import WhyBeBeauty from "@/components/WhyBeBeauty";
 
-// Distinct from /hambakristalli-komplekt's metadata (layout.tsx there) —
+// Distinct from /tooth-gem-kit's metadata (layout.tsx there) —
 // this page is the brand/comparison landing page, not the product listing,
 // so it needs its own title instead of inheriting the root layout's default.
 export const metadata: Metadata = {
-  title: "Salongi Tulemus, Kodus 10 Minutiga",
+  title: "Salon Results, At Home in 10 Minutes",
   description:
-    "Paigalda hambakristallid ise kodus — ilma salongibroneeringu ja kõrge hinnata. Swarovski kristallid, professionaalne tulemus vaid 10 minutiga.",
+    "Apply tooth gems yourself at home — no salon booking, no high price tag. Swarovski crystals, professional results in just 10 minutes.",
   openGraph: {
-    title: "Salongi Tulemus, Kodus 10 Minutiga | beBeauty DIY",
+    title: "Salon Results, At Home in 10 Minutes | beBeauty DIY",
     description:
-      "Paigalda hambakristallid ise kodus — ilma salongibroneeringu ja kõrge hinnata. Swarovski kristallid, professionaalne tulemus vaid 10 minutiga.",
+      "Apply tooth gems yourself at home — no salon booking, no high price tag. Swarovski crystals, professional results in just 10 minutes.",
   },
   twitter: {
-    title: "Salongi Tulemus, Kodus 10 Minutiga | beBeauty DIY",
+    title: "Salon Results, At Home in 10 Minutes | beBeauty DIY",
     description:
-      "Paigalda hambakristallid ise kodus — ilma salongibroneeringu ja kõrge hinnata. Swarovski kristallid, professionaalne tulemus vaid 10 minutiga.",
+      "Apply tooth gems yourself at home — no salon booking, no high price tag. Swarovski crystals, professional results in just 10 minutes.",
   },
 };
 

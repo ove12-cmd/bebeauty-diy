@@ -23,7 +23,7 @@ export default function ImageLightbox({
 
   return createPortal(
     <div className="bb-lightbox-overlay" onClick={onClose}>
-      <button className="bb-popup__close bb-lightbox__close" onClick={onClose} aria-label="Sulge">✕</button>
+      <button className="bb-popup__close bb-lightbox__close" onClick={onClose} aria-label="Close">✕</button>
       <div className="bb-lightbox" onClick={(e) => e.stopPropagation()}>
         <Image
           src={src}

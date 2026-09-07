@@ -1,4 +1,4 @@
-const STEPS = ["Andmed", "Tarne", "Makse"] as const;
+const STEPS = ["Details", "Shipping", "Payment"] as const;
 
 /**
  * Progress indicator for the checkout. `current` is 1-based; steps before it
@@ -7,7 +7,7 @@ const STEPS = ["Andmed", "Tarne", "Makse"] as const;
 export default function CheckoutSteps({ current }: { current: 1 | 2 | 3 }) {
   return (
     <ol
-      aria-label="Tellimuse sammud"
+      aria-label="Checkout steps"
       className="mb-3.5 flex list-none flex-wrap items-center gap-2 p-0 text-[11px]"
     >
       {STEPS.map((label, i) => {
@@ -36,7 +36,7 @@ export default function CheckoutSteps({ current }: { current: 1 | 2 | 3 }) {
               }
             >
               {step} {label}
-              {isDone && <span className="sr-only"> (tehtud)</span>}
+              {isDone && <span className="sr-only"> (done)</span>}
             </span>
           </li>
         );

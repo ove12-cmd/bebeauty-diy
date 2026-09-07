@@ -68,7 +68,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return [...prev, { ...item, qty }];
     });
     setIsOpen(true);
-    // Fired here (the data source) rather than on each "Lisa korvi" button,
+    // Fired here (the data source) rather than on each "Add to cart" button,
     // since there are several of those across the page.
     trackMeta("AddToCart", {
       content_ids: [item.id],

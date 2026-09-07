@@ -4,23 +4,23 @@ import Button from "@/components/ui/Button";
 const STEPS = [
   {
     n: "01",
-    word: "Vali",
-    title: "Vali endale sobiv komplekt.",
-    sub: "Leia oma lemmikkristallid ja kõik vajalik ühest komplektist.",
+    word: "Choose",
+    title: "Choose the kit that's right for you.",
+    sub: "Find your favorite crystals and everything you need in one kit.",
     src: "/howto/vali.jpg",
   },
   {
     n: "02",
-    word: "Paigalda",
-    title: "Kleebi kristall hambale.",
-    sub: "Järgi lihtsaid juhiseid ning paigalda kristall vaid mõne minutiga.",
+    word: "Apply",
+    title: "Stick the crystal onto your tooth.",
+    sub: "Follow the simple instructions and apply the crystal in just a few minutes.",
     src: "/howto/paigalda.jpg",
   },
   {
     n: "03",
-    word: "Sära",
-    title: "Naudi säravat naeratust.",
-    sub: "Salongivääriline tulemus mugavalt oma kodus.",
+    word: "Shine",
+    title: "Enjoy your sparkling smile.",
+    sub: "Salon-quality results, from the comfort of home.",
     src: "/howto/tulemus.jpg",
   },
 ];
@@ -28,7 +28,7 @@ const STEPS = [
 export default function HowItWorks() {
   return (
     <section id="kuidas" className="bb-hiw">
-      <h2 className="bb-hiw__heading">Kuidas see töötab?</h2>
+      <h2 className="bb-hiw__heading">How it works</h2>
       {STEPS.map((step) => (
         <div key={step.n} className="bb-hiw__card">
           <div className="bb-hiw__img">
@@ -48,8 +48,8 @@ export default function HowItWorks() {
         </div>
       ))}
       <div className="bb-hiw__guide">
-        <Button href="/juhend" className="bb-hiw__guide-btn">
-          Vaata juhendit
+        <Button href="/guide" className="bb-hiw__guide-btn">
+          View the guide
         </Button>
       </div>
     </section>

@@ -12,7 +12,7 @@ export default function Results() {
           <div key={n} className="bb-rcard">
             <Image
               src={`/home/gallery/${n}.png`}
-              alt={`Hambakristalliga naeratus — klientide tulemus ${n}`}
+              alt={`Smile with a tooth gem — customer result ${n}`}
               fill
               sizes="(max-width: 1024px) 50vw, 33vw"
               style={{ objectFit: "cover" }}

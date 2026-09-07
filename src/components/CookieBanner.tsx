@@ -30,12 +30,12 @@ export default function CookieBanner() {
     <div className="bb-cookie">
       <div className="bb-cookie__inner">
         <p className="bb-cookie__text">
-          Kasutame küpsiseid, et pakkuda sulle parimat ostukogemust. Loe lähemalt meie{" "}
-          <Link href="/privaatsus" className="bb-cookie__link">privaatsuspoliitikast</Link>.
+          We use cookies to give you the best shopping experience. Read more in our{" "}
+          <Link href="/privacy" className="bb-cookie__link">privacy policy</Link>.
         </p>
         <div className="bb-cookie__actions">
-          <Button className="bb-cookie__accept" onClick={accept}>Nõustun</Button>
-          <button className="bb-cookie__decline" onClick={decline}>Keeldu</button>
+          <Button className="bb-cookie__accept" onClick={accept}>Accept</Button>
+          <button className="bb-cookie__decline" onClick={decline}>Decline</button>
         </div>
       </div>
     </div>

@@ -15,8 +15,8 @@ export default function Footer() {
             <Logo className="bb-logo-badge__img" />
           </div>
           <h2 className="bb-footer__headline">
-            SALONGIVÄÄRILINE <em className="bb-footer__headline-em">TULEMUS</em>,<br />
-            ILMA SALONGITA.
+            SALON-WORTHY <em className="bb-footer__headline-em">RESULTS</em>,<br />
+            NO SALON NEEDED.
           </h2>
         </div>
 
@@ -25,27 +25,27 @@ export default function Footer() {
           {/* Pood column hidden for now */}
           <div className="bb-footer__col">
             <span className="bb-footer__col-title">Info</span>
-            <Link href="/#kuidas" className="bb-footer__link">Kuidas see töötab</Link>
-            <Link href="/juhend" className="bb-footer__link">Paigaldusjuhend</Link>
-            <Link href="/hambakristalli-komplekt#arvustused" className="bb-footer__link">KKK</Link>
+            <Link href="/#kuidas" className="bb-footer__link">How it works</Link>
+            <Link href="/guide" className="bb-footer__link">Application Guide</Link>
+            <Link href="/tooth-gem-kit#reviews" className="bb-footer__link">FAQ</Link>
             {/* Kontakt hidden for now */}
-            <Link href="/tarne" className="bb-footer__link">Tarne ja tagastus</Link>
-            <Link href="/privaatsus" className="bb-footer__link">Privaatsuspoliitika</Link>
-            <Link href="/tingimused" className="bb-footer__link">Tingimused</Link>
+            <Link href="/shipping" className="bb-footer__link">Shipping & Returns</Link>
+            <Link href="/privacy" className="bb-footer__link">Privacy Policy</Link>
+            <Link href="/terms" className="bb-footer__link">Terms</Link>
           </div>
         </div>
 
         {/* Right — product card */}
         <div className="bb-footer__card">
           <div className="bb-footer__card-inner">
-            <span className="bb-footer__card-pill">DIY KOMPLEKT</span>
-            <p className="bb-footer__card-text">Kõik vajalik ühes komplektis.</p>
-            <Button href="/hambakristalli-komplekt" className="bb-footer__card-btn">
-              Osta komplekt →
+            <span className="bb-footer__card-pill">DIY KIT</span>
+            <p className="bb-footer__card-text">Everything you need in one kit.</p>
+            <Button href="/tooth-gem-kit" className="bb-footer__card-btn">
+              Shop the kit →
             </Button>
           </div>
           <div className="bb-footer__card-img">
-          <Image src="/popupo.jpg" alt="beBeauty DIY komplekt" fill sizes="(max-width: 1024px) 200px, 220px" style={{ objectFit: "cover" }} />
+          <Image src="/popupo.jpg" alt="beBeauty DIY tooth gem kit" fill sizes="(max-width: 1024px) 200px, 220px" style={{ objectFit: "cover" }} />
         </div>
         </div>
 
@@ -53,9 +53,9 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <div className="bb-footer__bottom">
-        <span className="bb-footer__copy">© {new Date().getFullYear()} beBeauty DIY. Kõik õigused kaitstud.</span>
+        <span className="bb-footer__copy">© {new Date().getFullYear()} beBeauty DIY. All rights reserved.</span>
         <PaymentMethods tone="inverse" />
-        <span className="bb-footer__made">♡ Disainitud Eestis · Made with care</span>
+        <span className="bb-footer__made">♡ Designed in Estonia · Made with care</span>
       </div>
     </footer>
   );

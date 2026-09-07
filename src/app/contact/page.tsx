@@ -19,9 +19,9 @@ export default function ContactPage() {
   return (
     <main className="bb-legal">
       <div className="bb-legal__inner bb-legal__inner--narrow">
-        <Link href="/" className="bb-legal__back">← Tagasi</Link>
-        <h1 className="bb-legal__title">Kontakt</h1>
-        <p className="bb-legal__subtitle">Küsimused, koostöö või lihtsalt tere — kirjuta meile.</p>
+        <Link href="/" className="bb-legal__back">← Back</Link>
+        <h1 className="bb-legal__title">Contact</h1>
+        <p className="bb-legal__subtitle">Questions, collaborations, or just want to say hi — write to us.</p>
 
         <div className="bb-contact__info">
           <div className="bb-contact__item">
@@ -40,45 +40,45 @@ export default function ContactPage() {
           ))}
           <div className="bb-contact__item">
             <span className="bb-contact__icon">⏱</span>
-            <span>Vastame üldjuhul 24h jooksul</span>
+            <span>We usually reply within 24h</span>
           </div>
         </div>
 
         {sent ? (
           <div className="bb-contact__success">
             <span className="bb-contact__success-icon">✓</span>
-            <h3>Sõnum saadetud!</h3>
-            <p>Vastame sulle 24 tunni jooksul.</p>
+            <h3>Message sent!</h3>
+            <p>We'll get back to you within 24 hours.</p>
           </div>
         ) : (
           <form className="bb-contact__form" onSubmit={handleSubmit}>
             <div className="bb-contact__field">
-              <label className="bb-contact__label">Nimi</label>
+              <label className="bb-contact__label">Name</label>
               <input
                 className="bb-contact__input"
                 type="text"
-                placeholder="Sinu nimi"
+                placeholder="Your name"
                 value={form.name}
                 onChange={e => setForm({ ...form, name: e.target.value })}
                 required
               />
             </div>
             <div className="bb-contact__field">
-              <label className="bb-contact__label">E-post</label>
+              <label className="bb-contact__label">Email</label>
               <input
                 className="bb-contact__input"
                 type="email"
-                placeholder="sinu@email.ee"
+                placeholder="you@email.com"
                 value={form.email}
                 onChange={e => setForm({ ...form, email: e.target.value })}
                 required
               />
             </div>
             <div className="bb-contact__field">
-              <label className="bb-contact__label">Sõnum</label>
+              <label className="bb-contact__label">Message</label>
               <textarea
                 className="bb-contact__input bb-contact__textarea"
-                placeholder="Mida soovid küsida?"
+                placeholder="What would you like to ask?"
                 rows={5}
                 value={form.message}
                 onChange={e => setForm({ ...form, message: e.target.value })}
@@ -86,7 +86,7 @@ export default function ContactPage() {
               />
             </div>
             <Button type="submit" className="bb-contact__submit">
-              Saada sõnum
+              Send message
             </Button>
           </form>
         )}

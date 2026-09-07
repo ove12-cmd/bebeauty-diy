@@ -37,11 +37,11 @@ export default function ReviewSubmitPopup() {
     e.target.value = "";
     if (!file) return;
     if (!file.type.startsWith("image/")) {
-      setPhotoError("Fail peab olema pilt.");
+      setPhotoError("The file must be an image.");
       return;
     }
     if (file.size > MAX_PHOTO_BYTES) {
-      setPhotoError("Pilt on liiga suur (max 5 MB).");
+      setPhotoError("The image is too large (max 5 MB).");
       return;
     }
     if (photoPreview) URL.revokeObjectURL(photoPreview);
@@ -70,25 +70,25 @@ export default function ReviewSubmitPopup() {
   return (
     <>
       <Button className="bb-testi__add-btn" onClick={() => setOpen(true)}>
-        Lisa enda tagasiside
+        Add your review
       </Button>
 
       {open && createPortal(
         <div className="bb-popup-overlay" onClick={close}>
           <div className="bb-review-popup" onClick={(e) => e.stopPropagation()}>
-            <button className="bb-popup__close" onClick={close} aria-label="Sulge">✕</button>
+            <button className="bb-popup__close" onClick={close} aria-label="Close">✕</button>
 
             {status === "sent" ? (
               <div className="bb-review-popup__success">
                 <p className="bb-review-popup__success-icon">💛</p>
-                <h3 className="bb-review-popup__title">Aitäh tagasiside eest!</h3>
-                <p className="bb-review-popup__sub">Hindame igat sõna — see aitab meil paremaks saada.</p>
+                <h3 className="bb-review-popup__title">Thanks for your feedback!</h3>
+                <p className="bb-review-popup__sub">We value every word — it helps us get better.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="bb-review-popup__form">
-                <h3 className="bb-review-popup__title">Jaga oma kogemust</h3>
+                <h3 className="bb-review-popup__title">Share your experience</h3>
 
-                <label className="bb-review-popup__label" htmlFor="rf-name">Nimi</label>
+                <label className="bb-review-popup__label" htmlFor="rf-name">Name</label>
                 <input
                   id="rf-name"
                   className="bb-review-popup__input"
@@ -99,13 +99,13 @@ export default function ReviewSubmitPopup() {
                 />
 
                 <fieldset className="bb-review-popup__stars">
-                  <legend className="bb-review-popup__label">Hinnang</legend>
+                  <legend className="bb-review-popup__label">Rating</legend>
                   {[1, 2, 3, 4, 5].map((n) => (
                     <button
                       key={n}
                       type="button"
                       className="bb-review-popup__star"
-                      aria-label={`${n} tärni`}
+                      aria-label={`${n} stars`}
                       aria-pressed={n === rating}
                       onClick={() => setRating(n)}
                     >
@@ -114,7 +114,7 @@ export default function ReviewSubmitPopup() {
                   ))}
                 </fieldset>
 
-                <label className="bb-review-popup__label" htmlFor="rf-text">Sinu arvustus</label>
+                <label className="bb-review-popup__label" htmlFor="rf-text">Your review</label>
                 <textarea
                   id="rf-text"
                   className="bb-review-popup__textarea"
@@ -125,17 +125,17 @@ export default function ReviewSubmitPopup() {
                   rows={4}
                 />
 
-                <label className="bb-review-popup__label" htmlFor="rf-photo">Foto (valikuline)</label>
+                <label className="bb-review-popup__label" htmlFor="rf-photo">Photo (optional)</label>
                 {photoPreview ? (
                   <div className="bb-review-popup__photo-preview">
                     <img src={photoPreview} alt="" />
-                    <button type="button" className="bb-review-popup__photo-remove" onClick={clearPhoto} aria-label="Eemalda foto">
+                    <button type="button" className="bb-review-popup__photo-remove" onClick={clearPhoto} aria-label="Remove photo">
                       ✕
                     </button>
                   </div>
                 ) : (
                   <label htmlFor="rf-photo" className="bb-review-popup__photo-btn">
-                    📷 Lisa foto
+                    📷 Add photo
                   </label>
                 )}
                 <input
@@ -148,7 +148,7 @@ export default function ReviewSubmitPopup() {
                 {photoError && <p className="bb-review-popup__photo-error">{photoError}</p>}
 
                 <Button type="submit" className="bb-review-popup__submit" disabled={status === "sending"}>
-                  {status === "sending" ? "Saadan…" : "Saada tagasiside"}
+                  {status === "sending" ? "Sending…" : "Submit review"}
                 </Button>
               </form>
             )}

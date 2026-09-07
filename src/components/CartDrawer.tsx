@@ -24,17 +24,17 @@ export default function CartDrawer() {
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
-        aria-label="Ostukorv"
+        aria-label="Shopping cart"
       >
         <div className="bb-cart__head">
-          <h2 className="bb-cart__title">Ostukorv{count > 0 ? ` (${count})` : ""}</h2>
-          <button className="bb-cart__close" onClick={close} aria-label="Sulge">✕</button>
+          <h2 className="bb-cart__title">Cart{count > 0 ? ` (${count})` : ""}</h2>
+          <button className="bb-cart__close" onClick={close} aria-label="Close">✕</button>
         </div>
 
         {items.length === 0 ? (
           <div className="bb-cart__empty">
-            <p>Sinu ostukorv on tühi.</p>
-            <Button href="/hambakristalli-komplekt" onClick={close}>Vaata komplekte</Button>
+            <p>Your cart is empty.</p>
+            <Button href="/tooth-gem-kit" onClick={close}>View kits</Button>
           </div>
         ) : (
           <>
@@ -54,12 +54,12 @@ export default function CartDrawer() {
                   </div>
                   <div className="bb-cart-item__controls">
                     <div className="bb-cart-item__qty">
-                      <button onClick={() => setQty(item.id, item.qty - 1)} aria-label="Vähenda">−</button>
+                      <button onClick={() => setQty(item.id, item.qty - 1)} aria-label="Decrease quantity">−</button>
                       <span>{item.qty}</span>
-                      <button onClick={() => setQty(item.id, item.qty + 1)} aria-label="Suurenda">+</button>
+                      <button onClick={() => setQty(item.id, item.qty + 1)} aria-label="Increase quantity">+</button>
                     </div>
                     <button className="bb-cart-item__remove" onClick={() => remove(item.id)}>
-                      Eemalda
+                      Remove
                     </button>
                   </div>
                 </div>
@@ -70,26 +70,26 @@ export default function CartDrawer() {
               {hasDiscount && (
                 <>
                   <div className="bb-cart__row">
-                    <span>Vahesumma</span>
+                    <span>Subtotal</span>
                     <span>{money(subtotal)}</span>
                   </div>
                   <div className="bb-cart__row bb-cart__row--discount">
-                    <span>Sooduskood (−{discountPct}%)</span>
+                    <span>Discount code (−{discountPct}%)</span>
                     <span>−{money(discountAmount)}</span>
                   </div>
                 </>
               )}
               <div className="bb-cart__subtotal">
-                <span>{hasDiscount ? "Kokku" : "Vahesumma"}</span>
+                <span>{hasDiscount ? "Total" : "Subtotal"}</span>
                 <span>{money(hasDiscount ? discountedTotal : subtotal)}</span>
               </div>
               <p className="bb-cart__note">
                 {hasDiscount
-                  ? "Tasuta tarne · sooduskood arvestatud"
-                  : "Tasuta tarne · sooduskood lisatakse vormistamisel"}
+                  ? "Free delivery · discount code applied"
+                  : "Free delivery · discount code applied at checkout"}
               </p>
               <Button href="/checkout" className="bb-cart__checkout" onClick={close}>
-                Vormista tellimus
+                Checkout
               </Button>
             </div>
           </>

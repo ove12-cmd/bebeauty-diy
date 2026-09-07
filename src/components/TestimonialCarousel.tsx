@@ -54,8 +54,8 @@ export default function TestimonialCarousel() {
 
   return (
     <section
-      aria-roledescription="karussell"
-      aria-label="Klientide arvustused"
+      aria-roledescription="carousel"
+      aria-label="Customer reviews"
       className="bb-carousel w-full px-5 pb-8 md:px-14"
       style={{ marginTop: "-1.5rem" }}
     >
@@ -71,7 +71,7 @@ export default function TestimonialCarousel() {
               }`}
               style={{ animationDelay: `${k * 60}ms` }}
             >
-              <Stars rating={r.rating} label={`Hinnang ${r.rating} / 5`} className="mb-1.5" />
+              <Stars rating={r.rating} label={`Rating ${r.rating} / 5`} className="mb-1.5" />
               <blockquote className="text-[13px] leading-relaxed text-[var(--bb-ink)]">
                 {r.text}
               </blockquote>
@@ -82,8 +82,8 @@ export default function TestimonialCarousel() {
                     <button
                       key={src}
                       type="button"
-                      onClick={() => setLightbox({ src, alt: `${r.name} tulemus` })}
-                      aria-label={`Suurenda ${r.name} tulemuse foto`}
+                      onClick={() => setLightbox({ src, alt: `${r.name} result` })}
+                      aria-label={`Enlarge ${r.name}'s result photo`}
                       className="relative block h-12 w-12 cursor-zoom-in overflow-hidden rounded-lg bg-[var(--bb-chip-bg)] transition-transform hover:-translate-y-0.5"
                     >
                       <Image
@@ -111,7 +111,7 @@ export default function TestimonialCarousel() {
           <button
             type="button"
             onClick={() => step(-1)}
-            aria-label="Eelmine arvustus"
+            aria-label="Previous review"
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--bb-chip-border)] bg-[var(--bb-paper)] text-[var(--bb-ink-2)] transition-colors hover:border-[var(--bb-gold)] md:hidden"
           >
             <svg
@@ -135,7 +135,7 @@ export default function TestimonialCarousel() {
                 key={r.name}
                 type="button"
                 onClick={() => setIndex(i)}
-                aria-label={`Näita arvustust ${i + 1}`}
+                aria-label={`Show review ${i + 1}`}
                 aria-current={i === index ? "true" : undefined}
                 className={`relative h-2 overflow-hidden rounded-full transition-all duration-300 ease-out ${
                   i === index
@@ -160,7 +160,7 @@ export default function TestimonialCarousel() {
           <button
             type="button"
             onClick={() => step(1)}
-            aria-label="Järgmine arvustus"
+            aria-label="Next review"
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--bb-chip-border)] bg-[var(--bb-paper)] text-[var(--bb-ink-2)] transition-colors hover:border-[var(--bb-gold)] md:hidden"
           >
             <svg
@@ -184,7 +184,7 @@ export default function TestimonialCarousel() {
               onClick={() => setUserPaused((p) => !p)}
               className="text-[11px] text-[var(--bb-ink-3)] underline transition-colors hover:no-underline"
             >
-              {autoRunning ? "Peata" : "Käivita"}
+              {autoRunning ? "Pause" : "Play"}
             </button>
           )}
         </div>

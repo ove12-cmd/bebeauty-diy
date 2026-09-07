@@ -4,7 +4,7 @@ import Link from "next/link";
 import Button from "@/components/ui/Button";
 import ImageLightbox from "@/components/ImageLightbox";
 import { useCallback, useEffect, useState } from "react";
-import "./juhend.css";
+import "./guide.css";
 
 type NeedItem = { icon?: string; img?: string; label: string };
 
@@ -20,68 +20,68 @@ type Step = {
 const STEPS: Step[] = [
   {
     n: "01",
-    category: "Ettevalmistus",
-    title: "Puhasta ja ettevalmista pind",
-    actions: ["Paigalda põsehoidja", "Kuivata hammas täielikult"],
-    tip: "Järgmise sammu jaoks peab hammas olema täiesti kuiv.",
+    category: "Prep",
+    title: "Clean and prepare the surface",
+    actions: ["Insert the cheek retractor", "Dry the tooth completely"],
+    tip: "The tooth needs to be completely dry for the next step.",
     needs: [
-      { img: "/tools/vatirull.png", label: "Vatirull" },
-      { img: "/tools/põsehoidja.png", label: "Põsehoidja" },
+      { img: "/tools/vatirull.png", label: "Cotton roll" },
+      { img: "/tools/põsehoidja.png", label: "Cheek retractor" },
     ],
   },
   {
     n: "02",
     category: "Etch",
-    title: "Valmista pind kinnituseks",
-    actions: ["Kanna väike kogus Etch geeli hambale (sinakas pudel)", "Oota 30 sekundit"],
-    tip: "Ära kasuta liiga palju geeli.",
+    title: "Prep the surface for bonding",
+    actions: ["Apply a small amount of Etch gel to the tooth (blue bottle)", "Wait 30 seconds"],
+    tip: "Don't use too much gel.",
     needs: [
-      { img: "/tools/etch.png", label: "Etch geel" },
-      { img: "/tools/mikrotikk.png", label: "Mikrotikk" },
+      { img: "/tools/etch.png", label: "Etch gel" },
+      { img: "/tools/mikrotikk.png", label: "Micro brush" },
     ],
   },
   {
     n: "03",
-    category: "Puhastus",
-    title: "Eemalda Etch geel ja kuivata",
-    actions: ["Eemalda Etch geel hambalt vatirulliga", "Kuivata hammas uuesti"],
-    needs: [{ img: "/tools/vatirull.png", label: "Vatirull" }],
+    category: "Cleanup",
+    title: "Remove the Etch gel and dry",
+    actions: ["Remove the Etch gel from the tooth with a cotton roll", "Dry the tooth again"],
+    needs: [{ img: "/tools/vatirull.png", label: "Cotton roll" }],
   },
   {
     n: "04",
-    category: "Paigaldus",
-    title: "Lisa liim",
-    actions: ["Pane väike kogus liimi hambale (valge pudel)", "Kasuta selleks mikrotikku"],
+    category: "Application",
+    title: "Add the adhesive",
+    actions: ["Apply a small amount of adhesive to the tooth (white bottle)", "Use the micro brush for this"],
     needs: [
-      { img: "/tools/liim.png", label: "Liim" },
-      { img: "/tools/mikrotikk.png", label: "Mikrotikk" },
+      { img: "/tools/liim.png", label: "Adhesive" },
+      { img: "/tools/mikrotikk.png", label: "Micro brush" },
     ],
   },
   {
     n: "05",
-    category: "Kristall",
-    title: "Aseta kristall",
-    actions: ["Pane kristall liimi peale", "Vajuta õrnalt kristallile"],
-    tip: "Ära liiguta kristalli pärast asetust.",
+    category: "Crystal",
+    title: "Place the crystal",
+    actions: ["Place the crystal onto the adhesive", "Press gently on the crystal"],
+    tip: "Don't move the crystal once it's placed.",
     needs: [
-      { icon: "💎", label: "Kristall" },
-      { img: "/tools/aplikaator.png", label: "Aplikaator" },
+      { icon: "💎", label: "Crystal" },
+      { img: "/tools/aplikaator.png", label: "Applicator" },
     ],
   },
   {
     n: "06",
-    category: "Kinnitamine",
-    title: "UV-kõvastamine",
-    actions: ["Kõvasta 3 × 45 sekundit UV-lambiga"],
-    needs: [{ img: "/tools/uv.png", label: "UV-lamp" }],
+    category: "Curing",
+    title: "UV curing",
+    actions: ["Cure for 3 × 45 seconds with the UV lamp"],
+    needs: [{ img: "/tools/uv.png", label: "UV lamp" }],
   },
 ];
 
 const AFTERCARE = {
-  eyebrow: "Pärast paigaldust",
-  title: "Hoia tulemus puhtana",
-  actions: ["Ära söö ega joo 1 tund", "Väldi kõvasid ja kleepuvaid toite 24 tundi"],
-  note: "Tulemus võiks püsida 2–4 nädalat.",
+  eyebrow: "After application",
+  title: "Keep the result clean",
+  actions: ["Don't eat or drink for 1 hour", "Avoid hard and sticky foods for 24 hours"],
+  note: "The result should last 2–4 weeks.",
 };
 
 const TOTAL = STEPS.length;
@@ -128,20 +128,20 @@ export default function GuidePage() {
   return (
     <main className="bb-guide">
       <div className="bb-guide__inner">
-        <Link href="/" className="bb-guide__back">← Tagasi</Link>
+        <Link href="/" className="bb-guide__back">← Back</Link>
 
         {isIntro && (
           <div className="bb-guide__intro" key="intro">
-            <p className="bb-guide__eyebrow">Paigaldusjuhend</p>
-            <h1 className="bb-guide__intro-title">Hambakristalli paigaldus</h1>
-            <p className="bb-guide__intro-sub">Salongitulemus kodus 10 minutiga.</p>
+            <p className="bb-guide__eyebrow">Application Guide</p>
+            <h1 className="bb-guide__intro-title">Tooth Gem Application</h1>
+            <p className="bb-guide__intro-sub">Salon results at home in 10 minutes.</p>
             <div className="bb-guide__intro-meta">
-              <span>{TOTAL} sammu</span>
+              <span>{TOTAL} steps</span>
               <span className="bb-guide__meta-dot">·</span>
-              <span>~10 minutit</span>
+              <span>~10 minutes</span>
             </div>
             <Button className="bb-guide__start" onClick={next}>
-              Alusta
+              Start
             </Button>
           </div>
         )}
@@ -149,7 +149,7 @@ export default function GuidePage() {
         {current && (
           <>
             <div className="bb-guide__progress">
-              <span className="bb-guide__progress-label">Samm {step}/{TOTAL}</span>
+              <span className="bb-guide__progress-label">Step {step}/{TOTAL}</span>
               <div className="bb-guide__dots">
                 {STEPS.map((s, i) => {
                   const idx = i + 1;
@@ -160,7 +160,7 @@ export default function GuidePage() {
                       type="button"
                       className={`bb-guide__dot bb-guide__dot--${state}`}
                       onClick={() => setStep(idx)}
-                      aria-label={`Samm ${idx}: ${s.category}`}
+                      aria-label={`Step ${idx}: ${s.category}`}
                       aria-current={idx === step}
                     >
                       {idx}
@@ -187,12 +187,12 @@ export default function GuidePage() {
               {current.tip && (
                 <div className="bb-guide__tip">
                   <span className="bb-guide__tip-icon">💡</span>
-                  <p><strong>Nipp:</strong> {current.tip}</p>
+                  <p><strong>Tip:</strong> {current.tip}</p>
                 </div>
               )}
 
               <div className="bb-guide__needs">
-                <span className="bb-guide__needs-label">Vaja läheb</span>
+                <span className="bb-guide__needs-label">You'll need</span>
                 <div className="bb-guide__chips">
                   {current.needs.map((item) =>
                     item.img ? (
@@ -218,9 +218,9 @@ export default function GuidePage() {
             </div>
 
             <div className="bb-guide__nav">
-              <button className="bb-guide__nav-btn" onClick={prev}>← Eelmine</button>
+              <button className="bb-guide__nav-btn" onClick={prev}>← Previous</button>
               <Button className="bb-guide__nav-next" onClick={next}>
-                {step === TOTAL ? "Valmis" : "Järgmine"}
+                {step === TOTAL ? "Done" : "Next"}
               </Button>
             </div>
           </>
@@ -229,7 +229,7 @@ export default function GuidePage() {
         {isDone && (
           <div className="bb-guide__done" key="done">
             <span className="bb-guide__done-badge"><IconCheck /></span>
-            <h2 className="bb-guide__done-title">Valmis!</h2>
+            <h2 className="bb-guide__done-title">All done!</h2>
 
             <div className="bb-guide__aftercare">
               <p className="bb-guide__cat">{AFTERCARE.eyebrow}</p>
@@ -246,10 +246,10 @@ export default function GuidePage() {
             </div>
 
             <div className="bb-guide__done-actions">
-              <Button href="/hambakristalli-komplekt">
-                Osta komplekt
+              <Button href="/tooth-gem-kit">
+                Shop the kit
               </Button>
-              <button className="bb-guide__restart" onClick={() => setStep(0)}>Alusta uuesti</button>
+              <button className="bb-guide__restart" onClick={() => setStep(0)}>Start over</button>
             </div>
           </div>
         )}

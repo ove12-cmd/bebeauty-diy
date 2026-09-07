@@ -11,7 +11,7 @@
   --bb-ink-2:   #4a4a4a;
 
   --bb-font:    var(--font-bricolage), system-ui, sans-serif;
-  --bb-hand:    var(--font-kalam), var(--font-bricolage), system-ui, sans-serif;
+  --bb-hand:    var(--font-instrument), var(--font-bricolage), system-ui, sans-serif;
 
   --bb-shadow:  0 18px 50px -28px rgba(0, 0, 0, 0.35);
 
@@ -36,7 +36,7 @@
   --bb-ok-ink:      #1d6b4f;
 
   /* Type scale — shared display heading tokens */
-  --bb-fw-display:       800;
+  --bb-fw-display:       600;
   --bb-tracking-display: -0.04em;
   --bb-fs-section:       clamp(28px, 3vw, 42px);
 }

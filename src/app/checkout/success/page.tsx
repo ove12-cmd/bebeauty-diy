@@ -83,21 +83,21 @@ function SuccessInner() {
     <main className="bb-checkout">
       <div className="bb-checkout__inner bb-checkout__confirm">
         <span className="bb-checkout__confirm-icon">✓</span>
-        <h1 className="bb-checkout__confirm-title">Aitäh tellimuse eest!</h1>
+        <h1 className="bb-checkout__confirm-title">Thanks for your order!</h1>
         <p className="bb-checkout__confirm-sub">
           {ref ? (
-            <>Sinu tellimus <strong>{ref}</strong> on vastu võetud. </>
+            <>Your order <strong>{ref}</strong> has been received. </>
           ) : (
-            <>Sinu tellimus on vastu võetud. </>
+            <>Your order has been received. </>
           )}
           {pending
-            ? "Kinnitame makse laekumise ja saadame kinnituse e-postiga."
-            : "Saatsime kinnituse e-postiga ning paneme paki peagi teele."}
+            ? "We're confirming your payment and will send a confirmation by email."
+            : "We've sent a confirmation by email and your package will be on its way soon."}
         </p>
 
         {order && (
           <aside className="bb-checkout__summary bb-checkout__confirm-summary">
-            <h2 className="bb-checkout__section-title">Tellimuse kokkuvõte</h2>
+            <h2 className="bb-checkout__section-title">Order summary</h2>
 
             <div className="bb-checkout__lines">
               {order.items.map((item, i) => (
@@ -109,18 +109,18 @@ function SuccessInner() {
             </div>
 
             <div className="bb-checkout__totals">
-              <div className="bb-checkout__total-row"><span>Vahesumma</span><span>{eur(order.subtotal)}</span></div>
+              <div className="bb-checkout__total-row"><span>Subtotal</span><span>{eur(order.subtotal)}</span></div>
               {discount > 0 && (
                 <div className="bb-checkout__total-row bb-checkout__total-row--discount">
-                  <span>Sooduskood (−{order.discountPct}%)</span><span>−{eur(discount)}</span>
+                  <span>Discount code (−{order.discountPct}%)</span><span>−{eur(discount)}</span>
                 </div>
               )}
               <div className="bb-checkout__total-row">
-                <span>Kohaletoimetamine — {order.deliveryMethod}</span>
-                <span>{order.deliveryPrice === 0 ? "Tasuta" : eur(order.deliveryPrice)}</span>
+                <span>Delivery — {order.deliveryMethod}</span>
+                <span>{order.deliveryPrice === 0 ? "Free" : eur(order.deliveryPrice)}</span>
               </div>
               <div className="bb-checkout__total-row bb-checkout__total-row--grand">
-                <span>Kokku</span><span>{eur(order.grandTotal)}</span>
+                <span>Total</span><span>{eur(order.grandTotal)}</span>
               </div>
             </div>
 
@@ -131,7 +131,7 @@ function SuccessInner() {
           </aside>
         )}
 
-        <Button href="/">Tagasi avalehele</Button>
+        <Button href="/">Back to homepage</Button>
       </div>
     </main>
   );

@@ -21,9 +21,9 @@ import "./checkout.css";
 function deliveryOptions(gemOnly: boolean, freeShipping: boolean) {
   return [
     gemOnly && !freeShipping
-      ? { id: "omniva", label: "Omniva pakiautomaat", price: 3.9, note: "3,90 € · 1–2 tööpäeva" }
-      : { id: "omniva", label: "Omniva pakiautomaat", price: 0, note: "Tasuta · 1–2 tööpäeva" },
-    { id: "courier", label: "Kuller koju", price: 3.9, note: "3,90 € · 1–3 tööpäeva" },
+      ? { id: "omniva", label: "Omniva parcel locker", price: 3.9, note: "3,90 € · 1–2 business days" }
+      : { id: "omniva", label: "Omniva parcel locker", price: 0, note: "Free · 1–2 business days" },
+    { id: "courier", label: "Courier to your door", price: 3.9, note: "3,90 € · 1–3 business days" },
   ];
 }
 
@@ -169,9 +169,9 @@ export default function CheckoutPage() {
     return (
       <main className="bb-checkout">
         <div className="bb-checkout__inner bb-checkout__empty">
-          <h1 className="bb-checkout__title">Ostukorv on tühi</h1>
-          <p>Lisa tooteid ostukorvi, et tellimus vormistada.</p>
-          <Button href="/hambakristalli-komplekt">Vaata tooteid</Button>
+          <h1 className="bb-checkout__title">Your cart is empty</h1>
+          <p>Add products to your cart to place an order.</p>
+          <Button href="/tooth-gem-kit">View products</Button>
         </div>
       </main>
     );
@@ -182,7 +182,7 @@ export default function CheckoutPage() {
       <div className="bb-checkout__inner">
         <div className="mb-4 flex items-center justify-between gap-3 border-b border-[var(--bb-line)] pb-3">
           <Link
-            href="/hambakristalli-komplekt"
+            href="/tooth-gem-kit"
             className="text-sm font-medium tracking-[-0.2px] text-[var(--bb-ink)] no-underline"
           >
             {COMPANY.name}
@@ -202,17 +202,17 @@ export default function CheckoutPage() {
               <rect x="3" y="11" width="18" height="10" rx="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
-            Turvaline ostukeskkond
+            Secure checkout
           </span>
         </div>
 
         <CheckoutSteps current={step} />
-        <h1 className="bb-checkout__title">Vormista tellimus</h1>
+        <h1 className="bb-checkout__title">Complete your order</h1>
 
         <div className={`bb-checkout__grid${clientSecret ? " is-paying" : ""}`}>
           {clientSecret ? (
             <div className="bb-checkout__form">
-              <h2 className="bb-checkout__section-title">Maksmine</h2>
+              <h2 className="bb-checkout__section-title">Payment</h2>
               <p className="mb-3.5 flex items-start gap-1.5 text-[11px] leading-snug text-[var(--bb-ink-2)]">
                 <svg
                   aria-hidden="true"
@@ -229,7 +229,7 @@ export default function CheckoutPage() {
                   <rect x="3" y="11" width="18" height="10" rx="2" />
                   <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
-                Makseid töötleb Stripe. Me ei näe ega salvesta su kaardiandmeid.
+                Payments are processed by Stripe. We never see or store your card details.
               </p>
               <CheckoutPayment
                 clientSecret={clientSecret}
@@ -238,31 +238,31 @@ export default function CheckoutPage() {
                 paymentIntentId={paymentIntentId}
               />
               <p className="mt-2 text-center text-[11px] leading-relaxed text-[var(--bb-ink-2)]">
-                Saadame kauba välja järgmisel tööpäeval ·{" "}
-                <Link href="/tingimused" className="text-[var(--bb-gold-deep)] underline hover:no-underline">
-                  müügitingimused
+                We ship your order out the next business day ·{" "}
+                <Link href="/terms" className="text-[var(--bb-gold-deep)] underline hover:no-underline">
+                  terms of sale
                 </Link>
               </p>
             </div>
           ) : (
           <form className="bb-checkout__form" onSubmit={handleSubmit}>
-            <h2 className="bb-checkout__section-title">Kontaktandmed</h2>
+            <h2 className="bb-checkout__section-title">Contact Details</h2>
             <div className="bb-checkout__field">
-              <label htmlFor="co-name">Nimi</label>
-              <input id="co-name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Ees- ja perekonnanimi" />
+              <label htmlFor="co-name">Name</label>
+              <input id="co-name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="First and last name" />
             </div>
             <div className="bb-checkout__row">
               <div className="bb-checkout__field">
-                <label htmlFor="co-email">E-post</label>
-                <input id="co-email" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="sinu@email.ee" />
+                <label htmlFor="co-email">Email</label>
+                <input id="co-email" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="you@email.com" />
               </div>
               <div className="bb-checkout__field">
-                <label htmlFor="co-phone">Telefon</label>
+                <label htmlFor="co-phone">Phone</label>
                 <input id="co-phone" type="tel" required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+372 5xxx xxxx" />
               </div>
             </div>
 
-            <h2 className="bb-checkout__section-title">Kohaletoimetamine</h2>
+            <h2 className="bb-checkout__section-title">Delivery</h2>
             <div className="bb-checkout__delivery">
               {DELIVERY.map((d) => (
                 <label key={d.id} className={`bb-checkout__delivery-opt ${form.delivery === d.id ? "is-active" : ""}`}>
@@ -275,7 +275,7 @@ export default function CheckoutPage() {
 
             {form.delivery === "omniva" ? (
               <div className="bb-checkout__lockers">
-                <label htmlFor="co-locker" className="bb-checkout__locker-label">Vali pakiautomaat</label>
+                <label htmlFor="co-locker" className="bb-checkout__locker-label">Choose a parcel locker</label>
 
                 {selectedLocker ? (
                   <div className="bb-checkout__locker-selected">
@@ -283,7 +283,7 @@ export default function CheckoutPage() {
                       <span className="bb-checkout__locker-name">{selectedLocker.name}</span>
                       <span className="bb-checkout__locker-meta">{selectedLocker.city}{selectedLocker.county ? `, ${selectedLocker.county}` : ""}</span>
                     </div>
-                    <button type="button" onClick={() => setSelectedLocker(null)}>Muuda</button>
+                    <button type="button" onClick={() => setSelectedLocker(null)}>Change</button>
                   </div>
                 ) : lockersState === "error" ? (
                   <input
@@ -291,7 +291,7 @@ export default function CheckoutPage() {
                     className="bb-checkout__locker-search"
                     value={manualLocker}
                     onChange={(e) => { setManualLocker(e.target.value); setLockerError(false); }}
-                    placeholder="Sisesta pakiautomaadi nimi"
+                    placeholder="Enter the parcel locker name"
                   />
                 ) : (
                   <>
@@ -300,15 +300,15 @@ export default function CheckoutPage() {
                       className="bb-checkout__locker-search"
                       value={query}
                       onChange={(e) => setQuery(e.target.value)}
-                      placeholder="Sisesta linn või sihtnumber"
+                      placeholder="Search by city or postal code"
                       autoComplete="off"
                     />
-                    {lockersState === "loading" && <p className="bb-checkout__locker-hint">Laen pakiautomaate…</p>}
+                    {lockersState === "loading" && <p className="bb-checkout__locker-hint">Loading parcel lockers…</p>}
                     {lockersState === "ready" && query.trim().length < 2 && (
-                      <p className="bb-checkout__locker-hint">Alusta trükkimist, et leida lähim pakiautomaat.</p>
+                      <p className="bb-checkout__locker-hint">Start typing to find the nearest parcel locker.</p>
                     )}
                     {lockersState === "ready" && query.trim().length >= 2 && results.length === 0 && (
-                      <p className="bb-checkout__locker-hint">Ühtegi pakiautomaati ei leitud.</p>
+                      <p className="bb-checkout__locker-hint">No parcel lockers found.</p>
                     )}
                     {lockersState === "ready" && results.length > 0 && (
                       <ul className="bb-checkout__locker-list">
@@ -328,21 +328,21 @@ export default function CheckoutPage() {
                     )}
                   </>
                 )}
-                {lockerError && <p className="bb-checkout__locker-err">Palun vali pakiautomaat.</p>}
+                {lockerError && <p className="bb-checkout__locker-err">Please choose a parcel locker.</p>}
               </div>
             ) : (
               <>
                 <div className="bb-checkout__field">
-                  <label htmlFor="co-street">Aadress</label>
-                  <input id="co-street" required value={form.street} onChange={(e) => setForm({ ...form, street: e.target.value })} placeholder="Tänav ja maja number" />
+                  <label htmlFor="co-street">Address</label>
+                  <input id="co-street" required value={form.street} onChange={(e) => setForm({ ...form, street: e.target.value })} placeholder="Street and house number" />
                 </div>
                 <div className="bb-checkout__row">
                   <div className="bb-checkout__field">
-                    <label htmlFor="co-city">Linn</label>
-                    <input id="co-city" required value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} placeholder="Linn / vald" />
+                    <label htmlFor="co-city">City</label>
+                    <input id="co-city" required value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} placeholder="City / municipality" />
                   </div>
                   <div className="bb-checkout__field">
-                    <label htmlFor="co-zip">Sihtnumber</label>
+                    <label htmlFor="co-zip">Postal code</label>
                     <input id="co-zip" required value={form.zip} onChange={(e) => setForm({ ...form, zip: e.target.value })} placeholder="12345" />
                   </div>
                 </div>
@@ -356,22 +356,22 @@ export default function CheckoutPage() {
                 <circle cx="17.5" cy="18" r="1.8" />
               </svg>
               <span>
-                Telli enne kell <span className="font-medium">14.00</span> — saadame järgmisel päeval teele.
+                Order before <span className="font-medium">14:00</span> — we'll ship it out the next day.
               </span>
             </div>
 
             {payError && (
-              <p className="bb-checkout__locker-err">Makse jäi pooleli. Palun proovi uuesti.</p>
+              <p className="bb-checkout__locker-err">Payment didn't go through. Please try again.</p>
             )}
             <Button type="submit" className="bb-checkout__submit" disabled={submitting}>
-              {submitting ? "Palun oota…" : "Jätka maksmiseni"}
+              {submitting ? "Please wait…" : "Continue to payment"}
             </Button>
-            <p className="bb-checkout__fine">Esitades tellimuse nõustud meie tingimustega. Järgmises sammus sisestad kaardiandmed.</p>
+            <p className="bb-checkout__fine">By placing your order you agree to our terms. You'll enter your card details in the next step.</p>
           </form>
           )}
 
           <aside className="bb-checkout__summary">
-            <h2 className="bb-checkout__section-title">Sinu tellimus</h2>
+            <h2 className="bb-checkout__section-title">Your order</h2>
             <div className="bb-checkout__lines">
               {items.map((i) => (
                 <div key={i.id} className="flex items-start gap-2.5 py-1.5">
@@ -386,21 +386,21 @@ export default function CheckoutPage() {
                   </span>
                   <span className="min-w-0 flex-1 leading-snug">
                     {i.label}
-                    <span className="bb-checkout__qty block">kogus {i.qty}</span>
+                    <span className="bb-checkout__qty block">qty {i.qty}</span>
                   </span>
                   <span className="whitespace-nowrap">{eur(i.price * i.qty)}</span>
                 </div>
               ))}
             </div>
             <div className="bb-checkout__totals">
-              <div className="bb-checkout__total-row"><span>Vahesumma</span><span>{eur(subtotal)}</span></div>
+              <div className="bb-checkout__total-row"><span>Subtotal</span><span>{eur(subtotal)}</span></div>
               {discount > 0 && (
                 <div className="bb-checkout__total-row bb-checkout__total-row--discount">
-                  <span>Sooduskood (−{discountPct}%)</span><span>−{eur(discount)}</span>
+                  <span>Discount code (−{discountPct}%)</span><span>−{eur(discount)}</span>
                 </div>
               )}
-              <div className="bb-checkout__total-row"><span>Kohaletoimetamine</span><span>{delivery.price === 0 ? "Tasuta" : eur(delivery.price)}</span></div>
-              <div className="bb-checkout__total-row bb-checkout__total-row--grand"><span>Kokku</span><span>{eur(total)}</span></div>
+              <div className="bb-checkout__total-row"><span>Delivery</span><span>{delivery.price === 0 ? "Free" : eur(delivery.price)}</span></div>
+              <div className="bb-checkout__total-row bb-checkout__total-row--grand"><span>Total</span><span>{eur(total)}</span></div>
             </div>
 
             {clientSecret ? (

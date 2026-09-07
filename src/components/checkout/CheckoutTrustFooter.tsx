@@ -3,8 +3,8 @@ import SocialIcon from "@/components/ui/SocialIcon";
 import { COMPANY } from "@/lib/company";
 
 const LINKS = [
-  { href: "/tingimused", label: "Müügitingimused" },
-  { href: "/hambakristalli-komplekt#arvustused", label: "Korduma kippuvad küsimused" },
+  { href: "/terms", label: "Terms of Sale" },
+  { href: "/tooth-gem-kit#reviews", label: "Frequently Asked Questions" },
 ];
 
 /**

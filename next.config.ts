@@ -74,12 +74,22 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       // Old shop URL → keyword slug (permanent, preserves any existing links).
-      { source: "/shop", destination: "/hambakristalli-komplekt", permanent: true },
+      { source: "/shop", destination: "/tooth-gem-kit", permanent: true },
       // Old product URL → keyword slug (permanent, preserves any existing links).
-      { source: "/product/diy-hambakristalli-komplekt", destination: "/hambakristalli-komplekt", permanent: true },
-      // Kontakt page hidden for now — temporary (not permanent) so it's a
+      { source: "/product/diy-hambakristalli-komplekt", destination: "/tooth-gem-kit", permanent: true },
+      // Estonian route slugs → English ones (site went global). Permanent so
+      // existing bookmarks, backlinks, and any live ad campaigns pointed at
+      // the old paths keep working instead of 404ing.
+      { source: "/hambakristalli-komplekt", destination: "/tooth-gem-kit", permanent: true },
+      { source: "/juhend", destination: "/guide", permanent: true },
+      { source: "/kristallid", destination: "/crystals", permanent: true },
+      { source: "/tarne", destination: "/shipping", permanent: true },
+      { source: "/privaatsus", destination: "/privacy", permanent: true },
+      { source: "/tingimused", destination: "/terms", permanent: true },
+      // Contact page hidden for now — temporary (not permanent) so it's a
       // one-line revert once the page comes back.
       { source: "/kontakt", destination: "/", permanent: false },
+      { source: "/contact", destination: "/", permanent: false },
     ];
   },
 };

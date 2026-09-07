@@ -10,17 +10,17 @@ export const LOCALE = "et";
 // reaches checkout on its own.
 export const GEM_PRICE = 1;
 
-// Buying crystals with no kit, on /kristallid — priced separately from the
+// Buying crystals with no kit, on /crystals — priced separately from the
 // bundled add-on above.
 export const STANDALONE_GEM_PRICE = 2;
 
 export const EXTRA_GEM_TYPES = [
-  { id: "gem-clear", label: "Swarovski Kristall läbipaistev", img: "/crystals/gem-clear.jpg" },
-  { id: "gem-ab", label: "Swarovski Boreale", img: "/crystals/gem-ab.jpg" },
-  { id: "gem-ab-butterfly", label: "Swarovski Boreale Butterfly", img: "/crystals/gem-ab-butterfly.jpg" },
+  { id: "gem-clear", label: "Swarovski Clear Crystal", img: "/crystals/gem-clear.jpg" },
+  { id: "gem-ab", label: "Swarovski Borealis", img: "/crystals/gem-ab.jpg" },
+  { id: "gem-ab-butterfly", label: "Swarovski Borealis Butterfly", img: "/crystals/gem-ab-butterfly.jpg" },
 ] as const;
 
-// Sizes for the standalone /kristallid page only — same labels as the kit's
+// Sizes for the standalone /crystals page only — same labels as the kit's
 // own VARIANTS, but a distinct id shape (gem id + size id) so they can
 // never collide with a bare kit id like "s20".
 export const GEM_SIZES = [
@@ -33,7 +33,7 @@ export function gemSizeId(gemId: string, sizeId: string): string {
   return `${gemId}-${sizeId}`;
 }
 
-// Variant id → unit price (€). Mirrors VARIANTS in src/app/hambakristalli-komplekt/page.tsx.
+// Variant id → unit price (€). Mirrors VARIANTS in src/app/tooth-gem-kit/page.tsx.
 export const VARIANT_PRICES: Record<string, number> = {
   s17: 35,
   s20: 35,
@@ -49,7 +49,7 @@ const GEM_IDS: Set<string> = new Set([
   ...EXTRA_GEM_TYPES.flatMap((g) => GEM_SIZES.map((s) => gemSizeId(g.id, s.id))),
 ]);
 
-// Buying crystals with no kit in the order — the /kristallid page enforces
+// Buying crystals with no kit in the order — the /crystals page enforces
 // all of these client-side; priceOrder() re-checks them server-side too.
 export const MIN_STANDALONE_GEMS = 10;
 export const FREE_SHIPPING_GEM_THRESHOLD = 20;
@@ -64,15 +64,15 @@ export function isGemOnlyOrder(ids: string[]): boolean {
 
 // Auto-generated marketing codes (see UrgencyPopup) — always the standard rate.
 export const FUNNY_DISCOUNT_CODES = [
-  "BB-HAMBAKE",
-  "BB-KULLAKE",
-  "BB-SÄRASILM",
-  "BB-KIMALANE",
-  "BB-HELKUR",
-  "BB-KULDHAMMAS",
-  "BB-NAERATA",
-  "BB-KRISTALL",
-  "BB-HIILGUS",
+  "BB-TOOTHFAIRY",
+  "BB-GOLDGRIN",
+  "BB-SPARKLEFANG",
+  "BB-BUMBLEBLING",
+  "BB-GLOWGETTER",
+  "BB-GOLDTOOTH",
+  "BB-GRINNIN",
+  "BB-GEMGRIN",
+  "BB-DAZZLEMOUTH",
   "BB-BLINGSTAR",
 ] as const;
 
@@ -100,8 +100,8 @@ export function isGeneratedMarketingCode(code?: string | null): boolean {
 }
 
 export const DELIVERY: Record<string, { label: string; price: number }> = {
-  omniva: { label: "Omniva pakiautomaat", price: 0 },
-  courier: { label: "Kuller koju", price: 3.9 },
+  omniva: { label: "Omniva parcel locker", price: 0 },
+  courier: { label: "Courier to your door", price: 3.9 },
 };
 
 export type IncomingItem = { id: string; label?: string; qty: number };

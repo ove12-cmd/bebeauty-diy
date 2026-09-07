@@ -1,6 +1,6 @@
 "use client";
 
-import "./kristallid.css";
+import "./crystals.css";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -61,17 +61,17 @@ export default function CrystalsPage() {
       <SiteNav active="kristallid" />
 
       <div className="bb-crystals__intro">
-        <h1 className="bb-crystals__title">Osta kristalle eraldi</h1>
+        <h1 className="bb-crystals__title">Shop Crystals Separately</h1>
         <p className="bb-crystals__sub">
-          Lisa juurde oma lemmikkristalle — sobib olemasoleva komplekti täiendamiseks või uue disaini loomiseks. Ei ole vaja tellida uut komplekti.
+          Add more of your favorite crystals — perfect for topping up your existing kit or creating a new design. No need to order a new kit.
         </p>
         <p className="bb-crystals__note">
-          Minimaalne tellimus {MIN_STANDALONE_GEMS} kristalli.
+          Minimum order {MIN_STANDALONE_GEMS} crystals.
         </p>
       </div>
 
-      <Link href="/hambakristalli-komplekt" className="bb-crystals__back-cta">
-        Pole veel komplekti? Osta DIY Hambakristalli komplekt →
+      <Link href="/tooth-gem-kit" className="bb-crystals__back-cta">
+        Don't have a kit yet? Shop the DIY Tooth Gem Kit →
       </Link>
 
       <div className="bb-crystals__grid">
@@ -80,13 +80,13 @@ export default function CrystalsPage() {
             <button
               type="button"
               className="bb-crystals__thumb"
-              aria-label={`Suurenda ${g.label}`}
+              aria-label={`Zoom in on ${g.label}`}
               onClick={() => setLightbox({ src: g.img, alt: g.label })}
             >
               <Image src={g.img} alt={g.label} width={72} height={72} style={{ objectFit: "contain" }} />
             </button>
             <span className="bb-crystals__name">{g.label}</span>
-            <span className="bb-crystals__price">{priceStr(STANDALONE_GEM_PRICE)}/tk</span>
+            <span className="bb-crystals__price">{priceStr(STANDALONE_GEM_PRICE)}/pc</span>
             <div className="bb-crystals__sizes">
               {GEM_SIZES.map(s => {
                 const key = gemSizeId(g.id, s.id);
@@ -94,11 +94,11 @@ export default function CrystalsPage() {
                   <div key={key} className="bb-crystals__size-row">
                     <span className="bb-crystals__size-label">{s.label}</span>
                     <div className="bb-qty__ctrl bb-qty__ctrl--sm">
-                      <button className="bb-qty__btn" onClick={() => bump(key, -1)} aria-label={`Vähenda ${g.label} ${s.label}`}>
+                      <button className="bb-qty__btn" onClick={() => bump(key, -1)} aria-label={`Decrease ${g.label} ${s.label}`}>
                         <IconMinus />
                       </button>
                       <span className="bb-qty__num">{qtys[key] ?? 0}</span>
-                      <button className="bb-qty__btn" onClick={() => bump(key, 1)} aria-label={`Suurenda ${g.label} ${s.label}`}>
+                      <button className="bb-qty__btn" onClick={() => bump(key, 1)} aria-label={`Increase ${g.label} ${s.label}`}>
                         <IconPlus />
                       </button>
                     </div>
@@ -112,23 +112,23 @@ export default function CrystalsPage() {
 
       <p className={`bb-crystals__shipping-note ${total >= FREE_SHIPPING_GEM_THRESHOLD ? "bb-crystals__shipping-note--met" : ""}`}>
         {total >= FREE_SHIPPING_GEM_THRESHOLD
-          ? "🎉 Tasuta transport rakendub!"
-          : `📦 Tasuta transport alates ${FREE_SHIPPING_GEM_THRESHOLD} kristallist${total > 0 ? ` — lisa veel ${FREE_SHIPPING_GEM_THRESHOLD - total}` : ""}.`}
+          ? "🎉 Free shipping applied!"
+          : `📦 Free shipping from ${FREE_SHIPPING_GEM_THRESHOLD} crystals${total > 0 ? ` — add ${FREE_SHIPPING_GEM_THRESHOLD - total} more` : ""}.`}
       </p>
 
       <div className="bb-crystals__bar">
         <div className="bb-crystals__bar-info">
           <span className={`bb-crystals__bar-count ${belowMin ? "bb-crystals__bar-count--warn" : ""}`}>
             {total === 0
-              ? `Vähemalt ${MIN_STANDALONE_GEMS} kristalli`
+              ? `At least ${MIN_STANDALONE_GEMS} crystals`
               : belowMin
-                ? `Vajad veel ${MIN_STANDALONE_GEMS - total} kristalli (min. ${MIN_STANDALONE_GEMS})`
-                : `${total} kristalli`}
+                ? `You need ${MIN_STANDALONE_GEMS - total} more crystals (min. ${MIN_STANDALONE_GEMS})`
+                : `${total} crystals`}
           </span>
           <span className="bb-crystals__bar-price">{priceStr(cost)}</span>
         </div>
         <Button className="bb-crystals__cta" onClick={addToCart} disabled={total < MIN_STANDALONE_GEMS}>
-          <IconCart />Lisa korvi
+          <IconCart />Add to cart
         </Button>
       </div>
 
