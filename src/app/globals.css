@@ -132,9 +132,7 @@ html, body {
 
 .bb-nav__cart {
   position: relative;
-  border: none;
 }
-.bb-nav__cart:hover { background: rgba(255, 255, 255, 0.08); }
 
 .bb-nav__cart-badge {
   position: absolute;
@@ -432,15 +430,16 @@ html, body {
   background: var(--bb-chip-bg);
 }
 
-/* An ink border/shadow reads fine on the site's paper surfaces but vanishes
-   against a dark section (nav, footer, the FinalCTA band) — this swaps both
-   to white so the same pressed-button mechanic stays visible there too. */
+/* An ink border reads fine on the site's paper surfaces but vanishes against
+   a dark section (nav, footer, the FinalCTA band) — this switches it to
+   white. The offset shadow is dropped entirely here rather than recolored:
+   against a dark background it read as a stray box, not a pressed button. */
 .bb-btn--on-dark {
   border-color: rgba(255, 255, 255, 0.9);
-  box-shadow: 2.5px 2.5px 0 0 rgba(255, 255, 255, 0.9);
+  box-shadow: none;
 }
 .bb-btn--on-dark:active {
-  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.9);
+  transform: none;
 }
 
 .bb-btn:disabled {
@@ -512,6 +511,14 @@ html, body {
 }
 .bb-icon-btn:hover { border-color: rgba(255, 255, 255, 0.55); }
 
+.bb-nav__cart {
+  border: none;
+}
+.bb-nav__cart:hover {
+  border-color: transparent;
+  background: rgba(255, 255, 255, 0.08);
+}
+
 /* ── Language switcher ── */
 .bb-lang {
   position: relative;
@@ -520,9 +527,9 @@ html, body {
 .bb-lang__trigger {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
   height: 44px;
-  padding: 0 14px;
+  padding: 0 12px;
   border-radius: 999px;
   border: none;
   background: transparent;
@@ -531,11 +538,7 @@ html, body {
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.15s;
 }
-.bb-lang__trigger:hover { background: rgba(255, 255, 255, 0.08); }
-
-.bb-lang__trigger-label { letter-spacing: -0.01em; }
 
 .bb-flag {
   width: 20px;
@@ -597,6 +600,7 @@ html, body {
 
 .bb-lang-inline {
   display: flex;
+  justify-content: center;
   gap: 8px;
   padding: 12px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
@@ -2315,14 +2319,9 @@ html, body {
   letter-spacing: 0.03em;
   text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 2.5px 2.5px 0 0 rgba(255, 255, 255, 0.9);
-  transition: color 0.15s, box-shadow 0.12s, transform 0.12s;
+  transition: color 0.15s;
 }
 .bb-cookie__decline:hover { color: #fff; }
-.bb-cookie__decline:active {
-  transform: translate(2.5px, 2.5px);
-  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.9);
-}
 
 .bb-cookie__accept {
   flex: 2;
@@ -3213,11 +3212,19 @@ html, body {
     border-radius: 20px;
   }
   .bb-nav__links, .bb-nav__cta { display: none; }
+  .bb-lang { display: none; }
   .bb-nav__hamburger { display: grid; }
 
-  /* Mobile dropdown full-width */
+  /* Mobile dropdown full-width — measured from the true viewport edge (the
+     same 50vw trick the nav pill above uses), not the parent's content box,
+     so it sits a consistent 10px in regardless of whether that parent has
+     its own side padding (.bb-shop on the product page) or none (.bb-hero
+     on the homepage). A plain margin here would compound with the parent's
+     padding and come out narrower on pages that have any. */
   .bb-nav__mobile-menu {
-    margin: 0 10px 8px;
+    margin-left: calc(50% - 50vw + 10px);
+    margin-right: calc(50% - 50vw + 10px);
+    margin-bottom: 8px;
     border-radius: 20px;
     border: 1px solid rgba(255,255,255,0.08);
     background: #111111;

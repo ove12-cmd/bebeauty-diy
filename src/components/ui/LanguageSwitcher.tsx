@@ -73,7 +73,6 @@ export default function LanguageSwitcher({ variant = "dropdown", className = "" 
         className="bb-lang__trigger"
       >
         <current.Flag className="bb-flag" />
-        <span className="bb-lang__trigger-label">{current.label}</span>
         <ChevronDown className={`bb-lang__chevron ${open ? "bb-lang__chevron--open" : ""}`} size={14} />
       </button>
 

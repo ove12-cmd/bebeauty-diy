@@ -13,6 +13,7 @@ import Button from "@/components/ui/Button";
 import PaymentMethods from "@/components/ui/PaymentMethods";
 import Stars from "@/components/ui/Stars";
 import { FaqAccordion } from "@/components/ui/FaqAccordion";
+import { FlagEU } from "@/components/ui/Flags";
 import { AVERAGE_RATING, REVIEW_COUNT, formatRating } from "@/lib/reviews";
 import { FAQ_CATEGORIES, FAQ_ITEMS, resolveFaqCategory, resolveFaqItem } from "@/lib/faq";
 import { productSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
@@ -167,8 +168,8 @@ function FAQ() {
 
 // icon/label pairs — label is a message key into the "shopTrust" namespace.
 const TRUST = [
-  { icon: "🦷", labelKey: "item1" },
-  { icon: "🇪🇺", labelKey: "item2" },
+  { icon: <Image src="/tooth.png" alt="" width={20} height={20} />, labelKey: "item1" },
+  { icon: <FlagEU className="bb-flag" />, labelKey: "item2" },
   { icon: "🔒", labelKey: "item3" },
 ];
 
@@ -512,7 +513,7 @@ export default function ShopPage() {
               <Button variant="outline" className="bb-shop__cta-secondary" onClick={openCart}>{tBuy("viewCart")}</Button>
             </div>
           </div>
-          <PaymentMethods note={tBuy("paymentNote")} className="mt-3" />
+          <PaymentMethods note={tBuy("paymentNote")} className="-mt-6 mb-4 max-md:-mt-2" />
           <div className="bb-urgency__shipping">
             {tBuy.rich("shippingLine", { strong: (chunks) => <strong>{chunks}</strong> })}
           </div>

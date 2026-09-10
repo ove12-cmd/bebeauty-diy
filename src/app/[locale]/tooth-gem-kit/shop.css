@@ -131,7 +131,7 @@
 .bb-shop-steps__guide-btn {
   background: transparent;
   border-color: rgba(255, 255, 255, 0.9);
-  box-shadow: 2.5px 2.5px 0 0 rgba(255, 255, 255, 0.9);
+  box-shadow: none;
   color: #ffffff;
   flex-shrink: 0;
 }
@@ -139,7 +139,7 @@
   background: rgba(255, 255, 255, 0.08);
 }
 .bb-shop-steps__guide-btn:active {
-  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.9);
+  transform: none;
 }
 
 .bb-shop-step__img {
@@ -874,9 +874,12 @@
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  flex: 1 1 auto;
 }
-.bb-shop__cta-group .bb-shop__cta { flex: 1 1 auto; }
-.bb-shop__cta-secondary { flex: 0 1 auto; }
+.bb-shop__cta-group .bb-shop__cta { flex: 0 0 auto; }
+/* Grows to soak up the row's remaining width, so its right edge lines up
+   with the discount row's Apply button above instead of stopping short. */
+.bb-shop__cta-secondary { flex: 1 1 auto; }
 
 /* On narrow screens the two buy actions split the row evenly instead of the
    secondary one shrinking to its label ā€” a 50/50 pair reads as a choice. */

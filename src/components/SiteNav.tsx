@@ -3,6 +3,7 @@
 import Button from "@/components/ui/Button";
 import Logo from "@/components/ui/Logo";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
+import MenuIcon from "@/components/ui/MenuIcon";
 import { useState } from "react";
 import { useCart } from "@/hooks/useCart";
 import { useTranslations } from "next-intl";
@@ -15,22 +16,6 @@ function IconCart() {
       <circle cx="9" cy="20" r="1.4" />
       <circle cx="18" cy="20" r="1.4" />
       <path d="M6 6 5 3H3" />
-    </svg>
-  );
-}
-
-function IconMenu() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round">
-      <path d="M4 7h16M4 12h16M4 17h16" />
-    </svg>
-  );
-}
-
-function IconClose() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round">
-      <path d="M18 6 6 18M6 6l12 12" />
     </svg>
   );
 }
@@ -72,18 +57,18 @@ export default function SiteNav({ active = "pood" }: { active?: string }) {
           <Button href="/tooth-gem-kit" className="bb-nav__cta bb-btn--on-dark">
             {t("shopTheKit")}
           </Button>
-          <LanguageSwitcher />
           <button className="bb-icon-btn bb-nav__cart" aria-label={t("cart")} onClick={openCart}>
             <IconCart />
             {cartCount > 0 && <span className="bb-nav__cart-badge">{cartCount}</span>}
           </button>
+          <LanguageSwitcher />
           {/* Hamburger — shown only when links collapse */}
           <button
             className="bb-icon-btn bb-nav__hamburger"
             aria-label={t("menu")}
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            {menuOpen ? <IconClose /> : <IconMenu />}
+            <MenuIcon open={menuOpen} />
           </button>
         </div>
       </nav>

@@ -31,3 +31,23 @@ export function FlagEE({ className = "" }: FlagProps) {
     </svg>
   );
 }
+
+// Twelve star centers on a ring of radius 11 around (30, 20), 30° apart,
+// starting at the top — the EU flag's actual, fixed star layout.
+const EU_STAR_POSITIONS: [number, number][] = [
+  [30, 9], [35.5, 10.5], [39.5, 14.5], [41, 20], [39.5, 25.5], [35.5, 29.5],
+  [30, 31], [24.5, 29.5], [20.5, 25.5], [19, 20], [20.5, 14.5], [24.5, 10.5],
+];
+const EU_STAR_PATH = "M0,-2 L0.47,-0.62 L1.9,-0.62 L0.73,0.24 L1.18,1.62 L0,0.76 L-1.18,1.62 L-0.73,0.24 L-1.9,-0.62 L-0.47,-0.62 Z";
+
+/** European Union — used for the "European crystals" trust badge. */
+export function FlagEU({ className = "" }: FlagProps) {
+  return (
+    <svg viewBox="0 0 60 40" className={className} aria-hidden="true">
+      <rect width="60" height="40" fill="#003399" />
+      {EU_STAR_POSITIONS.map(([x, y], i) => (
+        <path key={i} d={EU_STAR_PATH} fill="#ffcc00" transform={`translate(${x} ${y})`} />
+      ))}
+    </svg>
+  );
+}
