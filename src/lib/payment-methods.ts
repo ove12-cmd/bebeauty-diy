@@ -6,13 +6,20 @@
 export type PaymentMethod = {
   /** Stable id — used as the React key and for any future icon lookup. */
   id: string;
-  /** Brand name as it should read to a buyer. */
+  /** Brand name as it should read to a buyer (used as the icon's alt text). */
   label: string;
+  /** Brand mark, from public/. Each ships on its own white chip in
+   *  PaymentMethods.tsx, so a JPG's opaque background (Google Pay) reads the
+   *  same as a transparent PNG's (Visa/Mastercard/Apple Pay). */
+  icon: string;
+  /** Intrinsic width/height so next/image can size without layout shift. */
+  width: number;
+  height: number;
 };
 
 export const PAYMENT_METHODS: PaymentMethod[] = [
-  { id: "visa", label: "VISA" },
-  { id: "mastercard", label: "Mastercard" },
-  { id: "apple-pay", label: "Apple Pay" },
-  { id: "google-pay", label: "Google Pay" },
+  { id: "visa", label: "VISA", icon: "/visa-logo-1536x864-1.png", width: 1536, height: 864 },
+  { id: "mastercard", label: "Mastercard", icon: "/mastercard.png", width: 568, height: 352 },
+  { id: "apple-pay", label: "Apple Pay", icon: "/applepay.png", width: 697, height: 286 },
+  { id: "google-pay", label: "Google Pay", icon: "/google-pay.jpg", width: 576, height: 216 },
 ];

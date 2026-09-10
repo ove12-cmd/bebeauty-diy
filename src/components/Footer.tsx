@@ -43,7 +43,7 @@ export default function Footer() {
           <div className="bb-footer__card-inner">
             <span className="bb-footer__card-pill">{t("cardPill")}</span>
             <p className="bb-footer__card-text">{t("cardText")}</p>
-            <Button href="/tooth-gem-kit" className="bb-footer__card-btn">
+            <Button href="/tooth-gem-kit" className="bb-footer__card-btn bb-btn--on-dark">
               {t("cardCta")}
             </Button>
           </div>

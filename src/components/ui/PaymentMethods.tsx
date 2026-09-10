@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { PAYMENT_METHODS } from "@/lib/payment-methods";
 
@@ -22,12 +23,11 @@ type Props = {
 const TONE = {
   default: {
     root: "text-[var(--bb-ink-2)]",
-    badge:
-      "border border-[var(--bb-chip-border)] bg-[var(--bb-chip-bg)] px-2 py-[3px] text-[10.5px]",
+    badge: "border border-[var(--bb-chip-border)]",
   },
   inverse: {
     root: "text-white/50",
-    badge: "bg-white/[0.07] px-2.5 py-1 text-[11px]",
+    badge: "border border-black/5",
   },
 } as const;
 
@@ -80,9 +80,15 @@ export default function PaymentMethods({
         {PAYMENT_METHODS.map((method) => (
           <li
             key={method.id}
-            className={`rounded-md font-bold tracking-[0.02em] ${styles.badge}`}
+            className={`flex items-center justify-center rounded-md bg-white px-2 py-1.5 ${styles.badge}`}
           >
-            {method.label}
+            <Image
+              src={method.icon}
+              alt={method.label}
+              width={method.width}
+              height={method.height}
+              className="h-4 w-auto object-contain"
+            />
           </li>
         ))}
       </ul>

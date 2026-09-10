@@ -2,11 +2,11 @@
 
 import Button from "@/components/ui/Button";
 import Logo from "@/components/ui/Logo";
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import { useState } from "react";
 import { useCart } from "@/hooks/useCart";
-import { useLocale, useTranslations } from "next-intl";
-import { Link, usePathname, useRouter } from "@/i18n/navigation";
-import type { Locale } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 function IconCart() {
   return (
@@ -32,24 +32,6 @@ function IconClose() {
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round">
       <path d="M18 6 6 18M6 6l12 12" />
     </svg>
-  );
-}
-
-function LanguageSwitcher({ className = "" }: { className?: string }) {
-  const locale = useLocale() as Locale;
-  const t = useTranslations("nav");
-  const pathname = usePathname();
-  const router = useRouter();
-  const other: Locale = locale === "en" ? "et" : "en";
-
-  return (
-    <button
-      className={className}
-      aria-label={t("switchLanguage")}
-      onClick={() => router.replace(pathname, { locale: other })}
-    >
-      {other.toUpperCase()}
-    </button>
   );
 }
 
@@ -87,10 +69,10 @@ export default function SiteNav({ active = "pood" }: { active?: string }) {
         </div>
 
         <div className="bb-nav__right">
-          <LanguageSwitcher className="bb-icon-btn bb-nav__lang" />
-          <Button href="/tooth-gem-kit" className="bb-nav__cta">
+          <Button href="/tooth-gem-kit" className="bb-nav__cta bb-btn--on-dark">
             {t("shopTheKit")}
           </Button>
+          <LanguageSwitcher />
           <button className="bb-icon-btn bb-nav__cart" aria-label={t("cart")} onClick={openCart}>
             <IconCart />
             {cartCount > 0 && <span className="bb-nav__cart-badge">{cartCount}</span>}
@@ -119,10 +101,10 @@ export default function SiteNav({ active = "pood" }: { active?: string }) {
               {l.label}
             </Link>
           ))}
-          <LanguageSwitcher className="bb-nav__mobile-link bb-nav__lang" />
-          <Button href="/tooth-gem-kit" className="bb-nav__mobile-cta" onClick={() => setMenuOpen(false)}>
+          <Button href="/tooth-gem-kit" className="bb-nav__mobile-cta bb-btn--on-dark" onClick={() => setMenuOpen(false)}>
             {t("shopTheKit")}
           </Button>
+          <LanguageSwitcher variant="inline" />
         </div>
       )}
     </>

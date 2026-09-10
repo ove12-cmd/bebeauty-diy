@@ -271,7 +271,7 @@
 
 .bb-guide__nav-btn {
   background: none;
-  border: 1.5px solid #e0dcd2;
+  border: 1.5px solid var(--bb-ink);
   border-radius: 999px;
   padding: 13px 24px;
   font-family: var(--bb-font);
@@ -279,9 +279,11 @@
   font-weight: 600;
   color: var(--bb-ink);
   cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
+  box-shadow: 2.5px 2.5px 0 0 var(--bb-ink);
+  transition: background 0.15s, box-shadow 0.12s, transform 0.12s;
 }
-.bb-guide__nav-btn:hover { border-color: #c4bfb2; background: #fff; }
+.bb-guide__nav-btn:hover { background: #fff; }
+.bb-guide__nav-btn:active { transform: translate(2.5px, 2.5px); box-shadow: 0 0 0 0 var(--bb-ink); }
 
 .bb-guide__nav-next {
   font-size: 15px !important;

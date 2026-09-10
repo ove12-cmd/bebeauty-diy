@@ -39,7 +39,7 @@ export default function CookieBanner() {
           })}
         </p>
         <div className="bb-cookie__actions">
-          <Button className="bb-cookie__accept" onClick={accept}>{t("accept")}</Button>
+          <Button className="bb-cookie__accept bb-btn--on-dark" onClick={accept}>{t("accept")}</Button>
           <button className="bb-cookie__decline" onClick={decline}>{t("decline")}</button>
         </div>
       </div>

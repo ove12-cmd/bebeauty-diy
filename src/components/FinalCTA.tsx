@@ -32,7 +32,7 @@ export default function FinalCTA() {
         {t("subLine1")}<br />
         {t("subLine2")}
       </p>
-      <Button href="/tooth-gem-kit" className="bb-cta__btn">
+      <Button href="/tooth-gem-kit" className="bb-cta__btn bb-btn--on-dark">
         {tNav("shopTheKit")}
       </Button>
     </section>

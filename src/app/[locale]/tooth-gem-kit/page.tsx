@@ -12,6 +12,7 @@ import SiteNav from "@/components/SiteNav";
 import Button from "@/components/ui/Button";
 import PaymentMethods from "@/components/ui/PaymentMethods";
 import Stars from "@/components/ui/Stars";
+import { FaqAccordion } from "@/components/ui/FaqAccordion";
 import { AVERAGE_RATING, REVIEW_COUNT, formatRating } from "@/lib/reviews";
 import { FAQ_CATEGORIES, FAQ_ITEMS, resolveFaqCategory, resolveFaqItem } from "@/lib/faq";
 import { productSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
@@ -97,7 +98,6 @@ function FAQ() {
   const tFaqSection = useTranslations("shopFaqSection");
   const categories = FAQ_CATEGORIES.map((c) => resolveFaqCategory(c, locale));
   const [cat, setCat] = useState(0);
-  const [open, setOpen] = useState<string | null>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const active = categories[cat];
 
@@ -113,7 +113,6 @@ function FAQ() {
     else return;
     e.preventDefault();
     setCat(next);
-    setOpen(null);
     tabRefs.current[next]?.focus();
   }
 
@@ -135,15 +134,12 @@ function FAQ() {
             aria-controls={`faq-panel-${c.id}`}
             aria-selected={i === cat}
             tabIndex={i === cat ? 0 : -1}
-            onClick={() => {
-              setCat(i);
-              setOpen(null);
-            }}
+            onClick={() => setCat(i)}
             onKeyDown={handleTabKey}
             className={
               i === cat
-                ? "rounded-full border border-[var(--bb-gold)] bg-[var(--bb-gold-tint)] px-4 py-2 text-[13px] font-semibold text-[var(--bb-gold-deep)]"
-                : "rounded-full border border-[var(--bb-chip-border)] px-4 py-2 text-[13px] font-semibold text-[var(--bb-ink-2)] hover:border-[var(--bb-gold-line)]"
+                ? "rounded-full border border-[var(--bb-gold)] bg-[var(--bb-gold-tint)] px-4 py-2 text-[13px] font-semibold text-[var(--bb-gold-deep)] shadow-[2px_2px_0_0_var(--bb-gold)] transition-[box-shadow,transform] duration-150 active:translate-x-[2px] active:translate-y-[2px] active:shadow-[0_0_0_0_var(--bb-gold)]"
+                : "rounded-full border border-[var(--bb-ink)] px-4 py-2 text-[13px] font-semibold text-[var(--bb-ink-2)] shadow-[2px_2px_0_0_var(--bb-ink)] transition-[box-shadow,transform,border-color] duration-150 hover:border-[var(--bb-gold-line)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[0_0_0_0_var(--bb-ink)]"
             }
           >
             {c.label}
@@ -155,30 +151,15 @@ function FAQ() {
         role="tabpanel"
         id={`faq-panel-${active.id}`}
         aria-labelledby={`faq-tab-${active.id}`}
-        // .bb-faq's own gap only reaches the tablist and this panel, so the
-        // items inside it need their own row spacing.
-        className="flex flex-col gap-3"
       >
-        {active.items.map((faq, i) => {
-          const key = `${active.id}-${i}`;
-          const isOpen = open === key;
-          return (
-            <div key={key} className={`bb-faq__item ${isOpen ? "bb-faq__item--open" : ""}`}>
-              <button
-                className="bb-faq__q"
-                aria-expanded={isOpen}
-                onClick={() => setOpen(isOpen ? null : key)}
-              >
-                <span className="bb-faq__num">{String(i + 1).padStart(2, "0")}</span>
-                <span className="bb-faq__text">{faq.q}</span>
-                <span className="bb-faq__icon">
-                  <IconPlus />
-                </span>
-              </button>
-              {isOpen && <p className="bb-faq__a">{faq.a}</p>}
-            </div>
-          );
-        })}
+        <FaqAccordion
+          key={active.id}
+          data={active.items.map((faq, i) => ({
+            id: `${active.id}-${i}`,
+            question: faq.q,
+            answer: faq.a,
+          }))}
+        />
       </div>
     </div>
   );
@@ -268,7 +249,7 @@ function StickyBar({ price, original, onAdd }: { price: string; original: string
       <div className="bb-sticky-bar__right">
         <span className="bb-sticky-bar__price">{price}</span>
         <span className="bb-sticky-bar__original">{original}</span>
-        <Button className="bb-sticky-bar__cta" onClick={onAdd}><IconCart />{t("addToCart")}</Button>
+        <Button className="bb-sticky-bar__cta bb-btn--on-dark" onClick={onAdd}><IconCart />{t("addToCart")}</Button>
       </div>
     </div>
   );

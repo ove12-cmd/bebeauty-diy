@@ -73,7 +73,7 @@ export default function Hero() {
             </div>
             <div className="bb-cta-card__buy">
               <span className="bb-cta-card__price">{t("price")}</span>
-              <Button href="/tooth-gem-kit">
+              <Button href="/tooth-gem-kit" className="bb-btn--on-dark">
                 {tNav("shopTheKit")}
               </Button>
             </div>

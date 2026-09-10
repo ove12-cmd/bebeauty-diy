@@ -130,13 +130,16 @@
 
 .bb-shop-steps__guide-btn {
   background: transparent;
-  border: 1px solid #ffffff;
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 2.5px 2.5px 0 0 rgba(255, 255, 255, 0.9);
   color: #ffffff;
-  box-shadow: none;
   flex-shrink: 0;
 }
 .bb-shop-steps__guide-btn:hover {
   background: rgba(255, 255, 255, 0.08);
+}
+.bb-shop-steps__guide-btn:active {
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.9);
 }
 
 .bb-shop-step__img {
@@ -229,63 +232,6 @@
   gap: 10px;
   max-width: 760px;
   margin: 0 auto;
-}
-
-.bb-faq__item {
-  background: #f7f6f2;
-  border-radius: 16px;
-  overflow: hidden;
-  transition: background 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.bb-faq__item--open {
-  background: #f0efe8;
-}
-
-.bb-faq__q {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 44px 1fr auto;
-  align-items: center;
-  padding: 20px 20px 20px 24px;
-  background: none;
-  border: none;
-  font-family: var(--bb-font);
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--bb-ink);
-  cursor: pointer;
-  text-align: left;
-  letter-spacing: -0.02em;
-  gap: 12px;
-}
-
-.bb-faq__num {
-  font-size: 14px;
-  font-weight: var(--bb-fw-display);
-  color: var(--bb-gold);
-  letter-spacing: -0.01em;
-}
-
-.bb-faq__text { flex: 1; }
-
-.bb-faq__icon {
-  flex-shrink: 0;
-  color: var(--bb-ink-2);
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: #e5e4de;
-}
-
-.bb-faq__item--open .bb-faq__icon {
-  transform: rotate(45deg);
-  color: var(--bb-gold);
-  background: #ffe9a8;
 }
 
 /* Urgency elements */
@@ -542,7 +488,7 @@
 .bb-discount__input {
   flex: 1;
   padding: 11px 14px;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1.5px solid #e0e0e0;
   font-family: var(--bb-font);
   font-size: 13px;
@@ -559,7 +505,7 @@
 
 .bb-discount__btn {
   padding: 11px 18px;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1.5px solid var(--bb-ink);
   background: none;
   font-family: var(--bb-font);
@@ -568,7 +514,12 @@
   color: var(--bb-ink);
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.15s, color 0.15s;
+  box-shadow: 2.5px 2.5px 0 0 var(--bb-ink);
+  transition: background 0.15s, color 0.15s, box-shadow 0.12s, transform 0.12s;
+}
+.bb-discount__btn:active {
+  transform: translate(2.5px, 2.5px);
+  box-shadow: 0 0 0 0 var(--bb-ink);
 }
 
 .bb-discount__btn:hover { background: var(--bb-ink); color: #fff; }
@@ -789,22 +740,6 @@
   margin-left: 8px;
 }
 
-@keyframes faqSlideIn {
-  0%   { opacity: 0; transform: translateY(-8px) scaleY(0.95); }
-  60%  { transform: translateY(2px) scaleY(1.01); }
-  100% { opacity: 1; transform: translateY(0) scaleY(1); }
-}
-
-.bb-faq__a {
-  font-size: 14px;
-  color: var(--bb-ink-2);
-  line-height: 1.7;
-  margin: 0;
-  padding: 0 24px 20px 80px;
-  animation: faqSlideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  transform-origin: top;
-}
-
 /* ── Tablet ── */
 @media (max-width: 1024px) {
   .bb-shop { padding: 0 24px 40px; }
@@ -868,7 +803,6 @@
 
   /* FAQ */
   .bb-faq-layout { grid-template-columns: 1fr; gap: 24px; }
-  .bb-faq__a { padding: 0 16px 18px 60px; }
 
   /* Stats */
   .bb-stats-bar { grid-template-columns: 1fr; }
