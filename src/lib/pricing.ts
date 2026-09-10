@@ -3,7 +3,6 @@
 // from these values so a tampered cart price can never reach the payment step.
 
 export const CURRENCY = "EUR";
-export const LOCALE = "et";
 
 // Extra crystals, purchasable only alongside a kit — the product page adds
 // them to the cart in the same click as the kit itself, so a gem line never
@@ -62,19 +61,42 @@ export function isGemOnlyOrder(ids: string[]): boolean {
   return ids.length > 0 && ids.every(isGemId);
 }
 
-// Auto-generated marketing codes (see UrgencyPopup) — always the standard rate.
-export const FUNNY_DISCOUNT_CODES = [
-  "BB-TOOTHFAIRY",
-  "BB-GOLDGRIN",
-  "BB-SPARKLEFANG",
-  "BB-BUMBLEBLING",
-  "BB-GLOWGETTER",
-  "BB-GOLDTOOTH",
-  "BB-GRINNIN",
-  "BB-GEMGRIN",
-  "BB-DAZZLEMOUTH",
-  "BB-BLINGSTAR",
-] as const;
+// Auto-generated marketing codes (see UrgencyPopup) — always the standard
+// rate. Kept per-locale so the popup can hand out a code that reads like a
+// pun in whichever language the shopper is browsing; a code generated in
+// one locale still works if checkout happens in the other (ALL_FUNNY_CODES
+// below is the flattened, server-authoritative lookup).
+export const FUNNY_DISCOUNT_CODES: Record<"en" | "et", readonly string[]> = {
+  en: [
+    "BB-TOOTHFAIRY",
+    "BB-GOLDGRIN",
+    "BB-SPARKLEFANG",
+    "BB-BUMBLEBLING",
+    "BB-GLOWGETTER",
+    "BB-GOLDTOOTH",
+    "BB-GRINNIN",
+    "BB-GEMGRIN",
+    "BB-DAZZLEMOUTH",
+    "BB-BLINGSTAR",
+  ],
+  et: [
+    "BB-HAMBAKE",
+    "BB-KULLAKE",
+    "BB-SÄRASILM",
+    "BB-KIMALANE",
+    "BB-HELKUR",
+    "BB-KULDHAMMAS",
+    "BB-NAERATA",
+    "BB-KRISTALL",
+    "BB-HIILGUS",
+    "BB-BLINGSTAR",
+  ],
+};
+
+const ALL_FUNNY_CODES: readonly string[] = [
+  ...FUNNY_DISCOUNT_CODES.en,
+  ...FUNNY_DISCOUNT_CODES.et,
+];
 
 export const STANDARD_DISCOUNT_PCT = 10;
 
@@ -82,7 +104,7 @@ export const STANDARD_DISCOUNT_PCT = 10;
 // the code string, never a percentage — the server decides the discount.
 export const DISCOUNT_CODES: Record<string, number> = {
   BEBEAUTY10: STANDARD_DISCOUNT_PCT,
-  ...Object.fromEntries(FUNNY_DISCOUNT_CODES.map((c) => [c, STANDARD_DISCOUNT_PCT])),
+  ...Object.fromEntries(ALL_FUNNY_CODES.map((c) => [c, STANDARD_DISCOUNT_PCT])),
   TEST95: 95, // internal testing only — not shown in any customer-facing UI
 };
 
@@ -93,16 +115,68 @@ export function discountPctForCode(code?: string | null): number {
 
 // True only for codes the popup itself can generate — never for BEBEAUTY10,
 // internal test codes, or anything else someone might type into the box.
-// Gates the time-limited ticker/popup-restore UI specifically.
+// Gates the time-limited ticker/popup-restore UI specifically. Checked
+// against both locales' lists, since a code generated in one locale must
+// still be recognised if the shopper (or their saved localStorage state)
+// comes back under the other.
 export function isGeneratedMarketingCode(code?: string | null): boolean {
   if (!code) return false;
-  return (FUNNY_DISCOUNT_CODES as readonly string[]).includes(code.trim().toUpperCase());
+  return ALL_FUNNY_CODES.includes(code.trim().toUpperCase());
 }
 
-export const DELIVERY: Record<string, { label: string; price: number }> = {
-  omniva: { label: "Omniva parcel locker", price: 0 },
-  courier: { label: "Courier to your door", price: 3.9 },
+// Delivery price by method — locale-neutral. The customer-facing label is
+// translated at render time (checkout, order-success page, confirmation
+// email) from this same `id`, never pre-formatted and stored: a label baked
+// into Stripe metadata at order time would be stuck in whatever language it
+// was created in, since PaymentIntent metadata is immutable after creation.
+export const DELIVERY: Record<string, { price: number }> = {
+  omniva: { price: 0 },
+  courier: { price: 3.9 },
 };
+
+type SupportedLocale = "en" | "et";
+
+const DELIVERY_METHOD_LABEL: Record<SupportedLocale, Record<string, string>> = {
+  en: { omniva: "Omniva parcel locker", courier: "Courier to your door" },
+  et: { omniva: "Omniva pakiautomaat", courier: "Kuller koju" },
+};
+
+/** Human-readable name of a delivery method, e.g. for a totals line. */
+export function deliveryMethodLabel(locale: SupportedLocale, method: string): string {
+  return DELIVERY_METHOD_LABEL[locale]?.[method] ?? method;
+}
+
+export type DeliveryDetails = {
+  method: string;
+  locker?: string;
+  street?: string;
+  city?: string;
+  zip?: string;
+};
+
+const DELIVERY_TARGET_TEXT: Record<SupportedLocale, { locker: (name: string) => string; courier: (address: string) => string }> = {
+  en: {
+    locker: (name) => `Parcel locker: ${name}`,
+    courier: (address) => `Courier: ${address}`,
+  },
+  et: {
+    locker: (name) => `Pakiautomaat: ${name}`,
+    courier: (address) => `Kuller: ${address}`,
+  },
+};
+
+/**
+ * The specific drop-off point/address line shown under the order summary
+ * and in the confirmation email — e.g. "Parcel locker: Tallinn Kristiine".
+ * Built from the raw fields stored on the order (never a pre-formatted
+ * sentence — see the DELIVERY comment above for why).
+ */
+export function formatDeliveryTarget(locale: SupportedLocale, details: DeliveryDetails): string {
+  const text = DELIVERY_TARGET_TEXT[locale] ?? DELIVERY_TARGET_TEXT.en;
+  if (details.method === "omniva") return text.locker(details.locker || "");
+  const address = [details.street, details.city, details.zip].filter(Boolean).join(", ");
+  return text.courier(address);
+}
 
 export type IncomingItem = { id: string; label?: string; qty: number };
 
@@ -113,8 +187,9 @@ export type PricedOrder = {
   subtotal: number;
   discountPct: number;
   discount: number;
+  // Locale-neutral key ("omniva" | "courier") — translate for display,
+  // never store a pre-formatted label (see the DELIVERY comment above).
   deliveryId: string;
-  deliveryLabel: string;
   deliveryPrice: number;
   grandTotal: number;
 };
@@ -177,7 +252,6 @@ export function priceOrder(input: {
     discountPct,
     discount,
     deliveryId: input.delivery,
-    deliveryLabel: delivery.label,
     deliveryPrice,
     grandTotal,
   };

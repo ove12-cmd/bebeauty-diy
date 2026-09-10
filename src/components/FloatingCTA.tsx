@@ -1,9 +1,11 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Button from "@/components/ui/Button";
 import { useEffect, useState } from "react";
 
 export default function FloatingCTA() {
+  const t = useTranslations("nav");
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -15,7 +17,7 @@ export default function FloatingCTA() {
   return (
     <div className={`bb-floating-cta ${visible ? "bb-floating-cta--visible" : ""}`}>
       <Button href="/tooth-gem-kit" className="bb-floating-cta__btn">
-        Shop the kit
+        {t("shopTheKit")}
       </Button>
     </div>
   );

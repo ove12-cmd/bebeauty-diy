@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export default function ImageLightbox({
   src,
@@ -13,6 +14,7 @@ export default function ImageLightbox({
   alt: string;
   onClose: () => void;
 }) {
+  const t = useTranslations("imageLightbox");
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
@@ -23,7 +25,7 @@ export default function ImageLightbox({
 
   return createPortal(
     <div className="bb-lightbox-overlay" onClick={onClose}>
-      <button className="bb-popup__close bb-lightbox__close" onClick={onClose} aria-label="Close">✕</button>
+      <button className="bb-popup__close bb-lightbox__close" onClick={onClose} aria-label={t("close")}>✕</button>
       <div className="bb-lightbox" onClick={(e) => e.stopPropagation()}>
         <Image
           src={src}

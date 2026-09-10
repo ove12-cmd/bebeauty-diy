@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { createPortal } from "react-dom";
+import { useTranslations } from "next-intl";
 import Button from "@/components/ui/Button";
 
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
 
 export default function ReviewSubmitPopup() {
+  const t = useTranslations("reviewSubmitPopup");
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [rating, setRating] = useState(5);
@@ -37,11 +39,11 @@ export default function ReviewSubmitPopup() {
     e.target.value = "";
     if (!file) return;
     if (!file.type.startsWith("image/")) {
-      setPhotoError("The file must be an image.");
+      setPhotoError(t("fileTypeError"));
       return;
     }
     if (file.size > MAX_PHOTO_BYTES) {
-      setPhotoError("The image is too large (max 5 MB).");
+      setPhotoError(t("fileSizeError"));
       return;
     }
     if (photoPreview) URL.revokeObjectURL(photoPreview);
@@ -70,25 +72,25 @@ export default function ReviewSubmitPopup() {
   return (
     <>
       <Button className="bb-testi__add-btn" onClick={() => setOpen(true)}>
-        Add your review
+        {t("addReview")}
       </Button>
 
       {open && createPortal(
         <div className="bb-popup-overlay" onClick={close}>
           <div className="bb-review-popup" onClick={(e) => e.stopPropagation()}>
-            <button className="bb-popup__close" onClick={close} aria-label="Close">✕</button>
+            <button className="bb-popup__close" onClick={close} aria-label={t("close")}>✕</button>
 
             {status === "sent" ? (
               <div className="bb-review-popup__success">
                 <p className="bb-review-popup__success-icon">💛</p>
-                <h3 className="bb-review-popup__title">Thanks for your feedback!</h3>
-                <p className="bb-review-popup__sub">We value every word — it helps us get better.</p>
+                <h3 className="bb-review-popup__title">{t("thanksTitle")}</h3>
+                <p className="bb-review-popup__sub">{t("thanksSub")}</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="bb-review-popup__form">
-                <h3 className="bb-review-popup__title">Share your experience</h3>
+                <h3 className="bb-review-popup__title">{t("formTitle")}</h3>
 
-                <label className="bb-review-popup__label" htmlFor="rf-name">Name</label>
+                <label className="bb-review-popup__label" htmlFor="rf-name">{t("nameLabel")}</label>
                 <input
                   id="rf-name"
                   className="bb-review-popup__input"
@@ -99,13 +101,13 @@ export default function ReviewSubmitPopup() {
                 />
 
                 <fieldset className="bb-review-popup__stars">
-                  <legend className="bb-review-popup__label">Rating</legend>
+                  <legend className="bb-review-popup__label">{t("ratingLabel")}</legend>
                   {[1, 2, 3, 4, 5].map((n) => (
                     <button
                       key={n}
                       type="button"
                       className="bb-review-popup__star"
-                      aria-label={`${n} stars`}
+                      aria-label={t("starsAria", { n })}
                       aria-pressed={n === rating}
                       onClick={() => setRating(n)}
                     >
@@ -114,7 +116,7 @@ export default function ReviewSubmitPopup() {
                   ))}
                 </fieldset>
 
-                <label className="bb-review-popup__label" htmlFor="rf-text">Your review</label>
+                <label className="bb-review-popup__label" htmlFor="rf-text">{t("reviewLabel")}</label>
                 <textarea
                   id="rf-text"
                   className="bb-review-popup__textarea"
@@ -125,17 +127,17 @@ export default function ReviewSubmitPopup() {
                   rows={4}
                 />
 
-                <label className="bb-review-popup__label" htmlFor="rf-photo">Photo (optional)</label>
+                <label className="bb-review-popup__label" htmlFor="rf-photo">{t("photoLabel")}</label>
                 {photoPreview ? (
                   <div className="bb-review-popup__photo-preview">
                     <img src={photoPreview} alt="" />
-                    <button type="button" className="bb-review-popup__photo-remove" onClick={clearPhoto} aria-label="Remove photo">
+                    <button type="button" className="bb-review-popup__photo-remove" onClick={clearPhoto} aria-label={t("removePhoto")}>
                       ✕
                     </button>
                   </div>
                 ) : (
                   <label htmlFor="rf-photo" className="bb-review-popup__photo-btn">
-                    📷 Add photo
+                    {t("addPhoto")}
                   </label>
                 )}
                 <input
@@ -148,7 +150,7 @@ export default function ReviewSubmitPopup() {
                 {photoError && <p className="bb-review-popup__photo-error">{photoError}</p>}
 
                 <Button type="submit" className="bb-review-popup__submit" disabled={status === "sending"}>
-                  {status === "sending" ? "Sending…" : "Submit review"}
+                  {status === "sending" ? t("sending") : t("submit")}
                 </Button>
               </form>
             )}

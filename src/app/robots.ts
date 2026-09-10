@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
       // Transactional / private / API routes have no search value.
-      disallow: ["/dashboard", "/checkout", "/api"],
+      disallow: ["/dashboard", "/checkout", "/et/checkout", "/api"],
     },
     sitemap: `${BASE_URL}/sitemap.xml`,
     host: BASE_URL,

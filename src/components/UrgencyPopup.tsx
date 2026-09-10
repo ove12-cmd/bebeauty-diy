@@ -1,14 +1,16 @@
 "use client";
 
 import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
 import Button from "@/components/ui/Button";
 import { FUNNY_DISCOUNT_CODES, isGeneratedMarketingCode } from "@/lib/pricing";
 import { useEffect, useState } from "react";
 
 const POPUP_THROTTLE_MS = 24 * 60 * 60 * 1000;
 
-function generateCode() {
-  return FUNNY_DISCOUNT_CODES[Math.floor(Math.random() * FUNNY_DISCOUNT_CODES.length)];
+function generateCode(locale: "en" | "et") {
+  const codes = FUNNY_DISCOUNT_CODES[locale];
+  return codes[Math.floor(Math.random() * codes.length)];
 }
 
 function getSecsLeft() {
@@ -23,6 +25,8 @@ function formatTime(s: number) {
 }
 
 export default function UrgencyPopup({ autoOpen = true }: { autoOpen?: boolean }) {
+  const locale = useLocale() as "en" | "et";
+  const t = useTranslations("urgencyPopup");
   const [visible, setVisible] = useState(false);
   const [code, setCode] = useState("");
   const [copied, setCopied] = useState(false);
@@ -71,7 +75,7 @@ export default function UrgencyPopup({ autoOpen = true }: { autoOpen?: boolean }
   }, [code]);
 
   function handleGenerate() {
-    const newCode = generateCode();
+    const newCode = generateCode(locale);
     const expiry = Date.now() + 15 * 60 * 1000;
     // Only store the *generated* code + its timer. The discount is not
     // "applied" until the user enters it and clicks Apply on the product
@@ -117,37 +121,41 @@ export default function UrgencyPopup({ autoOpen = true }: { autoOpen?: boolean }
   return (
     <div className="bb-popup-overlay" onClick={() => setVisible(false)}>
       <div className="bb-popup" onClick={e => e.stopPropagation()}>
-        <button className="bb-popup__close" onClick={() => setVisible(false)} aria-label="Close">✕</button>
+        <button className="bb-popup__close" onClick={() => setVisible(false)} aria-label={t("close")}>✕</button>
 
         <div className="bb-popup__img">
           {popupImg}
         </div>
 
         <div className="bb-popup__body">
-          <p className="bb-popup__eyebrow">Special offer</p>
-          <h2 className="bb-popup__title">Get <em className="bb-popup__title-em">10% off</em> your first order</h2>
-          <p className="bb-popup__sub">Generate your own personal discount code and use it at checkout.</p>
+          <p className="bb-popup__eyebrow">{t("eyebrow")}</p>
+          <h2 className="bb-popup__title">
+            {t.rich("titleTemplate", {
+              em: (chunks) => <em className="bb-popup__title-em">{chunks}</em>,
+            })}
+          </h2>
+          <p className="bb-popup__sub">{t("sub")}</p>
 
           {!code || expired ? (
             <Button className="bb-popup__cta" onClick={handleGenerate}>
-              {expired ? "Generate a new code" : "Generate discount code"}
+              {expired ? t("generateNew") : t("generate")}
             </Button>
           ) : (
             <div className="bb-popup__success">
-              <p className="bb-popup__psst">Psst — this one's just for you. 🤫</p>
+              <p className="bb-popup__psst">{t("psst")}</p>
               <div className="bb-popup__code-wrap">
                 <span className="bb-popup__code">{code}</span>
                 <button className="bb-popup__copy" onClick={copyCode}>
-                  {copied ? "✓ Copied" : "Copy"}
+                  {copied ? t("copied") : t("copy")}
                 </button>
               </div>
               {secsLeft !== null && secsLeft > 0 && (
                 <p className="bb-popup__timer-line">
-                  Valid for another <span className="bb-popup__timer-val">{formatTime(secsLeft)}</span>
+                  {t("validFor")} <span className="bb-popup__timer-val">{formatTime(secsLeft)}</span>
                 </p>
               )}
               <Button href="/tooth-gem-kit" className="bb-popup__cta" onClick={() => setVisible(false)}>
-                Use code →
+                {t("useCode")}
               </Button>
             </div>
           )}

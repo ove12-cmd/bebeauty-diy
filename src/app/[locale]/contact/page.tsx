@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Button from "@/components/ui/Button";
 import SocialIcon from "@/components/ui/SocialIcon";
 import { COMPANY } from "@/lib/company";

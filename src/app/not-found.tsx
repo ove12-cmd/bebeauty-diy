@@ -1,22 +1,16 @@
-import Link from "next/link";
-import Button from "@/components/ui/Button";
-
+// Root-level fallback 404 — reachable outside the [locale] segment (e.g. an
+// unmatched top-level path, or notFound() thrown outside any locale layout
+// boundary), so it can't assume NextIntlClientProvider is in scope. Still
+// rendered inside the root layout's <html>/<body> (this file must not add
+// its own). Kept deliberately plain/English; the real in-locale 404 with
+// translations and nav lives at app/[locale]/not-found.tsx.
 export default function NotFound() {
   return (
-    <div className="bb-notfound">
-      <div className="bb-notfound__inner">
-        <span className="bb-notfound__num">404</span>
-        <h1 className="bb-notfound__title">Page not found</h1>
-        <p className="bb-notfound__sub">This page is gone — like a crystal that fell off. 💎</p>
-        <div className="bb-notfound__actions">
-          <Button href="/">
-            Back to homepage
-          </Button>
-          <Link href="/tooth-gem-kit" className="bb-notfound__shop">
-            Shop products
-          </Link>
-        </div>
-      </div>
+    <div style={{ fontFamily: "system-ui, sans-serif", textAlign: "center", padding: "80px 20px" }}>
+      <h1>Page not found</h1>
+      <p>
+        <a href="/">Back to homepage</a>
+      </p>
     </div>
   );
 }

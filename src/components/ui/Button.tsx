@@ -1,10 +1,10 @@
-import Link from "next/link";
-import type { ReactNode } from "react";
+import { Link } from "@/i18n/navigation";
+import type { ComponentProps, ReactNode } from "react";
 
 type ButtonProps = {
   children: ReactNode;
-  /** Renders a Next.js <Link> when set, otherwise a <button>. */
-  href?: string;
+  /** Renders a locale-aware <Link> when set, otherwise a <button>. */
+  href?: ComponentProps<typeof Link>["href"];
   onClick?: () => void;
   /** Only applies when there is no href. */
   type?: "button" | "submit";

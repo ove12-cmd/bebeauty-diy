@@ -1,13 +1,15 @@
-const STEPS = ["Details", "Shipping", "Payment"] as const;
+import { useTranslations } from "next-intl";
 
 /**
  * Progress indicator for the checkout. `current` is 1-based; steps before it
  * read as done, the current one is highlighted, later ones stay muted.
  */
 export default function CheckoutSteps({ current }: { current: 1 | 2 | 3 }) {
+  const t = useTranslations("checkoutSteps");
+  const STEPS = [t("details"), t("shipping"), t("payment")];
   return (
     <ol
-      aria-label="Checkout steps"
+      aria-label={t("ariaLabel")}
       className="mb-3.5 flex list-none flex-wrap items-center gap-2 p-0 text-[11px]"
     >
       {STEPS.map((label, i) => {
@@ -36,7 +38,7 @@ export default function CheckoutSteps({ current }: { current: 1 | 2 | 3 }) {
               }
             >
               {step} {label}
-              {isDone && <span className="sr-only"> (done)</span>}
+              {isDone && <span className="sr-only"> {t("done")}</span>}
             </span>
           </li>
         );

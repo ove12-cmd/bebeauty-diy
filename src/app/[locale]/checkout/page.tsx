@@ -1,29 +1,35 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Button from "@/components/ui/Button";
 import CheckoutPayment from "@/components/CheckoutPayment";
 import CheckoutSteps from "@/components/checkout/CheckoutSteps";
 import CheckoutTrustFooter from "@/components/checkout/CheckoutTrustFooter";
 import OrderDetailsRecap from "@/components/checkout/OrderDetailsRecap";
 import { COMPANY } from "@/lib/company";
-import { CHECKOUT_REVIEW } from "@/lib/reviews";
+import { CHECKOUT_REVIEW, resolveReview } from "@/lib/reviews";
 import { useCart } from "@/hooks/useCart";
 import { searchLockers, type Locker } from "@/lib/lockers";
-import { FREE_SHIPPING_GEM_THRESHOLD, discountPctForCode, isGemId, isGemOnlyOrder } from "@/lib/pricing";
+import { FREE_SHIPPING_GEM_THRESHOLD, deliveryMethodLabel, discountPctForCode, isGemId, isGemOnlyOrder } from "@/lib/pricing";
 import { trackMeta, CURRENCY } from "@/lib/meta-pixel";
 import { trackGA4, getGaIds } from "@/lib/ga4";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import "./checkout.css";
 
 // Mirrors lib/pricing.ts's priceOrder() — a crystals-only order pays the
 // courier rate for Omniva too, unless it clears the free-shipping threshold.
-function deliveryOptions(gemOnly: boolean, freeShipping: boolean) {
+function deliveryOptions(
+  locale: "en" | "et",
+  t: ReturnType<typeof useTranslations>,
+  gemOnly: boolean,
+  freeShipping: boolean,
+) {
   return [
     gemOnly && !freeShipping
-      ? { id: "omniva", label: "Omniva parcel locker", price: 3.9, note: "3,90 € · 1–2 business days" }
-      : { id: "omniva", label: "Omniva parcel locker", price: 0, note: "Free · 1–2 business days" },
-    { id: "courier", label: "Courier to your door", price: 3.9, note: "3,90 € · 1–3 business days" },
+      ? { id: "omniva", label: deliveryMethodLabel(locale, "omniva"), price: 3.9, note: t("deliveryNoteOmnivaPaid") }
+      : { id: "omniva", label: deliveryMethodLabel(locale, "omniva"), price: 0, note: t("deliveryNoteOmnivaFree") },
+    { id: "courier", label: deliveryMethodLabel(locale, "courier"), price: 3.9, note: t("deliveryNoteCourier") },
   ];
 }
 
@@ -32,11 +38,15 @@ function eur(n: number) {
 }
 
 export default function CheckoutPage() {
+  const locale = useLocale() as "en" | "et";
+  const t = useTranslations("checkout");
+  const tCart = useTranslations("cart");
+  const checkoutReview = resolveReview(CHECKOUT_REVIEW, locale);
   const { items, subtotal, count } = useCart();
   const gemOnly = isGemOnlyOrder(items.map((i) => i.id));
   const totalGems = gemOnly ? items.reduce((sum, i) => sum + i.qty, 0) : 0;
   const freeShipping = totalGems >= FREE_SHIPPING_GEM_THRESHOLD;
-  const DELIVERY = deliveryOptions(gemOnly, freeShipping);
+  const DELIVERY = deliveryOptions(locale, t, gemOnly, freeShipping);
   const [discountCode, setDiscountCode] = useState("");
   const discountPct = discountPctForCode(discountCode);
   const [form, setForm] = useState({
@@ -150,6 +160,7 @@ export default function CheckoutPage() {
               : null,
           gaClientId: gaIds.clientId,
           gaSessionId: gaIds.sessionId,
+          locale,
         }),
       });
       if (!res.ok) throw new Error();
@@ -169,9 +180,9 @@ export default function CheckoutPage() {
     return (
       <main className="bb-checkout">
         <div className="bb-checkout__inner bb-checkout__empty">
-          <h1 className="bb-checkout__title">Your cart is empty</h1>
-          <p>Add products to your cart to place an order.</p>
-          <Button href="/tooth-gem-kit">View products</Button>
+          <h1 className="bb-checkout__title">{t("emptyTitle")}</h1>
+          <p>{t("emptyText")}</p>
+          <Button href="/tooth-gem-kit">{t("emptyCta")}</Button>
         </div>
       </main>
     );
@@ -202,17 +213,17 @@ export default function CheckoutPage() {
               <rect x="3" y="11" width="18" height="10" rx="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
-            Secure checkout
+            {t("secureCheckout")}
           </span>
         </div>
 
         <CheckoutSteps current={step} />
-        <h1 className="bb-checkout__title">Complete your order</h1>
+        <h1 className="bb-checkout__title">{t("title")}</h1>
 
         <div className={`bb-checkout__grid${clientSecret ? " is-paying" : ""}`}>
           {clientSecret ? (
             <div className="bb-checkout__form">
-              <h2 className="bb-checkout__section-title">Payment</h2>
+              <h2 className="bb-checkout__section-title">{t("paymentSectionTitle")}</h2>
               <p className="mb-3.5 flex items-start gap-1.5 text-[11px] leading-snug text-[var(--bb-ink-2)]">
                 <svg
                   aria-hidden="true"
@@ -229,7 +240,7 @@ export default function CheckoutPage() {
                   <rect x="3" y="11" width="18" height="10" rx="2" />
                   <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
-                Payments are processed by Stripe. We never see or store your card details.
+                {t("paymentNotice")}
               </p>
               <CheckoutPayment
                 clientSecret={clientSecret}
@@ -238,31 +249,34 @@ export default function CheckoutPage() {
                 paymentIntentId={paymentIntentId}
               />
               <p className="mt-2 text-center text-[11px] leading-relaxed text-[var(--bb-ink-2)]">
-                We ship your order out the next business day ·{" "}
-                <Link href="/terms" className="text-[var(--bb-gold-deep)] underline hover:no-underline">
-                  terms of sale
-                </Link>
+                {t.rich("shipNextDay", {
+                  link: (chunks) => (
+                    <Link href="/terms" className="text-[var(--bb-gold-deep)] underline hover:no-underline">
+                      {chunks}
+                    </Link>
+                  ),
+                })}
               </p>
             </div>
           ) : (
           <form className="bb-checkout__form" onSubmit={handleSubmit}>
-            <h2 className="bb-checkout__section-title">Contact Details</h2>
+            <h2 className="bb-checkout__section-title">{t("contactSectionTitle")}</h2>
             <div className="bb-checkout__field">
-              <label htmlFor="co-name">Name</label>
-              <input id="co-name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="First and last name" />
+              <label htmlFor="co-name">{t("nameLabel")}</label>
+              <input id="co-name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder={t("namePlaceholder")} />
             </div>
             <div className="bb-checkout__row">
               <div className="bb-checkout__field">
-                <label htmlFor="co-email">Email</label>
-                <input id="co-email" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="you@email.com" />
+                <label htmlFor="co-email">{t("emailLabel")}</label>
+                <input id="co-email" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder={t("emailPlaceholder")} />
               </div>
               <div className="bb-checkout__field">
-                <label htmlFor="co-phone">Phone</label>
-                <input id="co-phone" type="tel" required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+372 5xxx xxxx" />
+                <label htmlFor="co-phone">{t("phoneLabel")}</label>
+                <input id="co-phone" type="tel" required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder={t("phonePlaceholder")} />
               </div>
             </div>
 
-            <h2 className="bb-checkout__section-title">Delivery</h2>
+            <h2 className="bb-checkout__section-title">{t("deliverySectionTitle")}</h2>
             <div className="bb-checkout__delivery">
               {DELIVERY.map((d) => (
                 <label key={d.id} className={`bb-checkout__delivery-opt ${form.delivery === d.id ? "is-active" : ""}`}>
@@ -275,7 +289,7 @@ export default function CheckoutPage() {
 
             {form.delivery === "omniva" ? (
               <div className="bb-checkout__lockers">
-                <label htmlFor="co-locker" className="bb-checkout__locker-label">Choose a parcel locker</label>
+                <label htmlFor="co-locker" className="bb-checkout__locker-label">{t("lockerLabel")}</label>
 
                 {selectedLocker ? (
                   <div className="bb-checkout__locker-selected">
@@ -283,7 +297,7 @@ export default function CheckoutPage() {
                       <span className="bb-checkout__locker-name">{selectedLocker.name}</span>
                       <span className="bb-checkout__locker-meta">{selectedLocker.city}{selectedLocker.county ? `, ${selectedLocker.county}` : ""}</span>
                     </div>
-                    <button type="button" onClick={() => setSelectedLocker(null)}>Change</button>
+                    <button type="button" onClick={() => setSelectedLocker(null)}>{t("change")}</button>
                   </div>
                 ) : lockersState === "error" ? (
                   <input
@@ -291,7 +305,7 @@ export default function CheckoutPage() {
                     className="bb-checkout__locker-search"
                     value={manualLocker}
                     onChange={(e) => { setManualLocker(e.target.value); setLockerError(false); }}
-                    placeholder="Enter the parcel locker name"
+                    placeholder={t("manualLockerPlaceholder")}
                   />
                 ) : (
                   <>
@@ -300,15 +314,15 @@ export default function CheckoutPage() {
                       className="bb-checkout__locker-search"
                       value={query}
                       onChange={(e) => setQuery(e.target.value)}
-                      placeholder="Search by city or postal code"
+                      placeholder={t("lockerSearchPlaceholder")}
                       autoComplete="off"
                     />
-                    {lockersState === "loading" && <p className="bb-checkout__locker-hint">Loading parcel lockers…</p>}
+                    {lockersState === "loading" && <p className="bb-checkout__locker-hint">{t("loadingLockers")}</p>}
                     {lockersState === "ready" && query.trim().length < 2 && (
-                      <p className="bb-checkout__locker-hint">Start typing to find the nearest parcel locker.</p>
+                      <p className="bb-checkout__locker-hint">{t("startTyping")}</p>
                     )}
                     {lockersState === "ready" && query.trim().length >= 2 && results.length === 0 && (
-                      <p className="bb-checkout__locker-hint">No parcel lockers found.</p>
+                      <p className="bb-checkout__locker-hint">{t("noLockersFound")}</p>
                     )}
                     {lockersState === "ready" && results.length > 0 && (
                       <ul className="bb-checkout__locker-list">
@@ -328,22 +342,22 @@ export default function CheckoutPage() {
                     )}
                   </>
                 )}
-                {lockerError && <p className="bb-checkout__locker-err">Please choose a parcel locker.</p>}
+                {lockerError && <p className="bb-checkout__locker-err">{t("lockerRequiredError")}</p>}
               </div>
             ) : (
               <>
                 <div className="bb-checkout__field">
-                  <label htmlFor="co-street">Address</label>
-                  <input id="co-street" required value={form.street} onChange={(e) => setForm({ ...form, street: e.target.value })} placeholder="Street and house number" />
+                  <label htmlFor="co-street">{t("addressLabel")}</label>
+                  <input id="co-street" required value={form.street} onChange={(e) => setForm({ ...form, street: e.target.value })} placeholder={t("addressPlaceholder")} />
                 </div>
                 <div className="bb-checkout__row">
                   <div className="bb-checkout__field">
-                    <label htmlFor="co-city">City</label>
-                    <input id="co-city" required value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} placeholder="City / municipality" />
+                    <label htmlFor="co-city">{t("cityLabel")}</label>
+                    <input id="co-city" required value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} placeholder={t("cityPlaceholder")} />
                   </div>
                   <div className="bb-checkout__field">
-                    <label htmlFor="co-zip">Postal code</label>
-                    <input id="co-zip" required value={form.zip} onChange={(e) => setForm({ ...form, zip: e.target.value })} placeholder="12345" />
+                    <label htmlFor="co-zip">{t("zipLabel")}</label>
+                    <input id="co-zip" required value={form.zip} onChange={(e) => setForm({ ...form, zip: e.target.value })} placeholder={t("zipPlaceholder")} />
                   </div>
                 </div>
               </>
@@ -356,22 +370,22 @@ export default function CheckoutPage() {
                 <circle cx="17.5" cy="18" r="1.8" />
               </svg>
               <span>
-                Order before <span className="font-medium">14:00</span> — we'll ship it out the next day.
+                {t.rich("orderCutoffNotice", { strong: (chunks) => <span className="font-medium">{chunks}</span> })}
               </span>
             </div>
 
             {payError && (
-              <p className="bb-checkout__locker-err">Payment didn't go through. Please try again.</p>
+              <p className="bb-checkout__locker-err">{t("paymentFailedError")}</p>
             )}
             <Button type="submit" className="bb-checkout__submit" disabled={submitting}>
-              {submitting ? "Please wait…" : "Continue to payment"}
+              {submitting ? t("submitting") : t("continueToPayment")}
             </Button>
-            <p className="bb-checkout__fine">By placing your order you agree to our terms. You'll enter your card details in the next step.</p>
+            <p className="bb-checkout__fine">{t("fineprint")}</p>
           </form>
           )}
 
           <aside className="bb-checkout__summary">
-            <h2 className="bb-checkout__section-title">Your order</h2>
+            <h2 className="bb-checkout__section-title">{t("yourOrderTitle")}</h2>
             <div className="bb-checkout__lines">
               {items.map((i) => (
                 <div key={i.id} className="flex items-start gap-2.5 py-1.5">
@@ -386,21 +400,21 @@ export default function CheckoutPage() {
                   </span>
                   <span className="min-w-0 flex-1 leading-snug">
                     {i.label}
-                    <span className="bb-checkout__qty block">qty {i.qty}</span>
+                    <span className="bb-checkout__qty block">{t("qty", { n: i.qty })}</span>
                   </span>
                   <span className="whitespace-nowrap">{eur(i.price * i.qty)}</span>
                 </div>
               ))}
             </div>
             <div className="bb-checkout__totals">
-              <div className="bb-checkout__total-row"><span>Subtotal</span><span>{eur(subtotal)}</span></div>
+              <div className="bb-checkout__total-row"><span>{tCart("subtotal")}</span><span>{eur(subtotal)}</span></div>
               {discount > 0 && (
                 <div className="bb-checkout__total-row bb-checkout__total-row--discount">
-                  <span>Discount code (−{discountPct}%)</span><span>−{eur(discount)}</span>
+                  <span>{tCart("discountCode", { pct: discountPct })}</span><span>−{eur(discount)}</span>
                 </div>
               )}
-              <div className="bb-checkout__total-row"><span>Delivery</span><span>{delivery.price === 0 ? "Free" : eur(delivery.price)}</span></div>
-              <div className="bb-checkout__total-row bb-checkout__total-row--grand"><span>Total</span><span>{eur(total)}</span></div>
+              <div className="bb-checkout__total-row"><span>{t("delivery")}</span><span>{delivery.price === 0 ? t("free") : eur(delivery.price)}</span></div>
+              <div className="bb-checkout__total-row bb-checkout__total-row--grand"><span>{tCart("total")}</span><span>{eur(total)}</span></div>
             </div>
 
             {clientSecret ? (
@@ -425,10 +439,10 @@ export default function CheckoutPage() {
                   ★★★★★
                 </div>
                 <blockquote className="text-[11px] italic leading-relaxed text-[var(--bb-ink-2)]">
-                  {CHECKOUT_REVIEW.text}
+                  {checkoutReview.text}
                 </blockquote>
                 <figcaption className="mt-1.5 text-[10px] text-[var(--bb-ink-3)]">
-                  {CHECKOUT_REVIEW.name} · {CHECKOUT_REVIEW.date}
+                  {checkoutReview.name} · {checkoutReview.date}
                 </figcaption>
               </figure>
             )}

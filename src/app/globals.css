@@ -490,6 +490,20 @@ html, body {
 }
 .bb-icon-btn:hover { border-color: rgba(255, 255, 255, 0.55); }
 
+.bb-nav__lang {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.bb-nav__mobile-link.bb-nav__lang {
+  width: auto;
+  height: auto;
+  border: none;
+  border-radius: 0;
+  display: block;
+}
+
 /* ── Stars ── */
 .bb-stars {
   color: var(--bb-gold-2);

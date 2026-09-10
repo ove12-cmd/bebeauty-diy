@@ -2,8 +2,9 @@
 
 import "./crystals.css";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import ImageLightbox from "@/components/ImageLightbox";
 import SiteNav from "@/components/SiteNav";
 import Button from "@/components/ui/Button";
@@ -31,6 +32,7 @@ function IconMinus() {
 }
 
 export default function CrystalsPage() {
+  const t = useTranslations("crystalsPage");
   const { add } = useCart();
   const [qtys, setQtys] = useState<Record<string, number>>({});
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
@@ -61,17 +63,17 @@ export default function CrystalsPage() {
       <SiteNav active="kristallid" />
 
       <div className="bb-crystals__intro">
-        <h1 className="bb-crystals__title">Shop Crystals Separately</h1>
+        <h1 className="bb-crystals__title">{t("title")}</h1>
         <p className="bb-crystals__sub">
-          Add more of your favorite crystals — perfect for topping up your existing kit or creating a new design. No need to order a new kit.
+          {t("sub")}
         </p>
         <p className="bb-crystals__note">
-          Minimum order {MIN_STANDALONE_GEMS} crystals.
+          {t("note", { min: MIN_STANDALONE_GEMS })}
         </p>
       </div>
 
       <Link href="/tooth-gem-kit" className="bb-crystals__back-cta">
-        Don't have a kit yet? Shop the DIY Tooth Gem Kit →
+        {t("backCta")}
       </Link>
 
       <div className="bb-crystals__grid">
@@ -80,13 +82,13 @@ export default function CrystalsPage() {
             <button
               type="button"
               className="bb-crystals__thumb"
-              aria-label={`Zoom in on ${g.label}`}
+              aria-label={t("zoomAria", { label: g.label })}
               onClick={() => setLightbox({ src: g.img, alt: g.label })}
             >
               <Image src={g.img} alt={g.label} width={72} height={72} style={{ objectFit: "contain" }} />
             </button>
             <span className="bb-crystals__name">{g.label}</span>
-            <span className="bb-crystals__price">{priceStr(STANDALONE_GEM_PRICE)}/pc</span>
+            <span className="bb-crystals__price">{priceStr(STANDALONE_GEM_PRICE)}{t("perUnitSuffix")}</span>
             <div className="bb-crystals__sizes">
               {GEM_SIZES.map(s => {
                 const key = gemSizeId(g.id, s.id);
@@ -94,11 +96,11 @@ export default function CrystalsPage() {
                   <div key={key} className="bb-crystals__size-row">
                     <span className="bb-crystals__size-label">{s.label}</span>
                     <div className="bb-qty__ctrl bb-qty__ctrl--sm">
-                      <button className="bb-qty__btn" onClick={() => bump(key, -1)} aria-label={`Decrease ${g.label} ${s.label}`}>
+                      <button className="bb-qty__btn" onClick={() => bump(key, -1)} aria-label={t("decreaseAria", { label: g.label, size: s.label })}>
                         <IconMinus />
                       </button>
                       <span className="bb-qty__num">{qtys[key] ?? 0}</span>
-                      <button className="bb-qty__btn" onClick={() => bump(key, 1)} aria-label={`Increase ${g.label} ${s.label}`}>
+                      <button className="bb-qty__btn" onClick={() => bump(key, 1)} aria-label={t("increaseAria", { label: g.label, size: s.label })}>
                         <IconPlus />
                       </button>
                     </div>
@@ -112,23 +114,25 @@ export default function CrystalsPage() {
 
       <p className={`bb-crystals__shipping-note ${total >= FREE_SHIPPING_GEM_THRESHOLD ? "bb-crystals__shipping-note--met" : ""}`}>
         {total >= FREE_SHIPPING_GEM_THRESHOLD
-          ? "🎉 Free shipping applied!"
-          : `📦 Free shipping from ${FREE_SHIPPING_GEM_THRESHOLD} crystals${total > 0 ? ` — add ${FREE_SHIPPING_GEM_THRESHOLD - total} more` : ""}.`}
+          ? t("shippingMet")
+          : total > 0
+            ? t("shippingProgressWithRemaining", { threshold: FREE_SHIPPING_GEM_THRESHOLD, remaining: FREE_SHIPPING_GEM_THRESHOLD - total })
+            : t("shippingProgress", { threshold: FREE_SHIPPING_GEM_THRESHOLD })}
       </p>
 
       <div className="bb-crystals__bar">
         <div className="bb-crystals__bar-info">
           <span className={`bb-crystals__bar-count ${belowMin ? "bb-crystals__bar-count--warn" : ""}`}>
             {total === 0
-              ? `At least ${MIN_STANDALONE_GEMS} crystals`
+              ? t("barMinLabel", { min: MIN_STANDALONE_GEMS })
               : belowMin
-                ? `You need ${MIN_STANDALONE_GEMS - total} more crystals (min. ${MIN_STANDALONE_GEMS})`
-                : `${total} crystals`}
+                ? t("barBelowMin", { needed: MIN_STANDALONE_GEMS - total, min: MIN_STANDALONE_GEMS })
+                : t("barCount", { count: total })}
           </span>
           <span className="bb-crystals__bar-price">{priceStr(cost)}</span>
         </div>
         <Button className="bb-crystals__cta" onClick={addToCart} disabled={total < MIN_STANDALONE_GEMS}>
-          <IconCart />Add to cart
+          <IconCart />{t("addToCart")}
         </Button>
       </div>
 

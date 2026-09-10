@@ -1,9 +1,13 @@
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import Button from "@/components/ui/Button";
 
 const BG_IMGS = [1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3];
 
 export default function FinalCTA() {
+  const t = useTranslations("finalCta");
+  const tNav = useTranslations("nav");
+
   return (
     <section className="bb-cta">
       {/* Rotated image grid background */}
@@ -23,13 +27,13 @@ export default function FinalCTA() {
       <div className="bb-cta__overlay" aria-hidden="true" />
 
       {/* Content */}
-      <h2 className="bb-cta__title">{"Ready for a little glow-up?"}</h2>
+      <h2 className="bb-cta__title">{t("title")}</h2>
       <p className="bb-cta__sub">
-        Add a sparkling detail to your smile in just a few minutes.<br />
-        Order today – your kit will soon be at your nearest parcel locker.
+        {t("subLine1")}<br />
+        {t("subLine2")}
       </p>
       <Button href="/tooth-gem-kit" className="bb-cta__btn">
-        Shop the kit
+        {tNav("shopTheKit")}
       </Button>
     </section>
   );

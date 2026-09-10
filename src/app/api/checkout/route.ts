@@ -14,6 +14,10 @@ type Body = {
   address?: { street: string; city: string; zip: string } | null;
   gaClientId?: string | null;
   gaSessionId?: string | null;
+  /** Buyer's browsing locale — stored so the webhook's confirmation email
+   *  and the order-success page can both render delivery/order text in the
+   *  language the buyer actually used, not whatever the server defaults to. */
+  locale?: string | null;
 };
 
 export async function POST(req: NextRequest) {
@@ -44,10 +48,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Missing delivery address" }, { status: 400 });
   }
 
-  const deliveryText =
-    body.delivery === "omniva"
-      ? `Pakiautomaat: ${body.locker}`
-      : `Kuller: ${[body.address?.street, body.address?.city, body.address?.zip].filter(Boolean).join(", ")}`;
+  const locale = body.locale === "et" ? "et" : "en";
 
   const reference = "BB-" + Date.now().toString().slice(-8);
   const itemsJson = JSON.stringify(
@@ -78,8 +79,18 @@ export async function POST(req: NextRequest) {
         customerName: contact.name,
         customerEmail: contact.email,
         customerPhone: contact.phone,
-        delivery: deliveryText,
-        deliveryMethod: priced.deliveryLabel,
+        // Locale-neutral: raw method key + raw address fields, never a
+        // pre-formatted sentence. PaymentIntent metadata is immutable after
+        // creation, so a formatted string would be stuck in whichever
+        // language it was written in forever — the webhook's email and the
+        // order-success page each format these into text in the buyer's
+        // own locale (see lib/pricing.ts's formatDeliveryTarget).
+        locale,
+        deliveryMethod: body.delivery,
+        deliveryLocker: body.delivery === "omniva" ? body.locker || "" : "",
+        deliveryStreet: body.delivery === "courier" ? body.address?.street || "" : "",
+        deliveryCity: body.delivery === "courier" ? body.address?.city || "" : "",
+        deliveryZip: body.delivery === "courier" ? body.address?.zip || "" : "",
         discountPct: String(priced.discountPct),
         subtotal: String(priced.subtotal),
         deliveryPrice: String(priced.deliveryPrice),

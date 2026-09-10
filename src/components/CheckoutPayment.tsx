@@ -5,6 +5,8 @@ import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-
 import { useState } from "react";
 import Button from "@/components/ui/Button";
 import { useCart } from "@/hooks/useCart";
+import { useLocale, useTranslations } from "next-intl";
+import { getPathname } from "@/i18n/navigation";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "");
 
@@ -17,13 +19,21 @@ function PayForm({
   reference: string;
   paymentIntentId: string;
 }) {
+  const locale = useLocale() as "en" | "et";
+  const t = useTranslations("checkoutPayment");
   const stripe = useStripe();
   const elements = useElements();
   const { clear, items } = useCart();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const successUrl = `/checkout/success?ref=${reference}&pi=${paymentIntentId}`;
+  // Locale-prefixed (e.g. /et/checkout/success) so a 3-D Secure redirect or
+  // the post-payment navigation below lands back on the buyer's own locale
+  // instead of silently bouncing them to English.
+  const successUrl = getPathname({
+    href: { pathname: "/checkout/success", query: { ref: reference, pi: paymentIntentId } },
+    locale,
+  });
 
   async function handlePay(e: React.FormEvent) {
     e.preventDefault();
@@ -40,7 +50,7 @@ function PayForm({
     });
 
     if (error) {
-      setError(error.message ?? "Payment failed. Please try again.");
+      setError(error.message ?? t("genericError"));
       setBusy(false);
       return;
     }
@@ -87,8 +97,8 @@ function PayForm({
     // no error and no way forward.
     setError(
       paymentIntent.status === "requires_payment_method"
-        ? "We couldn't confirm the payment. Please try again or use a different payment method."
-        : "The payment didn't go through. Please try again.",
+        ? t("requiresPaymentMethodError")
+        : t("paymentFailedError"),
     );
     setBusy(false);
   }
@@ -98,7 +108,7 @@ function PayForm({
       <PaymentElement options={{ layout: "tabs" }} />
       {error && <p className="bb-checkout__locker-err">{error}</p>}
       <Button type="submit" className="bb-checkout__submit" disabled={busy || !stripe}>
-        {busy ? "Paying…" : `Pay ${amountLabel}`}
+        {busy ? t("paying") : t("payButton", { amount: amountLabel })}
       </Button>
     </form>
   );
@@ -115,12 +125,13 @@ export default function CheckoutPayment({
   reference: string;
   paymentIntentId: string;
 }) {
+  const locale = useLocale() as "en" | "et";
   return (
     <Elements
       stripe={stripePromise}
       options={{
         clientSecret,
-        locale: "en",
+        locale,
         // Stripe renders the Payment Element in its own iframe, so it can't
         // see our self-hosted next/font file — it must load the font itself.
         fonts: [

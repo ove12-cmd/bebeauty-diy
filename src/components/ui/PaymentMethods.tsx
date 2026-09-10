@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { PAYMENT_METHODS } from "@/lib/payment-methods";
 
 type Props = {
@@ -43,6 +44,7 @@ export default function PaymentMethods({
   className = "",
 }: Props) {
   const styles = TONE[tone];
+  const t = useTranslations("paymentMethods");
 
   return (
     <div
@@ -70,7 +72,7 @@ export default function PaymentMethods({
         </span>
       )}
       <ul
-        aria-label="Accepted payment methods"
+        aria-label={t("ariaLabel")}
         className={`flex list-none flex-wrap items-center gap-1.5 p-0 ${
           layout === "spread" ? "ms-auto" : ""
         }`}

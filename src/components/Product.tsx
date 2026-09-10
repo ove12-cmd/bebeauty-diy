@@ -1,22 +1,26 @@
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import Button from "@/components/ui/Button";
 
-const FEATURES = [
-  "Ready in 10 minutes",
-  "Swarovski crystals — the same ones salons use",
-  "Easy to apply at home",
-  "No special skills needed",
-  "Safe — won't damage tooth enamel",
-  "Clear, precise instructions",
-];
-
 export default function Product() {
+  const t = useTranslations("productSection");
+  const tNav = useTranslations("nav");
+
+  const FEATURES = [
+    t("feature1"),
+    t("feature2"),
+    t("feature3"),
+    t("feature4"),
+    t("feature5"),
+    t("feature6"),
+  ];
+
   return (
     <section className="bb-product">
       <div className="bb-product__img-wrap">
         <Image
           src="/product package v3.png"
-          alt="beBeauty DIY kit"
+          alt={t("imgAlt")}
           fill
           sizes="(max-width: 768px) 100vw, 55vw"
           style={{ objectFit: "cover" }}
@@ -24,14 +28,14 @@ export default function Product() {
       </div>
 
       <div className="bb-product__content">
-        <span className="bb-product__eyebrow">Kit</span>
-        <h2 className="bb-product__name">Everything you need for<br />the perfect result.</h2>
+        <span className="bb-product__eyebrow">{t("eyebrow")}</span>
+        <h2 className="bb-product__name">{t("headingLine1")}<br />{t("headingLine2")}</h2>
         <p className="bb-product__price">
-          <span className="bb-product__price-from">Price</span>
-          <span className="bb-product__price-value">35&nbsp;€</span>
+          <span className="bb-product__price-from">{t("priceLabel")}</span>
+          <span className="bb-product__price-value">{t("priceValue")}</span>
         </p>
         <p className="bb-product__desc">
-          Apply tooth gems at home — fast, easy, and with a professional result.
+          {t("desc")}
         </p>
         <ul className="bb-product__features">
           {FEATURES.map((f) => (
@@ -42,7 +46,7 @@ export default function Product() {
           ))}
         </ul>
         <Button href="/tooth-gem-kit" className="bb-product__cta">
-          Shop the kit
+          {tNav("shopTheKit")}
         </Button>
       </div>
     </section>

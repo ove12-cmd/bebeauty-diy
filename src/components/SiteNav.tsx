@@ -4,6 +4,9 @@ import Button from "@/components/ui/Button";
 import Logo from "@/components/ui/Logo";
 import { useState } from "react";
 import { useCart } from "@/hooks/useCart";
+import { useLocale, useTranslations } from "next-intl";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import type { Locale } from "@/i18n/routing";
 
 function IconCart() {
   return (
@@ -32,50 +35,70 @@ function IconClose() {
   );
 }
 
-const LINKS = [
-  { key: "pood", href: "/", label: "Shop" },
-  { key: "komplektid", href: "/tooth-gem-kit", label: "Kits" },
-  { key: "kuidas", href: "/#kuidas", label: "How it works" },
-  { key: "juhend", href: "/guide", label: "Guide" },
-  { key: "galerii", href: "/#galerii", label: "Gallery" },
-];
+function LanguageSwitcher({ className = "" }: { className?: string }) {
+  const locale = useLocale() as Locale;
+  const t = useTranslations("nav");
+  const pathname = usePathname();
+  const router = useRouter();
+  const other: Locale = locale === "en" ? "et" : "en";
+
+  return (
+    <button
+      className={className}
+      aria-label={t("switchLanguage")}
+      onClick={() => router.replace(pathname, { locale: other })}
+    >
+      {other.toUpperCase()}
+    </button>
+  );
+}
 
 export default function SiteNav({ active = "pood" }: { active?: string }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { count: cartCount, open: openCart } = useCart();
+  const t = useTranslations("nav");
+
+  const LINKS = [
+    { key: "pood", href: "/", label: t("shop") },
+    { key: "komplektid", href: "/tooth-gem-kit", label: t("kits") },
+    { key: "kuidas", href: { pathname: "/", hash: "kuidas" }, label: t("howItWorks") },
+    { key: "juhend", href: "/guide", label: t("guide") },
+    { key: "galerii", href: { pathname: "/", hash: "galerii" }, label: t("gallery") },
+  ] as const;
 
   return (
     <>
       <nav className="bb-nav">
-        <a href="/" className="bb-logo-badge" aria-label="beBeauty DIY">
+        <Link href="/" className="bb-logo-badge" aria-label="beBeauty DIY">
           <Logo className="bb-logo-badge__img" priority />
-        </a>
+        </Link>
 
         {/* Desktop links — hidden via CSS when they'd wrap */}
         <div className="bb-nav__links">
           {LINKS.map((l) => (
-            <a
+            <Link
               key={l.key}
               href={l.href}
               className={`bb-nav__link ${active === l.key ? "bb-nav__link--active" : ""}`}
             >
               {l.label}
-            </a>
+            </Link>
           ))}
         </div>
 
         <div className="bb-nav__right">
+          <LanguageSwitcher className="bb-icon-btn bb-nav__lang" />
           <Button href="/tooth-gem-kit" className="bb-nav__cta">
-            Shop the kit
+            {t("shopTheKit")}
           </Button>
-          <button className="bb-icon-btn bb-nav__cart" aria-label="Cart" onClick={openCart}>
+          <button className="bb-icon-btn bb-nav__cart" aria-label={t("cart")} onClick={openCart}>
             <IconCart />
             {cartCount > 0 && <span className="bb-nav__cart-badge">{cartCount}</span>}
           </button>
           {/* Hamburger — shown only when links collapse */}
           <button
             className="bb-icon-btn bb-nav__hamburger"
-            aria-label="Menu"
+            aria-label={t("menu")}
             onClick={() => setMenuOpen(!menuOpen)}
           >
             {menuOpen ? <IconClose /> : <IconMenu />}
@@ -87,17 +110,18 @@ export default function SiteNav({ active = "pood" }: { active?: string }) {
       {menuOpen && (
         <div className="bb-nav__mobile-menu">
           {LINKS.map((l) => (
-            <a
+            <Link
               key={l.key}
               href={l.href}
               className={`bb-nav__mobile-link ${active === l.key ? "bb-nav__mobile-link--active" : ""}`}
               onClick={() => setMenuOpen(false)}
             >
               {l.label}
-            </a>
+            </Link>
           ))}
+          <LanguageSwitcher className="bb-nav__mobile-link bb-nav__lang" />
           <Button href="/tooth-gem-kit" className="bb-nav__mobile-cta" onClick={() => setMenuOpen(false)}>
-            Shop the kit
+            {t("shopTheKit")}
           </Button>
         </div>
       )}

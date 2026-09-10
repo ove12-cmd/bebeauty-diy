@@ -1,4 +1,7 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
+
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const securityHeaders = [
   // Prevent clickjacking — don't allow site to be embedded in iframes
@@ -87,11 +90,14 @@ const nextConfig: NextConfig = {
       { source: "/privaatsus", destination: "/privacy", permanent: true },
       { source: "/tingimused", destination: "/terms", permanent: true },
       // Contact page hidden for now — temporary (not permanent) so it's a
-      // one-line revert once the page comes back.
+      // one-line revert once the page comes back. Blocked at every path that
+      // could reach it: the old bare Estonian slug, the new bare English
+      // slug, and the new localized Estonian slug under /et.
       { source: "/kontakt", destination: "/", permanent: false },
       { source: "/contact", destination: "/", permanent: false },
+      { source: "/et/kontakt", destination: "/et", permanent: false },
     ];
   },
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

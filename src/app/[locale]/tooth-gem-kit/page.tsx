@@ -3,6 +3,7 @@
 import "./shop.css";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import UrgencyPopup from "@/components/UrgencyPopup";
 import JsonLd from "@/components/JsonLd";
 import ImageLightbox from "@/components/ImageLightbox";
@@ -12,8 +13,9 @@ import Button from "@/components/ui/Button";
 import PaymentMethods from "@/components/ui/PaymentMethods";
 import Stars from "@/components/ui/Stars";
 import { AVERAGE_RATING, REVIEW_COUNT, formatRating } from "@/lib/reviews";
-import { FAQ_CATEGORIES, FAQ_ITEMS } from "@/lib/faq";
+import { FAQ_CATEGORIES, FAQ_ITEMS, resolveFaqCategory, resolveFaqItem } from "@/lib/faq";
 import { productSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
+import { getPathname } from "@/i18n/navigation";
 import { discountPctForCode, EXTRA_GEM_TYPES, GEM_PRICE } from "@/lib/pricing";
 import { trackMeta, CURRENCY } from "@/lib/meta-pixel";
 import { trackGA4 } from "@/lib/ga4";
@@ -23,9 +25,9 @@ import { useCart } from "@/hooks/useCart";
 const SHOW_EXTRA_GEMS = true;
 
 const VARIANTS = [
-  { id: "s17", label: "1.7mm", desc: "Smaller, more delicate crystal", price: 35, original: 45 },
-  { id: "s20", label: "2.0mm", desc: "Our recommendation", price: 35, original: 45 },
-  { id: "s23", label: "2.3mm", desc: "Larger, more striking effect", price: 35, original: 45 },
+  { id: "s17", label: "1.7mm", descKey: "variantDescS17", price: 35, original: 45 },
+  { id: "s20", label: "2.0mm", descKey: "variantDescS20", price: 35, original: 45 },
+  { id: "s23", label: "2.3mm", descKey: "variantDescS23", price: 35, original: 45 },
 ];
 
 // Product gallery — main image first, then alternate shots (click to swap)
@@ -51,19 +53,22 @@ function priceStr(n: number) {
 // `img` reuses the same tool shots as /guide, so the thing you read about
 // here is the thing you see in the instructions. The last row is a claim
 // rather than an object, so it has no photo — the thumbnail is optional.
-const BOX_ITEMS: { name: string; desc: string; img?: string }[] = [
-  { name: "UV LED Lamp", desc: "For fast, even curing.", img: "/tools/uv.png" },
-  { name: "Premium Crystals", desc: "10 Swarovski crystals included.", img: "/crystals/gem-ab.jpg" },
-  { name: "Glue & Etch", desc: "For professional bonding and longer-lasting hold.", img: "/tools/liim.png" },
-  { name: "Applicators", desc: "Everything you need for precise crystal placement.", img: "/tools/aplikaator.png" },
-  { name: "Cheek Retractor", desc: "Keeps your working area comfortably open.", img: "/tools/põsehoidja.png" },
-  { name: "Ready to Use", desc: "Open the box and get started right away." },
+// name/desc are message keys into the "shopBox" namespace — resolved at
+// render time so this data stays locale-agnostic.
+const BOX_ITEMS: { nameKey: string; descKey: string; img?: string }[] = [
+  { nameKey: "item1Name", descKey: "item1Desc", img: "/tools/uv.png" },
+  { nameKey: "item2Name", descKey: "item2Desc", img: "/crystals/gem-ab.jpg" },
+  { nameKey: "item3Name", descKey: "item3Desc", img: "/tools/liim.png" },
+  { nameKey: "item4Name", descKey: "item4Desc", img: "/tools/aplikaator.png" },
+  { nameKey: "item5Name", descKey: "item5Desc", img: "/tools/põsehoidja.png" },
+  { nameKey: "item6Name", descKey: "item6Desc" },
 ];
 
+// title/desc are message keys into the "shopSteps" namespace.
 const STEPS = [
-  { n: "01", title: "Choose", desc: "Pick your kit.", src: "/howto/vali.jpg" },
-  { n: "02", title: "Apply", desc: "Apply the crystals to your tooth.", src: "/howto/paigalda.jpg" },
-  { n: "03", title: "Done!", desc: "Crystal in place", src: "/howto/tulemus.jpg" },
+  { n: "01", titleKey: "step1Title", descKey: "step1Desc", src: "/howto/vali.jpg" },
+  { n: "02", titleKey: "step2Title", descKey: "step2Desc", src: "/howto/paigalda.jpg" },
+  { n: "03", titleKey: "step3Title", descKey: "step3Desc", src: "/howto/tulemus.jpg" },
 ];
 
 
@@ -88,15 +93,18 @@ function IconChevron() {
 }
 
 function FAQ() {
+  const locale = useLocale() as "en" | "et";
+  const tFaqSection = useTranslations("shopFaqSection");
+  const categories = FAQ_CATEGORIES.map((c) => resolveFaqCategory(c, locale));
   const [cat, setCat] = useState(0);
   const [open, setOpen] = useState<string | null>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const active = FAQ_CATEGORIES[cat];
+  const active = categories[cat];
 
   // Roving-focus keyboard handling, which role="tab" implies: arrows move
   // between tabs (wrapping), Home/End jump to the ends.
   function handleTabKey(e: React.KeyboardEvent) {
-    const last = FAQ_CATEGORIES.length - 1;
+    const last = categories.length - 1;
     let next = cat;
     if (e.key === "ArrowRight") next = cat === last ? 0 : cat + 1;
     else if (e.key === "ArrowLeft") next = cat === 0 ? last : cat - 1;
@@ -113,10 +121,10 @@ function FAQ() {
     <div className="bb-faq">
       <div
         role="tablist"
-        aria-label="Frequently asked questions"
+        aria-label={tFaqSection("sectionTitle")}
         className="mb-4 flex flex-wrap gap-1.5"
       >
-        {FAQ_CATEGORIES.map((c, i) => (
+        {categories.map((c, i) => (
           <button
             key={c.id}
             ref={(el) => {
@@ -176,33 +184,37 @@ function FAQ() {
   );
 }
 
+// icon/label pairs — label is a message key into the "shopTrust" namespace.
 const TRUST = [
-  { icon: "🦷", label: "Tooth-friendly" },
-  { icon: "🇪🇺", label: "European crystals" },
-  { icon: "🔒", label: "Secure payment" },
+  { icon: "🦷", labelKey: "item1" },
+  { icon: "🇪🇺", labelKey: "item2" },
+  { icon: "🔒", labelKey: "item3" },
 ];
 
+// num/label are message keys into the "shopStats" namespace.
 const STATS = [
-  { num: "10 min", label: "Application time" },
-  { num: "10", label: "Premium crystals included" },
-  { num: "1–2d", label: "Delivery in Estonia" },
-  { num: "2–4 weeks", label: "Average hold" },
+  { numKey: "item1Num", labelKey: "item1Label" },
+  { numKey: "item2Num", labelKey: "item2Label" },
+  { numKey: "item3Num", labelKey: "item3Label" },
+  { numKey: "item4Num", labelKey: "item4Label" },
 ];
 
+// label is a message key into the "shopSizeGuide" namespace.
 const SIZE_GUIDE = [
-  { size: "1.7mm", dot: 10, label: "Subtler, natural" },
-  { size: "2.0mm", dot: 13, label: "Most popular" },
-  { size: "2.3mm", dot: 16, label: "Bold effect" },
+  { size: "1.7mm", dot: 10, labelKey: "item1Label" },
+  { size: "2.0mm", dot: 13, labelKey: "item2Label" },
+  { size: "2.3mm", dot: 16, labelKey: "item3Label" },
 ];
 
 /* ── Sticky nav ── */
 function StickyNav() {
+  const t = useTranslations("shopStickyNav");
   const [active, setActive] = useState("kirjeldus");
   const TABS = [
-    { id: "kirjeldus", label: "Description" },
-    { id: "komplekt", label: "Kit" },
-    { id: "paigaldus", label: "Application" },
-    { id: "reviews", label: "Reviews" },
+    { id: "kirjeldus", label: t("descriptionTab") },
+    { id: "komplekt", label: t("kitTab") },
+    { id: "paigaldus", label: t("applicationTab") },
+    { id: "reviews", label: t("reviewsTab") },
   ];
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -225,6 +237,7 @@ function StickyNav() {
 
 /* ── Sticky buy bar ── */
 function StickyBar({ price, original, onAdd }: { price: string; original: string; onAdd: () => void }) {
+  const t = useTranslations("shopStickyBar");
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     // The bar shows once the lead line has scrolled off the top of the
@@ -251,17 +264,32 @@ function StickyBar({ price, original, onAdd }: { price: string; original: string
   }, []);
   return (
     <div className={`bb-sticky-bar ${visible ? "bb-sticky-bar--visible" : ""}`}>
-      <span className="bb-sticky-bar__name">DIY Tooth Gem Kit</span>
+      <span className="bb-sticky-bar__name">{t("name")}</span>
       <div className="bb-sticky-bar__right">
         <span className="bb-sticky-bar__price">{price}</span>
         <span className="bb-sticky-bar__original">{original}</span>
-        <Button className="bb-sticky-bar__cta" onClick={onAdd}><IconCart />Add to cart</Button>
+        <Button className="bb-sticky-bar__cta" onClick={onAdd}><IconCart />{t("addToCart")}</Button>
       </div>
     </div>
   );
 }
 
 export default function ShopPage() {
+  const locale = useLocale() as "en" | "et";
+  const t = useTranslations("product");
+  const tTrustBadge = useTranslations("trustBadge");
+  const tStickyNav = useTranslations("shopStickyNav");
+  const tHero = useTranslations("shopHero");
+  const tExtraGems = useTranslations("shopExtraGems");
+  const tDiscount = useTranslations("shopDiscount");
+  const tBuy = useTranslations("shopBuy");
+  const tTrust = useTranslations("shopTrust");
+  const tFeatures = useTranslations("shopFeatures");
+  const tStats = useTranslations("shopStats");
+  const tBox = useTranslations("shopBox");
+  const tSteps = useTranslations("shopSteps");
+  const tResults = useTranslations("shopResults");
+  const tFaqSection = useTranslations("shopFaqSection");
   const [selected, setSelected] = useState("s20");
   const [qty, setQty] = useState(1);
   const [mainImg, setMainImg] = useState(0);
@@ -276,7 +304,7 @@ export default function ShopPage() {
     setGemQtys(prev => ({ ...prev, [id]: Math.max(0, Math.min(50, (prev[id] ?? 0) + delta)) }));
   }
   const addToCart = () => {
-    add({ id: variant.id, label: `DIY Hambakristalli komplekt · ${variant.label}`, price: variant.price }, qty);
+    add({ id: variant.id, label: `${t("schemaName")} · ${variant.label}`, price: variant.price }, qty);
     // Gems only ever reach the cart here — alongside the kit, in this same
     // click — so a gem line never exists without one.
     EXTRA_GEM_TYPES.forEach(g => {
@@ -293,7 +321,7 @@ export default function ShopPage() {
   useEffect(() => {
     if (viewedVariants.current.has(variant.id)) return;
     viewedVariants.current.add(variant.id);
-    const contentName = `DIY Hambakristalli komplekt · ${variant.label}`;
+    const contentName = `${t("schemaName")} · ${variant.label}`;
     trackMeta("ViewContent", {
       content_ids: [variant.id],
       content_name: contentName,
@@ -306,7 +334,7 @@ export default function ShopPage() {
       value: variant.price,
       items: [{ item_id: variant.id, item_name: contentName, price: variant.price, quantity: 1 }],
     });
-  }, [variant.id, variant.label, variant.price]);
+  }, [variant.id, variant.label, variant.price, t]);
   const [code, setCode] = useState("");
   const [codeApplied, setCodeApplied] = useState(false);
   const [codeError, setCodeError] = useState(false);
@@ -333,9 +361,21 @@ export default function ShopPage() {
   }
   return (
     <main className="bb-shop">
-      <JsonLd data={productSchema({ price: variant.price })} />
-      <JsonLd data={faqSchema(FAQ_ITEMS)} />
-      <JsonLd data={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Tooth Gem Kit", path: "/tooth-gem-kit" }])} />
+      <JsonLd
+        data={productSchema({
+          locale,
+          price: variant.price,
+          name: t("schemaName"),
+          description: t("schemaDescription"),
+        })}
+      />
+      <JsonLd data={faqSchema(FAQ_ITEMS.map((item) => resolveFaqItem(item, locale)))} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: t("breadcrumbHome"), path: getPathname({ href: "/", locale }) },
+          { name: t("breadcrumbProduct"), path: getPathname({ href: "/tooth-gem-kit", locale }) },
+        ])}
+      />
       <UrgencyPopup autoOpen={false} />
       <StickyBar price={priceStr(finalPrice)} original={priceStr(variant.original)} onAdd={addToCart} />
       <SiteNav active="komplektid" />
@@ -346,7 +386,7 @@ export default function ShopPage() {
           <div className="bb-shop__img bb-shop__img--main">
             <Image
               src={GALLERY_IMAGES[mainImg]}
-              alt="DIY Tooth Gem Kit"
+              alt={tHero("mainImageAlt")}
               fill
               priority
               sizes="(max-width: 768px) 100vw, 55vw"
@@ -360,7 +400,7 @@ export default function ShopPage() {
                 type="button"
                 className={`bb-shop__img bb-shop__img--thumb ${mainImg === i ? "bb-shop__thumb--active" : ""}`}
                 onClick={() => setMainImg(i)}
-                aria-label={`View image ${i + 1}`}
+                aria-label={tHero("thumbAlt", { n: i + 1 })}
               >
                 <Image src={src} alt="" fill sizes="140px" style={{ objectFit: "cover" }} />
               </button>
@@ -369,12 +409,12 @@ export default function ShopPage() {
         </div>
 
         <div className="bb-shop__panel">
-          <h1 className="bb-shop__name">DIY Tooth Gem<br />Kit.</h1>
-          <p className="bb-shop__sub">Swarovski crystals · Made in Europe</p>
+          <h1 className="bb-shop__name">{tHero("nameLine1")}<br />{tHero("nameLine2")}</h1>
+          <p className="bb-shop__sub">{tHero("sub")}</p>
           <a href="#reviews" className="bb-shop__rating">
             <Stars rating={AVERAGE_RATING} size="md" className="bb-shop__rating-stars" />
-            {formatRating(AVERAGE_RATING)} · {REVIEW_COUNT} reviews{" "}
-            <span className="bb-shop__rating-cta">(see)</span>
+            {tTrustBadge("reviews", { rating: formatRating(AVERAGE_RATING, locale), count: REVIEW_COUNT })}{" "}
+            <span className="bb-shop__rating-cta">{tTrustBadge("see")}</span>
           </a>
 
           <div className="bb-shop__variants">
@@ -382,7 +422,7 @@ export default function ShopPage() {
               <button key={v.id} className={`bb-shop__variant ${selected === v.id ? "bb-shop__variant--active" : ""}`} onClick={() => setSelected(v.id)}>
                 <span className="bb-shop__variant-check">{selected === v.id ? "✓" : ""}</span>
                 <span className="bb-shop__variant-label">{v.label}</span>
-                <span className="bb-shop__variant-desc">{v.desc}</span>
+                <span className="bb-shop__variant-desc">{tHero(v.descKey)}</span>
                 <span className="bb-shop__variant-price">{priceStr(v.price)}</span>
               </button>
             ))}
@@ -390,8 +430,8 @@ export default function ShopPage() {
 
           {/* Included crystals */}
           <div className="bb-included">
-            <span className="bb-included__label">Included</span>
-            <span className="bb-included__value">10× standard Swarovski crystals</span>
+            <span className="bb-included__label">{tHero("includedLabel")}</span>
+            <span className="bb-included__value">{tHero("includedValue")}</span>
           </div>
 
           {/* Extra gems — hidden for now, not deleted */}
@@ -404,11 +444,11 @@ export default function ShopPage() {
                 aria-expanded={gemsOpen}
               >
                 <span className="bb-extra-gems__title">
-                  Add extra crystals
-                  <span className="bb-extra-gems__badge">Popular</span>
+                  {tExtraGems("title")}
+                  <span className="bb-extra-gems__badge">{tExtraGems("badge")}</span>
                 </span>
                 <span className="bb-extra-gems__head-right">
-                  <span className="bb-extra-gems__rate">{priceStr(GEM_PRICE)}/each</span>
+                  <span className="bb-extra-gems__rate">{priceStr(GEM_PRICE)}{tExtraGems("perUnitSuffix")}</span>
                   <span className={`bb-extra-gems__arrow ${gemsOpen ? "bb-extra-gems__arrow--open" : ""}`}>
                     <IconChevron />
                   </span>
@@ -420,7 +460,7 @@ export default function ShopPage() {
                     <button
                       type="button"
                       className="bb-extra-gems__thumb"
-                      aria-label={`Enlarge ${g.label}`}
+                      aria-label={tExtraGems("enlargeAria", { label: g.label })}
                       onClick={() => setLightbox({ src: g.img, alt: g.label })}
                     >
                       <Image src={g.img} alt={g.label} width={36} height={36} style={{ objectFit: "contain" }} />
@@ -431,7 +471,7 @@ export default function ShopPage() {
                     <button
                       className="bb-qty__btn"
                       onClick={() => bumpGemQty(g.id, -1)}
-                      aria-label={`Decrease ${g.label}`}
+                      aria-label={tExtraGems("decreaseAria", { label: g.label })}
                     >
                       <IconMinus />
                     </button>
@@ -439,7 +479,7 @@ export default function ShopPage() {
                     <button
                       className="bb-qty__btn"
                       onClick={() => bumpGemQty(g.id, 1)}
-                      aria-label={`Increase ${g.label}`}
+                      aria-label={tExtraGems("increaseAria", { label: g.label })}
                     >
                       <IconPlus />
                     </button>
@@ -455,20 +495,20 @@ export default function ShopPage() {
               <input
                 className="bb-discount__input"
                 type="text"
-                placeholder="Discount code"
+                placeholder={tDiscount("placeholder")}
                 value={code}
                 onChange={e => { setCode(e.target.value); setCodeError(false); }}
                 onKeyDown={e => e.key === "Enter" && applyCode()}
               />
-              <button className="bb-discount__btn" onClick={applyCode}>Apply</button>
+              <button className="bb-discount__btn" onClick={applyCode}>{tDiscount("apply")}</button>
             </div>
-            {codeApplied && <p className="bb-discount__ok">✓ Code applied — {appliedPct}% off!</p>}
-            {codeError && <p className="bb-discount__err">Invalid code. Please try again.</p>}
+            {codeApplied && <p className="bb-discount__ok">{tDiscount("applied", { pct: appliedPct })}</p>}
+            {codeError && <p className="bb-discount__err">{tDiscount("error")}</p>}
           </div>
 
           {totalGems > 0 && (
             <div className="bb-extra-gems__summary">
-              <span>Extra crystals ({totalGems}×)</span>
+              <span>{tExtraGems("summary", { count: totalGems })}</span>
               <span>{priceStr(gemsCost)}</span>
             </div>
           )}
@@ -476,9 +516,9 @@ export default function ShopPage() {
           <div className="bb-shop__buy">
             <div className="bb-shop__buy-left">
               <div className="bb-qty__ctrl">
-                <button className="bb-qty__btn" onClick={() => setQty(q => Math.max(1, q - 1))} aria-label="Decrease"><IconMinus /></button>
+                <button className="bb-qty__btn" onClick={() => setQty(q => Math.max(1, q - 1))} aria-label={tBuy("decreaseAria")}><IconMinus /></button>
                 <span className="bb-qty__num">{qty}</span>
-                <button className="bb-qty__btn" onClick={() => setQty(q => Math.min(10, q + 1))} aria-label="Increase"><IconPlus /></button>
+                <button className="bb-qty__btn" onClick={() => setQty(q => Math.min(10, q + 1))} aria-label={tBuy("increaseAria")}><IconPlus /></button>
               </div>
               <div className="bb-shop__prices">
                 <span className="bb-shop__price">{priceStr(finalPrice)}</span>
@@ -487,31 +527,33 @@ export default function ShopPage() {
               </div>
             </div>
             <div className="bb-shop__cta-group">
-              <Button className="bb-shop__cta" onClick={addToCart}><IconCart />Add to cart</Button>
-              <Button variant="outline" className="bb-shop__cta-secondary" onClick={openCart}>View cart</Button>
+              <Button className="bb-shop__cta" onClick={addToCart}><IconCart />{tBuy("addToCart")}</Button>
+              <Button variant="outline" className="bb-shop__cta-secondary" onClick={openCart}>{tBuy("viewCart")}</Button>
             </div>
           </div>
-          <PaymentMethods note="Secure payment" className="mt-3" />
-          <div className="bb-urgency__shipping">📦 Order today before 2:00 PM – we&apos;ll <strong>ship it out the next day</strong>.</div>
+          <PaymentMethods note={tBuy("paymentNote")} className="mt-3" />
+          <div className="bb-urgency__shipping">
+            {tBuy.rich("shippingLine", { strong: (chunks) => <strong>{chunks}</strong> })}
+          </div>
 
           <div className="bb-trust">
-            {TRUST.map((t, i) => (
+            {TRUST.map((item, i) => (
               <div key={i} className="bb-trust__item">
-                <span className="bb-trust__icon" aria-hidden="true">{t.icon}</span>
-                <span className="bb-trust__label">{t.label}</span>
+                <span className="bb-trust__icon" aria-hidden="true">{item.icon}</span>
+                <span className="bb-trust__label">{tTrust(item.labelKey)}</span>
               </div>
             ))}
           </div>
 
-          <p id="shop-lead" className="bb-shop__lead">Everything you need in one kit.</p>
-          <p className="bb-shop__desc">Apply tooth gems comfortably at home. The kit includes quality Swarovski crystals and all the tools you need for a quick, easy application.</p>
+          <p id="shop-lead" className="bb-shop__lead">{tFeatures("lead")}</p>
+          <p className="bb-shop__desc">{tFeatures("desc")}</p>
           <ul className="bb-shop__features">
-            <li>Premium Swarovski crystals</li>
-            <li>Lasts up to 2–4 weeks</li>
-            <li>Applied in about 10 minutes</li>
-            <li>Beginner-friendly</li>
-            <li>Safe when used according to the instructions</li>
-            <li>Free delivery to a parcel locker</li>
+            <li>{tFeatures("feature1")}</li>
+            <li>{tFeatures("feature2")}</li>
+            <li>{tFeatures("feature3")}</li>
+            <li>{tFeatures("feature4")}</li>
+            <li>{tFeatures("feature5")}</li>
+            <li>{tFeatures("feature6")}</li>
           </ul>
         </div>
       </div>
@@ -524,35 +566,35 @@ export default function ShopPage() {
         <div className="bb-stats-bar">
           {STATS.map((s, i) => (
             <div key={i} className="bb-stats-bar__item">
-              <span className="bb-stats-bar__num">{s.num}</span>
-              <span className="bb-stats-bar__label">{s.label}</span>
+              <span className="bb-stats-bar__num">{tStats(s.numKey)}</span>
+              <span className="bb-stats-bar__label">{tStats(s.labelKey)}</span>
             </div>
           ))}
         </div>
 
         {/* ── Reviews ── */}
-        <ReviewsSlider id="reviews" heading="Reviews" />
+        <ReviewsSlider id="reviews" heading={tStickyNav("reviewsTab")} />
       </div>
 
       {/* ── What's in the box ── */}
       <div className="bb-shop-section" id="komplekt">
-        <p className="bb-box-label">Everything in one kit</p>
-        <h2 className="bb-shop-section__title">What&apos;s in the box</h2>
-        <p className="bb-box-subtitle">Everything you need for a sparkling result — quality-tested and tooth-friendly.</p>
+        <p className="bb-box-label">{tBox("sectionLabel")}</p>
+        <h2 className="bb-shop-section__title">{tBox("title")}</h2>
+        <p className="bb-box-subtitle">{tBox("subtitle")}</p>
         <div className="bb-box-list">
           {BOX_ITEMS.map((item, i) => (
             <div key={i} className="bb-box-row">
               <span className="bb-box-row__num">{String(i + 1).padStart(2, "0")}</span>
               <div className="bb-box-row__body">
-                <span className="bb-box-row__name">{item.name}</span>
-                <span className="bb-box-row__desc">{item.desc}</span>
+                <span className="bb-box-row__name">{tBox(item.nameKey)}</span>
+                <span className="bb-box-row__desc">{tBox(item.descKey)}</span>
               </div>
               {item.img && (
                 <button
                   type="button"
                   className="bb-box-row__thumb"
-                  aria-label={`View larger: ${item.name}`}
-                  onClick={() => setLightbox({ src: item.img!, alt: item.name })}
+                  aria-label={tBox("thumbAria", { name: tBox(item.nameKey) })}
+                  onClick={() => setLightbox({ src: item.img!, alt: tBox(item.nameKey) })}
                 >
                   <Image src={item.img} alt="" width={72} height={72} />
                 </button>
@@ -565,9 +607,9 @@ export default function ShopPage() {
       {/* ── How to apply ── */}
       <div className="bb-shop-section bb-shop-section--dark" id="paigaldus">
         <div className="bb-shop-steps__head">
-          <h2 className="bb-shop-section__title bb-shop-section__title--light">How to apply</h2>
+          <h2 className="bb-shop-section__title bb-shop-section__title--light">{tSteps("sectionTitle")}</h2>
           <Button href="/guide" className="bb-shop-steps__guide-btn">
-            View the guide
+            {tSteps("guideButton")}
           </Button>
         </div>
         <div className="bb-shop-steps">
@@ -576,15 +618,15 @@ export default function ShopPage() {
               <div className="bb-shop-step__img">
                 <Image
                   src={step.src}
-                  alt={step.title}
+                  alt={tSteps(step.titleKey)}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
                   style={{ objectFit: "cover" }}
                 />
               </div>
               <span className="bb-shop-step__num">{step.n}</span>
-              <h3 className="bb-shop-step__title">{step.title}</h3>
-              <p className="bb-shop-step__desc">{step.desc}</p>
+              <h3 className="bb-shop-step__title">{tSteps(step.titleKey)}</h3>
+              <p className="bb-shop-step__desc">{tSteps(step.descKey)}</p>
             </div>
           ))}
         </div>
@@ -592,7 +634,7 @@ export default function ShopPage() {
 
       {/* ── Before / After gallery ── */}
       <div className="bb-shop-section">
-        <h2 className="bb-shop-section__title">Results</h2>
+        <h2 className="bb-shop-section__title">{tResults("sectionTitle")}</h2>
         <div className="bb-shop-ba">
           {RESULTS.map((item, i) => (
             <div key={i} className="bb-shop-ba__card">
@@ -610,7 +652,7 @@ export default function ShopPage() {
               ) : (
                 <Image
                   src={item.src}
-                  alt="Result"
+                  alt={tResults("imageAlt")}
                   fill
                   sizes="(max-width: 768px) 50vw, 25vw"
                   style={{ objectFit: "cover" }}
@@ -623,7 +665,7 @@ export default function ShopPage() {
 
       {/* ── FAQ ── */}
       <div className="bb-shop-section">
-        <h2 className="bb-shop-section__title bb-faq__title">Frequently asked questions</h2>
+        <h2 className="bb-shop-section__title bb-faq__title">{tFaqSection("sectionTitle")}</h2>
         <FAQ />
       </div>
 

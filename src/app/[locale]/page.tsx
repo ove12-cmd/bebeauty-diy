@@ -1,4 +1,8 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+import { getPathname } from "@/i18n/navigation";
+import { BASE_URL } from "@/lib/seo";
+import type { Locale } from "@/i18n/routing";
 import FinalCTA from "@/components/FinalCTA";
 import FloatingCTA from "@/components/FloatingCTA";
 import Hero from "@/components/Hero";
@@ -16,21 +20,38 @@ import WhyBeBeauty from "@/components/WhyBeBeauty";
 // Distinct from /tooth-gem-kit's metadata (layout.tsx there) —
 // this page is the brand/comparison landing page, not the product listing,
 // so it needs its own title instead of inheriting the root layout's default.
-export const metadata: Metadata = {
-  title: "Salon Results, At Home in 10 Minutes",
-  description:
-    "Apply tooth gems yourself at home — no salon booking, no high price tag. Swarovski crystals, professional results in just 10 minutes.",
-  openGraph: {
-    title: "Salon Results, At Home in 10 Minutes | beBeauty DIY",
-    description:
-      "Apply tooth gems yourself at home — no salon booking, no high price tag. Swarovski crystals, professional results in just 10 minutes.",
-  },
-  twitter: {
-    title: "Salon Results, At Home in 10 Minutes | beBeauty DIY",
-    description:
-      "Apply tooth gems yourself at home — no salon booking, no high price tag. Swarovski crystals, professional results in just 10 minutes.",
-  },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "homeMeta" });
+  const title = t("title");
+  const description = t("description");
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: getPathname({ href: "/", locale: locale as Locale }),
+      languages: {
+        en: `${BASE_URL}${getPathname({ href: "/", locale: "en" })}`,
+        et: `${BASE_URL}${getPathname({ href: "/", locale: "et" })}`,
+      },
+    },
+    openGraph: {
+      title: `${title} | beBeauty DIY`,
+      description,
+      url: `${BASE_URL}${getPathname({ href: "/", locale: locale as Locale })}`,
+      type: "website",
+    },
+    twitter: {
+      title: `${title} | beBeauty DIY`,
+      description,
+    },
+  };
+}
 
 export default function Home() {
   return (

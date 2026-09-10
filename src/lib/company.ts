@@ -8,9 +8,11 @@ export const COMPANY = {
   /**
    * Kits sold, as shown in the hero trust badge. This is a factual claim to
    * shoppers, so it must track reality — update it as sales grow, and don't
-   * round it up past what the order records support.
+   * round it up past what the order records support. Kept as a raw number
+   * (not a pre-formatted label) so the sentence shape can differ correctly
+   * between languages — see the "trustBadge.kitsSold" message key.
    */
-  kitsSoldLabel: "600+ kits sold",
+  kitsSoldCount: 600,
   // `network` drives the icon and is separate from `id`, because the shop
   // runs two different Facebook presences — keying the icon off the id alone
   // couldn't express that.

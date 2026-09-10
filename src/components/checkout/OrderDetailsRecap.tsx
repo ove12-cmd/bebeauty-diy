@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 type Props = {
   name: string;
   email: string;
@@ -23,16 +25,17 @@ export default function OrderDetailsRecap({
   deliveryTarget,
   onEdit,
 }: Props) {
+  const t = useTranslations("orderDetailsRecap");
   return (
     <div className="mt-2.5 rounded-xl border border-[var(--bb-line)] bg-[var(--bb-paper)] p-3.5">
       <div className="mb-2.5 flex items-center justify-between gap-2">
-        <span className="text-xs font-medium text-[var(--bb-ink)]">Your details</span>
+        <span className="text-xs font-medium text-[var(--bb-ink)]">{t("yourDetails")}</span>
         <button
           type="button"
           onClick={onEdit}
           className="text-[11px] text-[var(--bb-gold-deep)] underline hover:no-underline"
         >
-          Edit
+          {t("edit")}
         </button>
       </div>
 

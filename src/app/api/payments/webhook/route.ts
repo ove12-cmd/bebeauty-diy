@@ -231,7 +231,16 @@ export async function POST(req: NextRequest) {
       customerName: md.customerName,
       customerEmail: pi.receipt_email ?? md.customerEmail ?? undefined,
       customerPhone: md.customerPhone,
-      delivery: md.delivery,
+      // Buyer's browsing locale, captured at checkout — the email renders
+      // in this language, not a server default (see lib/email.ts).
+      locale: md.locale === "et" ? "et" : "en",
+      delivery: {
+        method: md.deliveryMethod || "",
+        locker: md.deliveryLocker,
+        street: md.deliveryStreet,
+        city: md.deliveryCity,
+        zip: md.deliveryZip,
+      },
       items,
     });
   } catch (err) {

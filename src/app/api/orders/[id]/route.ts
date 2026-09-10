@@ -35,8 +35,14 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
       items,
       subtotal: Number(md.subtotal) || 0,
       discountPct: Number(md.discountPct) || 0,
+      // Raw, locale-neutral fields — the success page (which knows its own
+      // locale via useLocale()) formats these into text itself, via the
+      // same lib/pricing.ts helpers the confirmation email uses.
       deliveryMethod: md.deliveryMethod || "",
-      deliveryTarget: md.delivery || "",
+      deliveryLocker: md.deliveryLocker || "",
+      deliveryStreet: md.deliveryStreet || "",
+      deliveryCity: md.deliveryCity || "",
+      deliveryZip: md.deliveryZip || "",
       deliveryPrice: Number(md.deliveryPrice) || 0,
       grandTotal: (pi.amount_received ?? pi.amount ?? 0) / 100,
       customerName: md.customerName || "",

@@ -4,6 +4,7 @@
 // works before email is configured.
 
 import { Resend } from "resend";
+import { formatDeliveryTarget, type DeliveryDetails } from "@/lib/pricing";
 
 export type OrderEmailItem = { name: string; quantity: number; finalPrice: number };
 
@@ -14,13 +15,44 @@ export type OrderEmailData = {
   customerName?: string;
   customerEmail?: string;
   customerPhone?: string;
-  delivery?: string; // human-readable: locker name or courier address
+  /** Buyer's browsing locale at checkout — only the *customer* confirmation
+   *  is sent in this language; the owner notification stays in English
+   *  regardless, matching the dashboard's own fixed working language. */
+  locale?: "en" | "et";
+  delivery?: DeliveryDetails;
   items?: OrderEmailItem[];
 };
 
 function esc(s: string): string {
   return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
 }
+
+// Plain string tables, not next-intl: this runs from a webhook with no
+// request-scoped locale context to hang next-intl's server APIs off of, and
+// two languages of transactional email copy don't need a full message
+// catalog for what's a handful of short lines.
+const CUSTOMER_EMAIL_STRINGS = {
+  en: {
+    subject: (ref: string) => `Order confirmation — ${ref}`,
+    heading: "Thank you for your order! ✨",
+    confirmed: (ref: string) => `Your order <strong>${esc(ref)}</strong> has been confirmed and payment received.`,
+    total: "Total:",
+    delivery: "Delivery:",
+    ordered: "Ordered:",
+    closing: "We'll get your package on its way soon. If you have any questions, just reply to this email.",
+    signoff: "— beBeauty DIY",
+  },
+  et: {
+    subject: (ref: string) => `Tellimuse kinnitus — ${ref}`,
+    heading: "Aitäh tellimuse eest! ✨",
+    confirmed: (ref: string) => `Sinu tellimus <strong>${esc(ref)}</strong> on kinnitatud ja makse on laekunud.`,
+    total: "Kokku:",
+    delivery: "Tarne:",
+    ordered: "Tellitud:",
+    closing: "Saadame Sinu paki peagi teele. Kui tekib küsimusi, vasta lihtsalt sellele kirjale.",
+    signoff: "— beBeauty DIY",
+  },
+} as const;
 
 export async function sendOrderEmails(order: OrderEmailData): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
@@ -41,14 +73,21 @@ export async function sendOrderEmails(order: OrderEmailData): Promise<void> {
     .map((i) => `<li>${esc(i.name)} × ${i.quantity} — ${money(i.finalPrice * i.quantity)}</li>`)
     .join("");
 
+  // Owner notification is always in English, matching the dashboard's own
+  // fixed working language — it doesn't follow the buyer's browsing locale.
+  const ownerDeliveryText = order.delivery ? formatDeliveryTarget("en", order.delivery) : "";
   const detailRows = [
     order.customerName && `<p><strong>Customer:</strong> ${esc(order.customerName)}</p>`,
     order.customerEmail && `<p><strong>Email:</strong> ${esc(order.customerEmail)}</p>`,
     order.customerPhone && `<p><strong>Phone:</strong> ${esc(order.customerPhone)}</p>`,
-    order.delivery && `<p><strong>Delivery:</strong> ${esc(order.delivery)}</p>`,
+    ownerDeliveryText && `<p><strong>Delivery:</strong> ${esc(ownerDeliveryText)}</p>`,
   ]
     .filter(Boolean)
     .join("");
+
+  const locale = order.locale === "et" ? "et" : "en";
+  const s = CUSTOMER_EMAIL_STRINGS[locale];
+  const customerDeliveryText = order.delivery ? formatDeliveryTarget(locale, order.delivery) : "";
 
   // Owner notification — one separate email per owner address. Sending each
   // individually (rather than one email with several recipients) keeps every
@@ -78,21 +117,21 @@ export async function sendOrderEmails(order: OrderEmailData): Promise<void> {
     );
   }
 
-  // Customer confirmation
+  // Customer confirmation — sent in the buyer's own browsing locale.
   if (order.customerEmail) {
     try {
       await resend.emails.send({
         from,
         to: order.customerEmail,
-        subject: `Order confirmation — ${order.reference}`,
+        subject: s.subject(order.reference),
         html: `
-          <h2>Thank you for your order! ✨</h2>
-          <p>Your order <strong>${esc(order.reference)}</strong> has been confirmed and payment received.</p>
-          <p><strong>Total:</strong> ${total}</p>
-          ${order.delivery ? `<p><strong>Delivery:</strong> ${esc(order.delivery)}</p>` : ""}
-          ${itemsHtml ? `<p><strong>Ordered:</strong></p><ul>${itemsHtml}</ul>` : ""}
-          <p>We'll get your package on its way soon. If you have any questions, just reply to this email.</p>
-          <p>— beBeauty DIY</p>
+          <h2>${s.heading}</h2>
+          <p>${s.confirmed(order.reference)}</p>
+          <p><strong>${s.total}</strong> ${total}</p>
+          ${customerDeliveryText ? `<p><strong>${s.delivery}</strong> ${esc(customerDeliveryText)}</p>` : ""}
+          ${itemsHtml ? `<p><strong>${s.ordered}</strong></p><ul>${itemsHtml}</ul>` : ""}
+          <p>${s.closing}</p>
+          <p>${s.signoff}</p>
         `,
       });
     } catch (err) {

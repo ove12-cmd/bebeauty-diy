@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import Button from "@/components/ui/Button";
 import SiteNav from "@/components/SiteNav";
 import TrustBadge from "@/components/ui/TrustBadge";
@@ -31,6 +32,9 @@ function ImageSlot({ label, variant = "default", src, alt, priority = false }: {
 
 /* ── Hero ── */
 export default function Hero() {
+  const t = useTranslations("hero");
+  const tNav = useTranslations("nav");
+
   return (
     <section className="bb-hero">
 
@@ -42,39 +46,39 @@ export default function Hero() {
 
       {/* HEADLINE */}
       <h1 className="bb-bigtype">
-        Salon results,<br />
-        at home in <em className="bb-bigtype__em">10 minutes</em>
+        {t("headlineLine1")}<br />
+        {t("headlinePrefix")} <em className="bb-bigtype__em">{t("headlineEm")}</em>
       </h1>
 
       <p className="bb-subline">
-        Apply salon-quality tooth gems yourself – no salon required.
+        {t("subline")}
       </p>
 
       {/* SHOWCASE */}
       <div className="bb-showcase">
         <div className="bb-showcase__main">
-          <ImageSlot label="Result" src="/home/hero.jpg" alt="Bright smile with a tooth gem" priority />
+          <ImageSlot label={t("resultLabel")} src="/home/hero.jpg" alt={t("resultAlt")} priority />
         </div>
         <div className="bb-showcase__side">
           <ImageSlot
-            label="Kit"
+            label={t("kitLabel")}
             variant="lav"
             src="/home/product.png"
-            alt="beBeauty DIY tooth gem kit"
+            alt={t("kitAlt")}
           />
           <div className="bb-cta-card">
             <div className="bb-cta-card__heading">
-              Everything in one small kit.
-              <b>Apply at home, no salon needed.</b>
+              {t("ctaHeading")}
+              <b>{t("ctaHeadingBold")}</b>
             </div>
             <div className="bb-cta-card__buy">
-              <span className="bb-cta-card__price">Price: 35€</span>
+              <span className="bb-cta-card__price">{t("price")}</span>
               <Button href="/tooth-gem-kit">
-                Shop the kit
+                {tNav("shopTheKit")}
               </Button>
             </div>
             <div className="bb-cta-card__rating">
-              <span className="bb-cta-card__meta">Order today – your kit will soon be at your nearest parcel locker.</span>
+              <span className="bb-cta-card__meta">{t("meta")}</span>
             </div>
           </div>
         </div>

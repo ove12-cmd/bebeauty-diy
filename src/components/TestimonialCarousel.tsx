@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import ImageLightbox from "@/components/ImageLightbox";
 import Stars from "@/components/ui/Stars";
-import { FEATURED_REVIEWS } from "@/lib/reviews";
+import { FEATURED_REVIEWS, resolveReview } from "@/lib/reviews";
 
 /** Cards rendered per step. All but the first are CSS-hidden below md. */
 const PER_SLIDE = 5;
@@ -28,6 +29,8 @@ const PER_SLIDE = 5;
  * prefers-reduced-motion there's no animation and so no auto-advance.
  */
 export default function TestimonialCarousel() {
+  const locale = useLocale() as "en" | "et";
+  const t = useTranslations("testimonialCarousel");
   const reviews = FEATURED_REVIEWS;
   const [index, setIndex] = useState(0);
   const [userPaused, setUserPaused] = useState(false);
@@ -54,14 +57,16 @@ export default function TestimonialCarousel() {
 
   return (
     <section
-      aria-roledescription="carousel"
-      aria-label="Customer reviews"
+      aria-roledescription={t("roleDescription")}
+      aria-label={t("ariaLabel")}
       className="bb-carousel w-full px-5 pb-8 md:px-14"
       style={{ marginTop: "-1.5rem" }}
     >
       <div className="rounded-2xl bg-[var(--bb-chip-bg)] p-4 md:p-5">
         <ul className="grid list-none grid-cols-1 gap-3 p-0 md:grid-cols-5">
-          {visible.map((r, k) => (
+          {visible.map((raw, k) => {
+            const r = resolveReview(raw, locale);
+            return (
             <li
               // Re-keying on index remounts the card, replaying the entry
               // animation without any transition state to manage.
@@ -71,7 +76,7 @@ export default function TestimonialCarousel() {
               }`}
               style={{ animationDelay: `${k * 60}ms` }}
             >
-              <Stars rating={r.rating} label={`Rating ${r.rating} / 5`} className="mb-1.5" />
+              <Stars rating={r.rating} label={t("ratingLabel", { rating: r.rating })} className="mb-1.5" />
               <blockquote className="text-[13px] leading-relaxed text-[var(--bb-ink)]">
                 {r.text}
               </blockquote>
@@ -82,8 +87,8 @@ export default function TestimonialCarousel() {
                     <button
                       key={src}
                       type="button"
-                      onClick={() => setLightbox({ src, alt: `${r.name} result` })}
-                      aria-label={`Enlarge ${r.name}'s result photo`}
+                      onClick={() => setLightbox({ src, alt: t("photoAlt", { name: r.name }) })}
+                      aria-label={t("enlargePhoto", { name: r.name })}
                       className="relative block h-12 w-12 cursor-zoom-in overflow-hidden rounded-lg bg-[var(--bb-chip-bg)] transition-transform hover:-translate-y-0.5"
                     >
                       <Image
@@ -102,7 +107,8 @@ export default function TestimonialCarousel() {
                 {r.name} · {r.date}
               </p>
             </li>
-          ))}
+            );
+          })}
         </ul>
 
         <div className="mt-4 flex items-center justify-center gap-3">
@@ -111,7 +117,7 @@ export default function TestimonialCarousel() {
           <button
             type="button"
             onClick={() => step(-1)}
-            aria-label="Previous review"
+            aria-label={t("previousReview")}
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--bb-chip-border)] bg-[var(--bb-paper)] text-[var(--bb-ink-2)] transition-colors hover:border-[var(--bb-gold)] md:hidden"
           >
             <svg
@@ -135,7 +141,7 @@ export default function TestimonialCarousel() {
                 key={r.name}
                 type="button"
                 onClick={() => setIndex(i)}
-                aria-label={`Show review ${i + 1}`}
+                aria-label={t("showReview", { n: i + 1 })}
                 aria-current={i === index ? "true" : undefined}
                 className={`relative h-2 overflow-hidden rounded-full transition-all duration-300 ease-out ${
                   i === index
@@ -160,7 +166,7 @@ export default function TestimonialCarousel() {
           <button
             type="button"
             onClick={() => step(1)}
-            aria-label="Next review"
+            aria-label={t("nextReview")}
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--bb-chip-border)] bg-[var(--bb-paper)] text-[var(--bb-ink-2)] transition-colors hover:border-[var(--bb-gold)] md:hidden"
           >
             <svg
@@ -184,7 +190,7 @@ export default function TestimonialCarousel() {
               onClick={() => setUserPaused((p) => !p)}
               className="text-[11px] text-[var(--bb-ink-3)] underline transition-colors hover:no-underline"
             >
-              {autoRunning ? "Pause" : "Play"}
+              {autoRunning ? t("pause") : t("play")}
             </button>
           )}
         </div>

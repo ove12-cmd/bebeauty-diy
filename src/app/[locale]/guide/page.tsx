@@ -1,88 +1,85 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Button from "@/components/ui/Button";
 import ImageLightbox from "@/components/ImageLightbox";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import "./guide.css";
 
-type NeedItem = { icon?: string; img?: string; label: string };
+type NeedItem = { icon?: string; img?: string; labelKey: string };
 
 type Step = {
   n: string;
-  category: string;
-  title: string;
-  actions: string[];
-  tip?: string;
+  categoryKey: string;
+  titleKey: string;
+  actionKeys: string[];
+  tipKey?: string;
   needs: NeedItem[];
 };
 
+// category/title/action/tip/need labels are message keys into the
+// "guidePage" namespace — resolved at render time so this data stays
+// locale-agnostic.
 const STEPS: Step[] = [
   {
     n: "01",
-    category: "Prep",
-    title: "Clean and prepare the surface",
-    actions: ["Insert the cheek retractor", "Dry the tooth completely"],
-    tip: "The tooth needs to be completely dry for the next step.",
+    categoryKey: "step1Category",
+    titleKey: "step1Title",
+    actionKeys: ["step1Action1", "step1Action2"],
+    tipKey: "step1Tip",
     needs: [
-      { img: "/tools/vatirull.png", label: "Cotton roll" },
-      { img: "/tools/põsehoidja.png", label: "Cheek retractor" },
+      { img: "/tools/vatirull.png", labelKey: "step1Need1Label" },
+      { img: "/tools/põsehoidja.png", labelKey: "step1Need2Label" },
     ],
   },
   {
     n: "02",
-    category: "Etch",
-    title: "Prep the surface for bonding",
-    actions: ["Apply a small amount of Etch gel to the tooth (blue bottle)", "Wait 30 seconds"],
-    tip: "Don't use too much gel.",
+    categoryKey: "step2Category",
+    titleKey: "step2Title",
+    actionKeys: ["step2Action1", "step2Action2"],
+    tipKey: "step2Tip",
     needs: [
-      { img: "/tools/etch.png", label: "Etch gel" },
-      { img: "/tools/mikrotikk.png", label: "Micro brush" },
+      { img: "/tools/etch.png", labelKey: "step2Need1Label" },
+      { img: "/tools/mikrotikk.png", labelKey: "step2Need2Label" },
     ],
   },
   {
     n: "03",
-    category: "Cleanup",
-    title: "Remove the Etch gel and dry",
-    actions: ["Remove the Etch gel from the tooth with a cotton roll", "Dry the tooth again"],
-    needs: [{ img: "/tools/vatirull.png", label: "Cotton roll" }],
+    categoryKey: "step3Category",
+    titleKey: "step3Title",
+    actionKeys: ["step3Action1", "step3Action2"],
+    needs: [{ img: "/tools/vatirull.png", labelKey: "step3Need1Label" }],
   },
   {
     n: "04",
-    category: "Application",
-    title: "Add the adhesive",
-    actions: ["Apply a small amount of adhesive to the tooth (white bottle)", "Use the micro brush for this"],
+    categoryKey: "step4Category",
+    titleKey: "step4Title",
+    actionKeys: ["step4Action1", "step4Action2"],
     needs: [
-      { img: "/tools/liim.png", label: "Adhesive" },
-      { img: "/tools/mikrotikk.png", label: "Micro brush" },
+      { img: "/tools/liim.png", labelKey: "step4Need1Label" },
+      { img: "/tools/mikrotikk.png", labelKey: "step4Need2Label" },
     ],
   },
   {
     n: "05",
-    category: "Crystal",
-    title: "Place the crystal",
-    actions: ["Place the crystal onto the adhesive", "Press gently on the crystal"],
-    tip: "Don't move the crystal once it's placed.",
+    categoryKey: "step5Category",
+    titleKey: "step5Title",
+    actionKeys: ["step5Action1", "step5Action2"],
+    tipKey: "step5Tip",
     needs: [
-      { icon: "💎", label: "Crystal" },
-      { img: "/tools/aplikaator.png", label: "Applicator" },
+      { icon: "💎", labelKey: "step5Need1Label" },
+      { img: "/tools/aplikaator.png", labelKey: "step5Need2Label" },
     ],
   },
   {
     n: "06",
-    category: "Curing",
-    title: "UV curing",
-    actions: ["Cure for 3 × 45 seconds with the UV lamp"],
-    needs: [{ img: "/tools/uv.png", label: "UV lamp" }],
+    categoryKey: "step6Category",
+    titleKey: "step6Title",
+    actionKeys: ["step6Action1"],
+    needs: [{ img: "/tools/uv.png", labelKey: "step6Need1Label" }],
   },
 ];
-
-const AFTERCARE = {
-  eyebrow: "After application",
-  title: "Keep the result clean",
-  actions: ["Don't eat or drink for 1 hour", "Avoid hard and sticky foods for 24 hours"],
-  note: "The result should last 2–4 weeks.",
-};
 
 const TOTAL = STEPS.length;
 
@@ -105,6 +102,7 @@ function IconImage() {
 }
 
 export default function GuidePage() {
+  const t = useTranslations("guidePage");
   // 0 = intro · 1..TOTAL = steps · TOTAL+1 = done
   const [step, setStep] = useState(0);
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
@@ -128,20 +126,20 @@ export default function GuidePage() {
   return (
     <main className="bb-guide">
       <div className="bb-guide__inner">
-        <Link href="/" className="bb-guide__back">← Back</Link>
+        <Link href="/" className="bb-guide__back">{t("backLabel")}</Link>
 
         {isIntro && (
           <div className="bb-guide__intro" key="intro">
-            <p className="bb-guide__eyebrow">Application Guide</p>
-            <h1 className="bb-guide__intro-title">Tooth Gem Application</h1>
-            <p className="bb-guide__intro-sub">Salon results at home in 10 minutes.</p>
+            <p className="bb-guide__eyebrow">{t("eyebrow")}</p>
+            <h1 className="bb-guide__intro-title">{t("introTitle")}</h1>
+            <p className="bb-guide__intro-sub">{t("introSub")}</p>
             <div className="bb-guide__intro-meta">
-              <span>{TOTAL} steps</span>
+              <span>{t("stepsCount", { n: TOTAL })}</span>
               <span className="bb-guide__meta-dot">·</span>
-              <span>~10 minutes</span>
+              <span>{t("timeEstimate")}</span>
             </div>
             <Button className="bb-guide__start" onClick={next}>
-              Start
+              {t("startButton")}
             </Button>
           </div>
         )}
@@ -149,7 +147,7 @@ export default function GuidePage() {
         {current && (
           <>
             <div className="bb-guide__progress">
-              <span className="bb-guide__progress-label">Step {step}/{TOTAL}</span>
+              <span className="bb-guide__progress-label">{t("progressLabel", { step, total: TOTAL })}</span>
               <div className="bb-guide__dots">
                 {STEPS.map((s, i) => {
                   const idx = i + 1;
@@ -160,7 +158,7 @@ export default function GuidePage() {
                       type="button"
                       className={`bb-guide__dot bb-guide__dot--${state}`}
                       onClick={() => setStep(idx)}
-                      aria-label={`Step ${idx}: ${s.category}`}
+                      aria-label={t("dotAria", { n: idx, category: t(s.categoryKey) })}
                       aria-current={idx === step}
                     >
                       {idx}
@@ -172,44 +170,44 @@ export default function GuidePage() {
 
             <div className="bb-guide__step" key={step}>
               <span className="bb-guide__num" aria-hidden="true">{current.n}</span>
-              <p className="bb-guide__cat">{current.category}</p>
-              <h2 className="bb-guide__title">{current.title}</h2>
+              <p className="bb-guide__cat">{t(current.categoryKey)}</p>
+              <h2 className="bb-guide__title">{t(current.titleKey)}</h2>
 
               <ul className="bb-guide__actions">
-                {current.actions.map((a) => (
-                  <li key={a} className="bb-guide__action">
+                {current.actionKeys.map((actionKey) => (
+                  <li key={actionKey} className="bb-guide__action">
                     <span className="bb-guide__check"><IconCheck /></span>
-                    {a}
+                    {t(actionKey)}
                   </li>
                 ))}
               </ul>
 
-              {current.tip && (
+              {current.tipKey && (
                 <div className="bb-guide__tip">
                   <span className="bb-guide__tip-icon">💡</span>
-                  <p><strong>Tip:</strong> {current.tip}</p>
+                  <p><strong>{t("tipLabel")}</strong> {t(current.tipKey)}</p>
                 </div>
               )}
 
               <div className="bb-guide__needs">
-                <span className="bb-guide__needs-label">You'll need</span>
+                <span className="bb-guide__needs-label">{t("needsLabel")}</span>
                 <div className="bb-guide__chips">
                   {current.needs.map((item) =>
                     item.img ? (
                       <button
-                        key={item.label}
+                        key={item.labelKey}
                         type="button"
                         className="bb-guide__chip bb-guide__chip--img"
-                        onClick={() => setLightbox({ src: item.img!, alt: item.label })}
+                        onClick={() => setLightbox({ src: item.img!, alt: t(item.labelKey) })}
                       >
                         <span className="bb-guide__chip-thumb" aria-hidden="true">
                           <IconImage />
                         </span>
-                        {item.label}
+                        {t(item.labelKey)}
                       </button>
                     ) : (
-                      <span key={item.label} className="bb-guide__chip">
-                        <span aria-hidden="true">{item.icon}</span> {item.label}
+                      <span key={item.labelKey} className="bb-guide__chip">
+                        <span aria-hidden="true">{item.icon}</span> {t(item.labelKey)}
                       </span>
                     ),
                   )}
@@ -218,9 +216,9 @@ export default function GuidePage() {
             </div>
 
             <div className="bb-guide__nav">
-              <button className="bb-guide__nav-btn" onClick={prev}>← Previous</button>
+              <button className="bb-guide__nav-btn" onClick={prev}>{t("prevButton")}</button>
               <Button className="bb-guide__nav-next" onClick={next}>
-                {step === TOTAL ? "Done" : "Next"}
+                {step === TOTAL ? t("doneButton") : t("nextButton")}
               </Button>
             </div>
           </>
@@ -229,27 +227,27 @@ export default function GuidePage() {
         {isDone && (
           <div className="bb-guide__done" key="done">
             <span className="bb-guide__done-badge"><IconCheck /></span>
-            <h2 className="bb-guide__done-title">All done!</h2>
+            <h2 className="bb-guide__done-title">{t("doneTitle")}</h2>
 
             <div className="bb-guide__aftercare">
-              <p className="bb-guide__cat">{AFTERCARE.eyebrow}</p>
-              <h3 className="bb-guide__aftercare-title">{AFTERCARE.title}</h3>
+              <p className="bb-guide__cat">{t("aftercareEyebrow")}</p>
+              <h3 className="bb-guide__aftercare-title">{t("aftercareTitle")}</h3>
               <ul className="bb-guide__actions">
-                {AFTERCARE.actions.map((a) => (
-                  <li key={a} className="bb-guide__action">
+                {["aftercareAction1", "aftercareAction2"].map((actionKey) => (
+                  <li key={actionKey} className="bb-guide__action">
                     <span className="bb-guide__check"><IconCheck /></span>
-                    {a}
+                    {t(actionKey)}
                   </li>
                 ))}
               </ul>
-              <p className="bb-guide__aftercare-note">{AFTERCARE.note}</p>
+              <p className="bb-guide__aftercare-note">{t("aftercareNote")}</p>
             </div>
 
             <div className="bb-guide__done-actions">
               <Button href="/tooth-gem-kit">
-                Shop the kit
+                {t("shopButton")}
               </Button>
-              <button className="bb-guide__restart" onClick={() => setStep(0)}>Start over</button>
+              <button className="bb-guide__restart" onClick={() => setStep(0)}>{t("restartButton")}</button>
             </div>
           </div>
         )}

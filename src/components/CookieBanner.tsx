@@ -1,10 +1,12 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Button from "@/components/ui/Button";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function CookieBanner() {
+  const t = useTranslations("cookieBanner");
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -30,12 +32,15 @@ export default function CookieBanner() {
     <div className="bb-cookie">
       <div className="bb-cookie__inner">
         <p className="bb-cookie__text">
-          We use cookies to give you the best shopping experience. Read more in our{" "}
-          <Link href="/privacy" className="bb-cookie__link">privacy policy</Link>.
+          {t.rich("text", {
+            link: (chunks) => (
+              <Link href="/privacy" className="bb-cookie__link">{chunks}</Link>
+            ),
+          })}
         </p>
         <div className="bb-cookie__actions">
-          <Button className="bb-cookie__accept" onClick={accept}>Accept</Button>
-          <button className="bb-cookie__decline" onClick={decline}>Decline</button>
+          <Button className="bb-cookie__accept" onClick={accept}>{t("accept")}</Button>
+          <button className="bb-cookie__decline" onClick={decline}>{t("decline")}</button>
         </div>
       </div>
     </div>
