@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { verifySession } from "@/lib/session";
 import { stripe } from "@/lib/stripe";
@@ -62,14 +63,22 @@ export default async function DashboardPage() {
       <div className="mx-auto max-w-6xl">
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-2xl font-bold text-neutral-900">Tellimused</h1>
-          <form action={logout}>
-            <button
-              type="submit"
+          <div className="flex items-center gap-3">
+            <Link
+              href="/dashboard/tracking-codes"
               className="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-semibold text-neutral-700 transition hover:bg-neutral-100"
             >
-              Logi välja
-            </button>
-          </form>
+              Jälgimiskoodid
+            </Link>
+            <form action={logout}>
+              <button
+                type="submit"
+                className="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-semibold text-neutral-700 transition hover:bg-neutral-100"
+              >
+                Logi välja
+              </button>
+            </form>
+          </div>
         </div>
 
         {orders.length === 0 ? (
