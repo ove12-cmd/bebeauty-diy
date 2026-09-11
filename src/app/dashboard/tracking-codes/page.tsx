@@ -40,12 +40,20 @@ export default async function TrackingCodesPage() {
           <div className="space-y-4">
             {TRACKING_SCRIPTS.map((script) => (
               <div key={script.id} className="rounded-xl border border-neutral-200 bg-white p-5">
-                <div className="mb-3 flex items-center justify-between gap-3">
+                <div className="mb-1 flex flex-wrap items-center justify-between gap-3">
                   <h2 className="font-semibold text-neutral-900">{script.name}</h2>
-                  <span className="whitespace-nowrap rounded-full bg-neutral-100 px-3 py-1 text-xs font-semibold text-neutral-600">
-                    {LOCATION_LABELS[script.location]}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    {script.verifiedAt && (
+                      <span className="whitespace-nowrap rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+                        ✓ Verified {script.verifiedAt}
+                      </span>
+                    )}
+                    <span className="whitespace-nowrap rounded-full bg-neutral-100 px-3 py-1 text-xs font-semibold text-neutral-600">
+                      {LOCATION_LABELS[script.location]}
+                    </span>
+                  </div>
                 </div>
+                <p className="mb-3 text-sm text-neutral-500">{script.source}</p>
                 <pre className="overflow-x-auto rounded-lg bg-neutral-900 p-4 text-xs text-neutral-100">
                   <code>{script.code}</code>
                 </pre>
