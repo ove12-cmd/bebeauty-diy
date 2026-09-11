@@ -20,3 +20,23 @@ export function trackMeta(event: string, params: Record<string, unknown> = {}, e
     window.fbq("track", event, params);
   }
 }
+
+// Fires the browser pixel event and a server-side Conversions API mirror
+// with the same eventId, so Meta deduplicates them into one event instead of
+// double-counting — same pattern the Stripe webhook already uses for
+// Purchase, just triggered client-side since AddToCart/InitiateCheckout
+// happen before any server round-trip (PaymentIntent) exists to hang a
+// webhook off. `keepalive` keeps the request alive through a page
+// navigation, since InitiateCheckout in particular fires right before one.
+export function trackMetaWithCapi(event: string, params: Record<string, unknown> = {}): void {
+  const eventId = crypto.randomUUID();
+  trackMeta(event, params, eventId);
+  fetch("/api/track/meta", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ event, eventId, customData: params }),
+    keepalive: true,
+  }).catch(() => {
+    /* best-effort — the browser pixel event above already fired regardless */
+  });
+}

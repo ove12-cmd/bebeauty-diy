@@ -3,12 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { sendOrderEmails, type OrderEmailItem } from "@/lib/email";
+import { sendMetaCapiEvent, type MetaCapiUserData } from "@/lib/meta-capi";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-const META_PIXEL_ID = "3246042772233645";
-const META_API_VERSION = "v21.0";
 
 // Stripe amounts are in the smallest unit for the currency — a cent for
 // EUR, but these currencies have no minor unit at all (already major units).
@@ -49,12 +47,6 @@ async function sendMetaPurchaseCapi(
   reference: string,
   eventTime: number,
 ): Promise<void> {
-  const token = process.env.META_CAPI_TOKEN;
-  if (!token) {
-    console.warn("[webhook] META_CAPI_TOKEN missing — skipping Meta CAPI Purchase for", reference);
-    return;
-  }
-
   const md = pi.metadata ?? {};
   // Mirrors the GA4 helper below: read the currency off the PaymentIntent and
   // convert through the shared helper, so a zero-decimal currency can never
@@ -65,7 +57,7 @@ async function sendMetaPurchaseCapi(
   const email = (pi.receipt_email ?? md.customerEmail ?? "").trim().toLowerCase();
   const phoneDigits = normalizePhone(md.customerPhone ?? "");
 
-  const userData: Record<string, string> = {};
+  const userData: MetaCapiUserData = {};
   if (email) {
     userData.em = sha256(email);
     // Meta weights external_id heavily for match quality, and email is the
@@ -78,43 +70,23 @@ async function sendMetaPurchaseCapi(
   if (md.fbp) userData.fbp = md.fbp;
   if (md.fbc) userData.fbc = md.fbc;
 
-  const metaEvent: Record<string, unknown> = {
-    event_name: "Purchase",
+  await sendMetaCapiEvent({
+    eventName: "Purchase",
     // The moment the card was actually charged — pi.created is when checkout
     // *began*, which drifts by minutes on a 3-D Secure flow and misdates the
     // conversion Meta attributes.
-    event_time: eventTime,
-    event_id: pi.id,
-    action_source: "website",
-    user_data: userData,
-    custom_data: {
+    eventTime,
+    eventId: pi.id,
+    userData,
+    customData: {
       value,
       currency,
       content_ids: contentIds,
       content_type: "product",
       order_id: reference || pi.id,
     },
-  };
-  if (md.eventSourceUrl) metaEvent.event_source_url = md.eventSourceUrl;
-
-  const payload: Record<string, unknown> = { data: [metaEvent] };
-  // Diverts the event to Events Manager → Test Events for verification.
-  // Leaving this set in production stops purchases reaching live reporting.
-  const testCode = process.env.META_TEST_EVENT_CODE;
-  if (testCode) payload.test_event_code = testCode;
-
-  const res = await fetch(
-    `https://graph.facebook.com/${META_API_VERSION}/${META_PIXEL_ID}/events?access_token=${token}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    },
-  );
-
-  if (!res.ok) {
-    console.error("[webhook] Meta CAPI request failed:", res.status, await res.text());
-  }
+    eventSourceUrl: md.eventSourceUrl,
+  });
 }
 
 type GA4Item = { item_id: string; item_name: string; price: number; quantity: number };

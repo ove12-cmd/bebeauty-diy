@@ -8,7 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { trackMeta, CURRENCY } from "@/lib/meta-pixel";
+import { trackMetaWithCapi, CURRENCY } from "@/lib/meta-pixel";
 
 export type CartItem = {
   id: string;
@@ -70,7 +70,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setIsOpen(true);
     // Fired here (the data source) rather than on each "Add to cart" button,
     // since there are several of those across the page.
-    trackMeta("AddToCart", {
+    trackMetaWithCapi("AddToCart", {
       content_ids: [item.id],
       content_name: item.label,
       content_type: "product",

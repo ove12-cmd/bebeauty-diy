@@ -11,7 +11,7 @@ import { CHECKOUT_REVIEW, resolveReview } from "@/lib/reviews";
 import { useCart } from "@/hooks/useCart";
 import { searchLockers, type Locker } from "@/lib/lockers";
 import { FREE_SHIPPING_GEM_THRESHOLD, deliveryMethodLabel, discountPctForCode, isGemId, isGemOnlyOrder } from "@/lib/pricing";
-import { trackMeta, CURRENCY } from "@/lib/meta-pixel";
+import { trackMetaWithCapi, CURRENCY } from "@/lib/meta-pixel";
 import { trackGA4, getGaIds } from "@/lib/ga4";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
@@ -87,7 +87,7 @@ export default function CheckoutPage() {
   useEffect(() => {
     if (initiateCheckoutFired.current || count === 0) return;
     initiateCheckoutFired.current = true;
-    trackMeta("InitiateCheckout", {
+    trackMetaWithCapi("InitiateCheckout", {
       content_ids: items.map((i) => i.id),
       content_type: "product",
       value: subtotal,
