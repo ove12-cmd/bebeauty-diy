@@ -1,5 +1,12 @@
 export type TrackingScriptLocation = "head" | "body-start" | "body-end";
 
+export type TrackingEvent = {
+  name: string;
+  firesFrom: string;
+  client: boolean;
+  server: boolean;
+};
+
 export type TrackingScript = {
   id: string;
   name: string;
@@ -8,6 +15,8 @@ export type TrackingScript = {
   source: string;
   /** ISO date this was last manually confirmed to actually fire on the live site. */
   verifiedAt?: string;
+  /** What this script is actually tracking — not every script fires more than an implicit PageView. */
+  events?: TrackingEvent[];
 };
 
 /**
@@ -50,6 +59,38 @@ export const TRACKING_SCRIPTS: TrackingScript[] = [
   fbq('track', 'PageView');
 </script>`,
     verifiedAt: "2026-09-11",
+    events: [
+      {
+        name: "PageView",
+        firesFrom: "Every route change (src/components/MetaPixel.tsx)",
+        client: true,
+        server: false,
+      },
+      {
+        name: "ViewContent",
+        firesFrom: "Product page, once per variant viewed (tooth-gem-kit/page.tsx)",
+        client: true,
+        server: false,
+      },
+      {
+        name: "AddToCart",
+        firesFrom: "Item added to cart (hooks/useCart.tsx)",
+        client: true,
+        server: true,
+      },
+      {
+        name: "InitiateCheckout",
+        firesFrom: "Checkout page loaded with a non-empty cart (checkout/page.tsx)",
+        client: true,
+        server: true,
+      },
+      {
+        name: "Purchase",
+        firesFrom: "Checkout success page + Stripe webhook on payment_intent.succeeded",
+        client: true,
+        server: true,
+      },
+    ],
   },
   {
     id: "ms-clarity",

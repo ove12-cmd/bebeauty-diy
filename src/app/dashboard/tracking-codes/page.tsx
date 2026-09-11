@@ -57,6 +57,34 @@ export default async function TrackingCodesPage() {
                 <pre className="overflow-x-auto rounded-lg bg-neutral-900 p-4 text-xs text-neutral-100">
                   <code>{script.code}</code>
                 </pre>
+
+                {script.events && script.events.length > 0 && (
+                  <div className="mt-4">
+                    <h3 className="mb-2 text-sm font-semibold text-neutral-900">What this is tracking</h3>
+                    <div className="overflow-x-auto rounded-lg border border-neutral-200">
+                      <table className="w-full min-w-[500px] text-left text-sm">
+                        <thead className="border-b border-neutral-200 bg-neutral-50 text-neutral-600">
+                          <tr>
+                            <th className="px-3 py-2 font-semibold">Event</th>
+                            <th className="px-3 py-2 font-semibold">Fires from</th>
+                            <th className="px-3 py-2 text-center font-semibold">Browser</th>
+                            <th className="px-3 py-2 text-center font-semibold">Server</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {script.events.map((event) => (
+                            <tr key={event.name} className="border-b border-neutral-100 last:border-0">
+                              <td className="whitespace-nowrap px-3 py-2 font-medium text-neutral-900">{event.name}</td>
+                              <td className="px-3 py-2 text-neutral-600">{event.firesFrom}</td>
+                              <td className="px-3 py-2 text-center">{event.client ? "✅" : "—"}</td>
+                              <td className="px-3 py-2 text-center">{event.server ? "✅" : "—"}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
