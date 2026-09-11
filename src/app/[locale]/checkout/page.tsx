@@ -198,7 +198,7 @@ export default function CheckoutPage() {
           >
             {COMPANY.name}
           </Link>
-          <span className="inline-flex items-center gap-1 text-[11px] text-[var(--bb-ink-3)]">
+          <span className="-mt-4 inline-flex items-center gap-1 text-[11px] text-[var(--bb-ink-3)]">
             <svg
               aria-hidden="true"
               width="13"

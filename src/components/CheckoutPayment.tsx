@@ -132,6 +132,10 @@ export default function CheckoutPayment({
       options={{
         clientSecret,
         locale,
+        // "auto" (the default) has a delay before showing anything, which is
+        // exactly the blank gap the buyer sees — force Stripe's own skeleton
+        // to appear immediately instead of building a custom one.
+        loader: "always",
         // Stripe renders the Payment Element in its own iframe, so it can't
         // see our self-hosted next/font file — it must load the font itself.
         fonts: [
