@@ -30,7 +30,7 @@ export default function Footer() {
             <span className="bb-footer__col-title">{t("infoTitle")}</span>
             <Link href={{ pathname: "/", hash: "kuidas" }} className="bb-footer__link">{t("howItWorks")}</Link>
             <Link href="/guide" className="bb-footer__link">{t("guide")}</Link>
-            <Link href={{ pathname: "/tooth-gem-kit", hash: "reviews" }} className="bb-footer__link">{t("faq")}</Link>
+            <Link href={{ pathname: "/tooth-gem-kit", hash: "faq" }} className="bb-footer__link">{t("faq")}</Link>
             {/* Kontakt hidden for now */}
             <Link href="/shipping" className="bb-footer__link">{t("shipping")}</Link>
             <Link href="/privacy" className="bb-footer__link">{t("privacy")}</Link>

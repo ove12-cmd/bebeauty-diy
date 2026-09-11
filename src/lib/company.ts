@@ -13,9 +13,6 @@ export const COMPANY = {
    * between languages — see the "trustBadge.kitsSold" message key.
    */
   kitsSoldCount: 600,
-  // `network` drives the icon and is separate from `id`, because the shop
-  // runs two different Facebook presences — keying the icon off the id alone
-  // couldn't express that.
   socials: [
     {
       id: "facebook-page",
@@ -23,12 +20,6 @@ export const COMPANY = {
       label: "Bebeauty DIY",
       // Numeric page id — works regardless of whether a vanity URL is set.
       url: "https://www.facebook.com/1204061762797891",
-    },
-    {
-      id: "facebook-handle",
-      network: "facebook",
-      label: "@bebeauty.diy",
-      url: "https://www.facebook.com/bebeauty.diy",
     },
   ],
 } as const;

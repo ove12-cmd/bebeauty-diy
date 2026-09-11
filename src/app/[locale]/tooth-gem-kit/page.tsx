@@ -646,7 +646,7 @@ export default function ShopPage() {
       </div>
 
       {/* ── FAQ ── */}
-      <div className="bb-shop-section">
+      <div id="faq" className="bb-shop-section">
         <h2 className="bb-shop-section__title bb-faq__title">{tFaqSection("sectionTitle")}</h2>
         <FAQ />
       </div>

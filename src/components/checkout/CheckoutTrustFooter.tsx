@@ -11,7 +11,7 @@ export default function CheckoutTrustFooter() {
   const t = useTranslations("checkoutTrustFooter");
   const LINKS = [
     { key: "terms", href: "/terms" as const, label: t("terms") },
-    { key: "faq", href: { pathname: "/tooth-gem-kit" as const, hash: "reviews" }, label: t("faq") },
+    { key: "faq", href: { pathname: "/tooth-gem-kit" as const, hash: "faq" }, label: t("faq") },
   ];
 
   return (
