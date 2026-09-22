@@ -32,7 +32,7 @@ const securityHeaders = [
       // Fonts
       "font-src 'self' https://fonts.gstatic.com",
       // Images: self + Unsplash CDN + data URIs + GA's pixel fallback + Meta Pixel beacon
-      "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://*.google-analytics.com https://www.facebook.com",
+      "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://*.google-analytics.com https://www.facebook.com https://i.crystalidea.shop",
       // Connect: self + Unsplash API + Stripe API (PaymentIntent confirmation) + GA/Meta/Clarity beacons
       // GA4 sends its collect hit to a regional subdomain (e.g. region1.google-analytics.com),
       // not the bare www host — must wildcard it or every hit gets silently CSP-blocked.
@@ -64,6 +64,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "plus.unsplash.com" },
+      // Internal /dashboard/crystal-catalog reference page only — the supplier's
+      // own product photos, hotlinked (not redistributed).
+      { protocol: "https", hostname: "i.crystalidea.shop" },
     ],
   },
   async headers() {

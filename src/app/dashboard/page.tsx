@@ -70,6 +70,12 @@ export default async function DashboardPage() {
             >
               Jälgimiskoodid
             </Link>
+            <Link
+              href="/dashboard/crystal-catalog"
+              className="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-semibold text-neutral-700 transition hover:bg-neutral-100"
+            >
+              Kristallikataloog
+            </Link>
             <form action={logout}>
               <button
                 type="submit"
