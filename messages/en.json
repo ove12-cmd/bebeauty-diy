@@ -1,4 +1,13 @@
 {
+  "vacation": {
+    "banner": "We're on holiday 6 Oct – 1 Nov. <link>Pre-order now</link> — we ship on 2 Nov.",
+    "shippingNote": "We're on holiday until 1 Nov — orders placed now ship out on 2 Nov.",
+    "popupEyebrow": "6 Oct – 1 Nov",
+    "popupTitle": "We're on holiday",
+    "popupBody": "You can pre-order right now, but please note: orders placed now don't ship out until 2 Nov. Your package arrives after that.",
+    "popupCta": "Got it",
+    "popupClose": "Close"
+  },
   "common": {
     "siteName": "beBeauty DIY"
   },

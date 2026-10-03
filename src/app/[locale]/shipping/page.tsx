@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import { getPathname } from "@/i18n/navigation";
 import { BASE_URL } from "@/lib/seo";
+import { isVacationActive } from "@/lib/vacation";
 import type { Locale } from "@/i18n/routing";
 
 export async function generateMetadata({
@@ -28,6 +29,7 @@ export async function generateMetadata({
 
 export default async function ShippingPage() {
   const t = await getTranslations("shippingPage");
+  const tVacation = await getTranslations("vacation");
   const mail = (chunks: React.ReactNode) => <a href="mailto:iluinfo1@gmail.com">{chunks}</a>;
   const strong = (chunks: React.ReactNode) => <strong>{chunks}</strong>;
 
@@ -57,7 +59,7 @@ export default async function ShippingPage() {
             <span>{t("rowRestValue")}</span>
           </div>
         </div>
-        <p>{t.rich("sameDayNote", { strong })}</p>
+        <p>{isVacationActive() ? tVacation("shippingNote") : t.rich("sameDayNote", { strong })}</p>
 
         <h2>{t("returnsHeading")}</h2>
         <p>{t("returnsText")}</p>

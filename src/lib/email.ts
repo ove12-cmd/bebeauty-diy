@@ -5,6 +5,7 @@
 
 import { Resend } from "resend";
 import { formatDeliveryTarget, type DeliveryDetails } from "@/lib/pricing";
+import { isVacationActive } from "@/lib/vacation";
 
 export type OrderEmailItem = { name: string; quantity: number; finalPrice: number };
 
@@ -40,6 +41,7 @@ const CUSTOMER_EMAIL_STRINGS = {
     delivery: "Delivery:",
     ordered: "Ordered:",
     closing: "We'll get your package on its way soon. If you have any questions, just reply to this email.",
+    vacationClosing: "We're on holiday until 1 Nov — your package ships out on 2 Nov. If you have any questions, just reply to this email.",
     signoff: "— beBeauty DIY",
   },
   et: {
@@ -50,6 +52,7 @@ const CUSTOMER_EMAIL_STRINGS = {
     delivery: "Tarne:",
     ordered: "Tellitud:",
     closing: "Saadame Sinu paki peagi teele. Kui tekib küsimusi, vasta lihtsalt sellele kirjale.",
+    vacationClosing: "Oleme puhkusel kuni 01.11 — saadame Sinu paki teele 02.11. Kui tekib küsimusi, vasta lihtsalt sellele kirjale.",
     signoff: "— beBeauty DIY",
   },
 } as const;
@@ -130,7 +133,7 @@ export async function sendOrderEmails(order: OrderEmailData): Promise<void> {
           <p><strong>${s.total}</strong> ${total}</p>
           ${customerDeliveryText ? `<p><strong>${s.delivery}</strong> ${esc(customerDeliveryText)}</p>` : ""}
           ${itemsHtml ? `<p><strong>${s.ordered}</strong></p><ul>${itemsHtml}</ul>` : ""}
-          <p>${s.closing}</p>
+          <p>${isVacationActive() ? s.vacationClosing : s.closing}</p>
           <p>${s.signoff}</p>
         `,
       });

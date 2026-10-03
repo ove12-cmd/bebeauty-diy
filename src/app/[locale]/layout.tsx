@@ -8,6 +8,7 @@ import CookieBanner from "@/components/CookieBanner";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import MetaPixel from "@/components/MetaPixel";
 import CartDrawer from "@/components/CartDrawer";
+import VacationBanner from "@/components/VacationBanner";
 import { CartProvider } from "@/hooks/useCart";
 import { organizationSchema, websiteSchema } from "@/lib/seo";
 import { routing } from "@/i18n/routing";
@@ -51,6 +52,7 @@ export default async function LocaleLayout({
         `}
       </Script>
       <CartProvider>
+        <VacationBanner />
         {children}
         <Footer />
         <CartDrawer />

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import UrgencyPopup from "@/components/UrgencyPopup";
+import VacationPopup from "@/components/VacationPopup";
 import JsonLd from "@/components/JsonLd";
 import ImageLightbox from "@/components/ImageLightbox";
 import ReviewsSlider from "@/components/ReviewsSlider";
@@ -359,6 +360,7 @@ export default function ShopPage() {
         ])}
       />
       <UrgencyPopup autoOpen={false} />
+      <VacationPopup />
       <StickyBar price={priceStr(finalPrice)} original={priceStr(variant.original)} onAdd={addToCart} />
       <SiteNav active="komplektid" />
 

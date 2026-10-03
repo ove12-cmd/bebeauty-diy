@@ -1,4 +1,13 @@
 {
+  "vacation": {
+    "banner": "Oleme puhkusel 06.10–01.11. <link>Telli ette</link> — saadame paki teele 02.11.",
+    "shippingNote": "Oleme puhkusel kuni 01.11 — praegu esitatud tellimused saadame teele 02.11.",
+    "popupEyebrow": "06.10–01.11",
+    "popupTitle": "Oleme puhkusel",
+    "popupBody": "Saad kohe ette tellida, aga pane tähele: praegu esitatud tellimused saadame teele alles 02.11. Pakk jõuab Sinuni pärast seda.",
+    "popupCta": "Sain aru",
+    "popupClose": "Sulge"
+  },
   "common": {
     "siteName": "beBeauty DIY"
   },

@@ -11,6 +11,7 @@ import { CHECKOUT_REVIEW, resolveReview } from "@/lib/reviews";
 import { useCart } from "@/hooks/useCart";
 import { searchLockers, type Locker } from "@/lib/lockers";
 import { FREE_SHIPPING_GEM_THRESHOLD, deliveryMethodLabel, discountPctForCode, isGemId, isGemOnlyOrder } from "@/lib/pricing";
+import { isVacationActive } from "@/lib/vacation";
 import { trackMetaWithCapi, CURRENCY } from "@/lib/meta-pixel";
 import { trackGA4, getGaIds } from "@/lib/ga4";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -40,6 +41,8 @@ function eur(n: number) {
 export default function CheckoutPage() {
   const locale = useLocale() as "en" | "et";
   const t = useTranslations("checkout");
+  const tVacation = useTranslations("vacation");
+  const onVacation = isVacationActive();
   const tCart = useTranslations("cart");
   const checkoutReview = resolveReview(CHECKOUT_REVIEW, locale);
   const { items, subtotal, count } = useCart();
@@ -249,13 +252,15 @@ export default function CheckoutPage() {
                 paymentIntentId={paymentIntentId}
               />
               <p className="mt-2 text-center text-[11px] leading-relaxed text-[var(--bb-ink-2)]">
-                {t.rich("shipNextDay", {
-                  link: (chunks) => (
-                    <Link href="/terms" className="text-[var(--bb-gold-deep)] underline hover:no-underline">
-                      {chunks}
-                    </Link>
-                  ),
-                })}
+                {onVacation
+                  ? tVacation("shippingNote")
+                  : t.rich("shipNextDay", {
+                      link: (chunks) => (
+                        <Link href="/terms" className="text-[var(--bb-gold-deep)] underline hover:no-underline">
+                          {chunks}
+                        </Link>
+                      ),
+                    })}
               </p>
             </div>
           ) : (
@@ -370,7 +375,9 @@ export default function CheckoutPage() {
                 <circle cx="17.5" cy="18" r="1.8" />
               </svg>
               <span>
-                {t.rich("orderCutoffNotice", { strong: (chunks) => <span className="font-medium">{chunks}</span> })}
+                {onVacation
+                  ? tVacation("shippingNote")
+                  : t.rich("orderCutoffNotice", { strong: (chunks) => <span className="font-medium">{chunks}</span> })}
               </span>
             </div>
 

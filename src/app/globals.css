@@ -2942,6 +2942,13 @@ html, body {
   min-height: 440px;
 }
 
+/* Vacation notice reuses the popup shell, minus the image column. */
+.bb-popup--notice {
+  grid-template-columns: 1fr;
+  max-width: 440px;
+  min-height: 0;
+}
+
 .bb-popup__close {
   position: absolute;
   top: 14px;
