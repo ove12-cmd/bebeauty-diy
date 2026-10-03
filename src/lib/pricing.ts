@@ -19,6 +19,35 @@ export const EXTRA_GEM_TYPES = [
   { id: "gem-ab-butterfly", label: "Swarovski Borealis Butterfly", img: "/crystals/gem-ab-butterfly.jpg" },
 ] as const;
 
+// Higher-cost cuts (Star Flower, Marquise/Navette, Heart, Rose) added later —
+// kept out of EXTRA_GEM_TYPES on purpose: that array is also the kit page's
+// €1/unit add-on list (GEM_PRICE), and several of these cost more than that
+// wholesale. Sold only standalone on /crystals, at their own tier price.
+export const PREMIUM_GEM_PRICE = {
+  standard: 4.9,
+  premium: 6.9,
+  deluxe: 8.9,
+} as const;
+
+export const PREMIUM_GEM_TYPES = [
+  { id: "gem-starflower-crystal-ab", label: "Star Flower Crystal AB", img: "/crystal-catalog/singles/starflower-crystal-ab.png", price: PREMIUM_GEM_PRICE.standard },
+  { id: "gem-starflower-aquamarine", label: "Star Flower Aquamarine", img: "/crystal-catalog/singles/starflower-aquamarine.png", price: PREMIUM_GEM_PRICE.standard },
+  { id: "gem-starflower-crystal", label: "Star Flower Crystal", img: "/crystal-catalog/singles/starflower-crystal.png", price: PREMIUM_GEM_PRICE.standard },
+  { id: "gem-marquise-aquamarine", label: "Marquise Aquamarine", img: "/crystal-catalog/singles/marquise-aquamarine.png", price: PREMIUM_GEM_PRICE.standard },
+  { id: "gem-marquise-crystal", label: "Marquise Crystal", img: "/crystal-catalog/singles/marquise-crystal.png", price: PREMIUM_GEM_PRICE.standard },
+  { id: "gem-heart-crystal-ab", label: "Heart Crystal AB", img: "/crystal-catalog/singles/heart-crystal-ab.png", price: PREMIUM_GEM_PRICE.standard },
+  { id: "gem-heart-crystal", label: "Heart Crystal", img: "/crystal-catalog/singles/heart-crystal.png", price: PREMIUM_GEM_PRICE.standard },
+  { id: "gem-marquise-aurum", label: "Marquise Crystal Aurum", img: "/crystal-catalog/singles/marquise-aurum.png", price: PREMIUM_GEM_PRICE.premium },
+  { id: "gem-marquise-vitrail-light", label: "Marquise Vitrail Light", img: "/crystal-catalog/singles/marquise-vitrail-light.png", price: PREMIUM_GEM_PRICE.premium },
+  { id: "gem-marquise-crystal-ab", label: "Marquise Crystal AB", img: "/crystal-catalog/singles/marquise-crystal-ab.png", price: PREMIUM_GEM_PRICE.premium },
+  { id: "gem-marquise-crystal-shimmer", label: "Marquise Crystal Shimmer", img: "/crystal-catalog/singles/marquise-crystal-shimmer.png", price: PREMIUM_GEM_PRICE.premium },
+  { id: "gem-rose-crystal", label: "Rose Crystal", img: "/crystal-catalog/singles/rose-crystal.png", price: PREMIUM_GEM_PRICE.premium },
+  { id: "gem-rose-aquamarine", label: "Rose Aquamarine", img: "/crystal-catalog/singles/rose-aquamarine.png", price: PREMIUM_GEM_PRICE.premium },
+  { id: "gem-rose-vitrail-light", label: "Rose Vitrail Light", img: "/crystal-catalog/singles/rose-vitrail-light.png", price: PREMIUM_GEM_PRICE.deluxe },
+  { id: "gem-rose-crystal-ab", label: "Rose Crystal AB", img: "/crystal-catalog/singles/rose-crystal-ab.png", price: PREMIUM_GEM_PRICE.deluxe },
+  { id: "gem-rose-crystal-shimmer", label: "Rose Crystal Shimmer", img: "/crystal-catalog/singles/rose-crystal-shimmer.png", price: PREMIUM_GEM_PRICE.deluxe },
+] as const;
+
 // Sizes for the standalone /crystals page only — same labels as the kit's
 // own VARIANTS, but a distinct id shape (gem id + size id) so they can
 // never collide with a bare kit id like "s20".
@@ -41,11 +70,17 @@ export const VARIANT_PRICES: Record<string, number> = {
   ...Object.fromEntries(
     EXTRA_GEM_TYPES.flatMap((g) => GEM_SIZES.map((s) => [gemSizeId(g.id, s.id), STANDALONE_GEM_PRICE])),
   ),
+  // Premium gems are standalone-only (see PREMIUM_GEM_TYPES above) — no bare
+  // g.id entry, so they can never be added at the kit page's flat GEM_PRICE.
+  ...Object.fromEntries(
+    PREMIUM_GEM_TYPES.flatMap((g) => GEM_SIZES.map((s) => [gemSizeId(g.id, s.id), g.price])),
+  ),
 };
 
 const GEM_IDS: Set<string> = new Set([
   ...EXTRA_GEM_TYPES.map((g) => g.id),
   ...EXTRA_GEM_TYPES.flatMap((g) => GEM_SIZES.map((s) => gemSizeId(g.id, s.id))),
+  ...PREMIUM_GEM_TYPES.flatMap((g) => GEM_SIZES.map((s) => gemSizeId(g.id, s.id))),
 ]);
 
 // Buying crystals with no kit in the order — the /crystals page enforces

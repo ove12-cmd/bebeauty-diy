@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import ImageLightbox from "@/components/ImageLightbox";
 import SiteNav from "@/components/SiteNav";
 import Button from "@/components/ui/Button";
-import { EXTRA_GEM_TYPES, FREE_SHIPPING_GEM_THRESHOLD, GEM_SIZES, MIN_STANDALONE_GEMS, STANDALONE_GEM_PRICE, gemSizeId } from "@/lib/pricing";
+import { EXTRA_GEM_TYPES, FREE_SHIPPING_GEM_THRESHOLD, GEM_SIZES, MIN_STANDALONE_GEMS, PREMIUM_GEM_TYPES, STANDALONE_GEM_PRICE, gemSizeId } from "@/lib/pricing";
 import { useCart } from "@/hooks/useCart";
 
 function priceStr(n: number) {
@@ -31,6 +31,63 @@ function IconMinus() {
   return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 12h14" /></svg>;
 }
 
+// Both lists sold standalone here, just at different price points — merged
+// once so qty/cost logic doesn't care which list a gem came from.
+const ALL_GEM_TYPES = [
+  ...EXTRA_GEM_TYPES.map((g) => ({ ...g, price: STANDALONE_GEM_PRICE })),
+  ...PREMIUM_GEM_TYPES,
+];
+
+type GemType = (typeof ALL_GEM_TYPES)[number];
+
+function GemCard({
+  g,
+  qtys,
+  bump,
+  onZoom,
+  t,
+}: {
+  g: GemType;
+  qtys: Record<string, number>;
+  bump: (id: string, delta: number) => void;
+  onZoom: (img: { src: string; alt: string }) => void;
+  t: ReturnType<typeof useTranslations>;
+}) {
+  return (
+    <div className="bb-crystals__card">
+      <button
+        type="button"
+        className="bb-crystals__thumb"
+        aria-label={t("zoomAria", { label: g.label })}
+        onClick={() => onZoom({ src: g.img, alt: g.label })}
+      >
+        <Image src={g.img} alt={g.label} width={72} height={72} style={{ objectFit: "contain" }} />
+      </button>
+      <span className="bb-crystals__name">{g.label}</span>
+      <span className="bb-crystals__price">{priceStr(g.price)}{t("perUnitSuffix")}</span>
+      <div className="bb-crystals__sizes">
+        {GEM_SIZES.map(s => {
+          const key = gemSizeId(g.id, s.id);
+          return (
+            <div key={key} className="bb-crystals__size-row">
+              <span className="bb-crystals__size-label">{s.label}</span>
+              <div className="bb-qty__ctrl bb-qty__ctrl--sm">
+                <button className="bb-qty__btn" onClick={() => bump(key, -1)} aria-label={t("decreaseAria", { label: g.label, size: s.label })}>
+                  <IconMinus />
+                </button>
+                <span className="bb-qty__num">{qtys[key] ?? 0}</span>
+                <button className="bb-qty__btn" onClick={() => bump(key, 1)} aria-label={t("increaseAria", { label: g.label, size: s.label })}>
+                  <IconPlus />
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function CrystalsPage() {
   const t = useTranslations("crystalsPage");
   const { add } = useCart();
@@ -42,17 +99,20 @@ export default function CrystalsPage() {
   }
 
   const total = Object.values(qtys).reduce((sum, n) => sum + n, 0);
-  const cost = total * STANDALONE_GEM_PRICE;
+  const cost = ALL_GEM_TYPES.reduce(
+    (sum, g) => sum + GEM_SIZES.reduce((s, size) => s + (qtys[gemSizeId(g.id, size.id)] ?? 0) * g.price, 0),
+    0,
+  );
 
   const belowMin = total > 0 && total < MIN_STANDALONE_GEMS;
 
   function addToCart() {
     if (total < MIN_STANDALONE_GEMS) return;
-    EXTRA_GEM_TYPES.forEach(g => {
+    ALL_GEM_TYPES.forEach(g => {
       GEM_SIZES.forEach(s => {
         const key = gemSizeId(g.id, s.id);
         const n = qtys[key] ?? 0;
-        if (n > 0) add({ id: key, label: `${g.label} · ${s.label}`, price: STANDALONE_GEM_PRICE }, n);
+        if (n > 0) add({ id: key, label: `${g.label} · ${s.label}`, price: g.price }, n);
       });
     });
     setQtys({});
@@ -78,37 +138,14 @@ export default function CrystalsPage() {
 
       <div className="bb-crystals__grid">
         {EXTRA_GEM_TYPES.map(g => (
-          <div key={g.id} className="bb-crystals__card">
-            <button
-              type="button"
-              className="bb-crystals__thumb"
-              aria-label={t("zoomAria", { label: g.label })}
-              onClick={() => setLightbox({ src: g.img, alt: g.label })}
-            >
-              <Image src={g.img} alt={g.label} width={72} height={72} style={{ objectFit: "contain" }} />
-            </button>
-            <span className="bb-crystals__name">{g.label}</span>
-            <span className="bb-crystals__price">{priceStr(STANDALONE_GEM_PRICE)}{t("perUnitSuffix")}</span>
-            <div className="bb-crystals__sizes">
-              {GEM_SIZES.map(s => {
-                const key = gemSizeId(g.id, s.id);
-                return (
-                  <div key={key} className="bb-crystals__size-row">
-                    <span className="bb-crystals__size-label">{s.label}</span>
-                    <div className="bb-qty__ctrl bb-qty__ctrl--sm">
-                      <button className="bb-qty__btn" onClick={() => bump(key, -1)} aria-label={t("decreaseAria", { label: g.label, size: s.label })}>
-                        <IconMinus />
-                      </button>
-                      <span className="bb-qty__num">{qtys[key] ?? 0}</span>
-                      <button className="bb-qty__btn" onClick={() => bump(key, 1)} aria-label={t("increaseAria", { label: g.label, size: s.label })}>
-                        <IconPlus />
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <GemCard key={g.id} g={{ ...g, price: STANDALONE_GEM_PRICE }} qtys={qtys} bump={bump} onZoom={setLightbox} t={t} />
+        ))}
+      </div>
+
+      <h2 className="bb-crystals__section-title">{t("premiumSectionTitle")}</h2>
+      <div className="bb-crystals__grid">
+        {PREMIUM_GEM_TYPES.map(g => (
+          <GemCard key={g.id} g={g} qtys={qtys} bump={bump} onZoom={setLightbox} t={t} />
         ))}
       </div>
 
