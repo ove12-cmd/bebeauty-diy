@@ -80,25 +80,31 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       // Old shop URL → keyword slug (permanent, preserves any existing links).
-      { source: "/shop", destination: "/tooth-gem-kit", permanent: true },
+      { source: "/shop", destination: "/hambakristalli-komplekt", permanent: true },
       // Old product URL → keyword slug (permanent, preserves any existing links).
-      { source: "/product/diy-hambakristalli-komplekt", destination: "/tooth-gem-kit", permanent: true },
-      // Estonian route slugs → English ones (site went global). Permanent so
-      // existing bookmarks, backlinks, and any live ad campaigns pointed at
-      // the old paths keep working instead of 404ing.
-      { source: "/hambakristalli-komplekt", destination: "/tooth-gem-kit", permanent: true },
-      { source: "/juhend", destination: "/guide", permanent: true },
-      { source: "/kristallid", destination: "/crystals", permanent: true },
-      { source: "/tarne", destination: "/shipping", permanent: true },
-      { source: "/privaatsus", destination: "/privacy", permanent: true },
-      { source: "/tingimused", destination: "/terms", permanent: true },
+      { source: "/product/diy-hambakristalli-komplekt", destination: "/hambakristalli-komplekt", permanent: true },
+      // Estonian became the default locale again on 2026-09-28 (was English
+      // since the "go global" migration) — these bare English slugs were the
+      // live default-locale URLs until then, so redirect them to /en/... on
+      // permanent so existing bookmarks, backlinks, and any live ad
+      // campaigns pointed at them keep working instead of 404ing. Estonian's
+      // own bare slugs (/hambakristalli-komplekt, /juhend, /kristallid,
+      // /tarne, /privaatsus, /tingimused) need no redirect — they're real,
+      // live pages again now that Estonian is unprefixed.
+      { source: "/tooth-gem-kit", destination: "/en/tooth-gem-kit", permanent: true },
+      { source: "/guide", destination: "/en/guide", permanent: true },
+      { source: "/crystals", destination: "/en/crystals", permanent: true },
+      { source: "/shipping", destination: "/en/shipping", permanent: true },
+      { source: "/privacy", destination: "/en/privacy", permanent: true },
+      { source: "/terms", destination: "/en/terms", permanent: true },
       // Contact page hidden for now — temporary (not permanent) so it's a
       // one-line revert once the page comes back. Blocked at every path that
-      // could reach it: the old bare Estonian slug, the new bare English
-      // slug, and the new localized Estonian slug under /et.
+      // could reach it: Estonian's bare slug, English's now-prefixed slug,
+      // and the old /et-prefixed slug from before this locale flip.
       { source: "/kontakt", destination: "/", permanent: false },
-      { source: "/contact", destination: "/", permanent: false },
-      { source: "/et/kontakt", destination: "/et", permanent: false },
+      { source: "/contact", destination: "/en", permanent: false },
+      { source: "/en/contact", destination: "/en", permanent: false },
+      { source: "/et/kontakt", destination: "/", permanent: false },
     ];
   },
 };

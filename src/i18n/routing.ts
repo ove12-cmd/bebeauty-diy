@@ -1,11 +1,14 @@
 import { defineRouting } from "next-intl/routing";
 
-// English stays unprefixed at its current, already-live URLs (no disruption
-// to existing Facebook ads / backlinks). Estonian lives under /et with its
-// own localized slugs — see `pathnames` below.
+// Estonian is the default locale — stays unprefixed at its own localized
+// slugs (see `pathnames` below), since Estonian is where the live ad
+// campaigns and backlinks actually point. English moved under /en/.
+// (Flipped back from English-default on 2026-09-28 — see next.config.ts
+// redirects for the compatibility redirects that preserve the old bare
+// English URLs this displaced.)
 export const routing = defineRouting({
   locales: ["en", "et"],
-  defaultLocale: "en",
+  defaultLocale: "et",
   localePrefix: "as-needed",
   // Without this, next-intl's Accept-Language sniffing would redirect a
   // fresh visitor from a live ad straight to /et/... based on browser
